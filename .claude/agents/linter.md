@@ -56,6 +56,8 @@ Flag if:
 - A component does not use `import type { ComponentChildren } from 'preact'` for children (should not use `any` or `ReactNode`)
 - An SVG icon is imported from an external library — inline SVGs are the pattern here
 - A page is conditionally mounted/unmounted instead of hidden via `.active` class
+- A button or interactive control nested inside a clickable `.row-item` whose handler does not begin with `e.stopPropagation()` — the row's own click handler will also fire
+- A Delete control rendered on a generated (recurring) row without a `!tx.isGenerated` guard — generated txs have no IndexedDB row; calling `delTx` on their derived id is a no-op or logic error
 
 ## CSS
 

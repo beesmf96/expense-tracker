@@ -1,6 +1,6 @@
 ---
 plan: inline-row-actions
-status: pending
+status: in-progress
 branch: feature/inline-row-actions
 pr: ~
 implemented: ~

@@ -9,6 +9,10 @@
 .row-sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .row-date{font-size:11px;color:var(--faint);margin-top:2px;font-family:'DM Mono',monospace;letter-spacing:.01em}
 .amount{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--r);white-space:nowrap}
+.row-actions{display:grid;grid-template-columns:1fr 1fr;gap:4px;flex-shrink:0}
+.row-act-btn{padding:6px 10px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.row-act-edit{background:var(--adim);color:var(--accent)}
+.row-act-del{background:var(--r-dim);color:var(--r)}
 
 /* ── BADGES ── */
 .badge{display:inline-block;font-size:9px;background:var(--adim);color:var(--accent);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle;font-weight:600;letter-spacing:.02em}

@@ -1,7 +1,9 @@
-import { txs, getCat, catColor, openM } from '../state/store'
+import { txs, getCat, catColor, openM, selCat, selRCat, selFreq } from '../state/store'
 import { t, mfmt, catLabel } from '../data/i18n'
 import { EmptyState } from '../components/EmptyState'
 import { allGeneratedUpToDate } from '../state/recurring'
+import { delTx } from '../db/queries'
+import type { Transaction, Freq } from '../types'
 
 export function Transactions() {
   const all = [
@@ -18,7 +20,17 @@ export function Transactions() {
     )
   }
 
-  // Group by YYYY-MM
+  function handleEdit(tx: Transaction) {
+    if (tx.isGenerated || tx.freq === 'none') {
+      selCat.value = tx.category
+      openM('expense', { editTx: tx })
+    } else {
+      selRCat.value = tx.category
+      selFreq.value = tx.freq as Exclude<Freq, 'none'>
+      openM('recurring', { editTx: tx })
+    }
+  }
+
   const groups = new Map<string, typeof all>()
   for (const tx of all) {
     const key = tx.date.slice(0, 7)
@@ -53,8 +65,29 @@ export function Transactions() {
                       {tx.date}
                       {tx.isGenerated && <span class="freq-badge" style={{ marginLeft: '6px' }}>↻</span>}
                     </div>
+                    <div class="amount">−{tx.amount.toFixed(2)}</div>
                   </div>
-                  <span class="amount">−{tx.amount.toFixed(2)}</span>
+                  <div class="row-actions">
+                    <button
+                      class="row-act-btn row-act-edit"
+                      onClick={e => { e.stopPropagation(); handleEdit(tx) }}
+                    >{t('edit')}</button>
+                    {!tx.isGenerated && (
+                      <button
+                        class="row-act-btn row-act-del"
+                        onClick={e => {
+                          e.stopPropagation()
+                          openM('confirm', {
+                            confirmIcon: '🗑️',
+                            confirmTitle: t('confirmDel'),
+                            confirmMsg: `Delete this ${catLabel(cat)} transaction of −${tx.amount.toFixed(2)}?`,
+                            confirmOkLabel: t('delete'),
+                            confirmOnOk: async () => { await delTx(tx.id) },
+                          })
+                        }}
+                      >{t('delete')}</button>
+                    )}
+                  </div>
                 </div>
               )
             })}
