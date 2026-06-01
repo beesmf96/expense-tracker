@@ -1,6 +1,6 @@
 ---
 name: tester
-description: Use when writing tests for this project. The project currently has no tests — this agent establishes the testing baseline and writes new tests when asked.
+description: Use when writing tests for this project. Vitest is configured and a baseline test exists (src/state/recurring.test.ts); this agent writes new tests when asked.
 temperature: 0
 model: sonnet
 tools:
@@ -14,32 +14,14 @@ You are a tester agent for MyLedger — a Preact + @preact/signals + Dexie expen
 
 ## Current state
 
-**There are no tests.** No test framework is installed. Before writing any test, you must first add Vitest to the project:
+Vitest is already installed and configured — do not re-run setup. In place:
 
-```bash
-npm install --save-dev vitest @testing-library/preact @testing-library/user-event happy-dom
-```
+- Dev deps: `vitest`, `@testing-library/preact`, `@testing-library/user-event`, `happy-dom`
+- `vite.config.ts` has the `test` block (`environment: 'happy-dom'`, `globals: true`)
+- `package.json` has `"test": "vitest"` — run with `npm test`
+- `src/state/recurring.test.ts` exists as the baseline (use it as the reference for the `makeTx` factory and test style; do not duplicate its setup boilerplate from scratch)
 
-Then add to `vite.config.ts`:
-
-```ts
-import { defineConfig } from 'vite'
-import preact from '@preact/preset-vite'
-
-export default defineConfig({
-  plugins: [preact()],
-  test: {
-    environment: 'happy-dom',
-    globals: true,
-  },
-})
-```
-
-And add to `package.json` scripts:
-
-```json
-"test": "vitest"
-```
+New tests go next to the source they cover. Pick up from "What to test first" below.
 
 ## What to test first
 
@@ -75,6 +57,10 @@ Do not test the inline version — it cannot be unit-tested as written.
 
 - `exportCSV` — verify the CSV rows match transaction data (mock `document.createElement`)
 - `backupJSON` — verify the backup object shape matches `BackupFile` type
+
+### `src/lib/txHelpers.ts`
+
+- `confirmDeleteTx(tx, cat)` is not pure — it calls `openM` and (via the confirm callback) `delTx`. Test it the same way as DB query functions: `vi.mock('../state/store')` for `openM` and `vi.mock('../db/queries')` for `delTx`, then assert `openM` was called with `'confirm'` and the expected context, and that invoking the captured `confirmOnOk` calls `delTx` with the original `tx.id`. Do not attempt to test it as a pure function.
 
 ## How to write tests
 
