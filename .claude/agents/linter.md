@@ -89,6 +89,12 @@ Flag if:
 - An enum is used — the project uses literal union types instead
 - `import { Foo }` is used for a type-only import — should be `import type { Foo }`
 
+## Duplication
+
+Flag if:
+- A function is defined locally that duplicates one already exported from `src/data/i18n.ts` or `src/lib/`. Known centralized helpers: `today()` (in `src/lib/dateHelpers.ts`), `freqLabel()` and `catLabel()` (in `src/data/i18n.ts`). A local `const today = () => new Date().toISOString().slice(0,10)` or an inline `FREQS.find(x => x.value === freq)` label lookup in a component/modal is a duplication — flag it and swap to the import. If the same body appears in two files but no central home exists yet, flag it for the coder to extract (do not extract it yourself — that is feature work beyond a one-line fix).
+- A `lang`-resolving label helper (reads `lang.value` to pick `en`/`zh`) is placed in `src/lib/` instead of `src/data/i18n.ts`. Signal-reading label helpers live next to `catLabel` in `i18n.ts`; only signal-free helpers (e.g. `today()`) belong in `lib/`.
+
 ## Comments
 
 Flag if:

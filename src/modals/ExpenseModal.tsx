@@ -7,10 +7,7 @@ import { selCat, closeM, modalCtx, openModal } from '../state/store'
 import { t } from '../data/i18n'
 import { CatGrid } from '../components/CatGrid'
 import { putTx } from '../db/queries'
-
-function today() {
-  return new Date().toISOString().slice(0, 10)
-}
+import { today } from '../lib/dateHelpers'
 
 export function ExpenseModal() {
   const amount = useSignal('')

@@ -1,7 +1,6 @@
-import { txs, getCat, catColor, openM, lang } from '../state/store'
-import { t, catLabel } from '../data/i18n'
+import { txs, getCat, catColor, openM } from '../state/store'
+import { t, catLabel, freqLabel } from '../data/i18n'
 import { EmptyState } from '../components/EmptyState'
-import { FREQS } from '../data/cats'
 
 export function Recurring() {
   const templates = txs.value.filter(tx => tx.freq !== 'none')
@@ -13,12 +12,6 @@ export function Recurring() {
         <EmptyState icon="🔄" message={t('noRecurring')} />
       </div>
     )
-  }
-
-  function freqLabel(freq: string): string {
-    const f = FREQS.find(x => x.value === freq)
-    if (!f) return freq
-    return lang.value === 'zh' ? f.zh : f.en
   }
 
   return (

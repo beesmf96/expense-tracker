@@ -29,7 +29,7 @@ src/
   types/index.ts       # All shared types — Freq, Lang, PageId, ModalId, Transaction, Category, etc.
   data/
     cats.ts            # CATS, COLORS, EMOJIS, FREQS — readonly constant arrays
-    i18n.ts            # S object (en/zh strings), t(), mfmt(), catLabel()
+    i18n.ts            # S object (en/zh strings), t(), mfmt(), catLabel(), freqLabel() — label helpers that read the lang signal
   db/
     db.ts              # Dexie class — two tables: txs, cats (both keyed by id)
     queries.ts         # All DB writes; every write ends with loadAll()
@@ -38,6 +38,7 @@ src/
     recurring.ts       # Pure functions: genRecurring(), monthTxs(), allGeneratedUpToDate()
   lib/
     catHelpers.ts      # Re-exports getCat/catColor from store; allCats() wrapper
+    dateHelpers.ts     # today() — signal-free date helpers (no lang/signal reads)
     exportHelpers.ts   # CSV export, JSON backup, restore from file
     txHelpers.ts       # confirmDeleteTx() — opens confirm modal then delTx
   components/          # Reusable UI: BottomNav, FAB, CatGrid, EmojiGrid, FreqGrid, ProgressBar, FormField, ModalActions, EmptyState

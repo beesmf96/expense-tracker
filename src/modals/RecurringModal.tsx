@@ -9,10 +9,7 @@ import { CatGrid } from '../components/CatGrid'
 import { FreqGrid } from '../components/FreqGrid'
 import { putTx } from '../db/queries'
 import type { Freq } from '../types'
-
-function today() {
-  return new Date().toISOString().slice(0, 10)
-}
+import { today } from '../lib/dateHelpers'
 
 export function RecurringModal() {
   const amount = useSignal('')

@@ -110,6 +110,8 @@ Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(i
 - Add all new UI strings to both `S.en` and `S.zh` in `src/data/i18n.ts`
 - Use `t('key')` in JSX — never hardcode English strings in templates
 - Category names: always use `catLabel(cat)` — never `cat.en` directly
+- Freq labels: always use `freqLabel(freq)` from `src/data/i18n.ts` — never re-derive the `FREQS.find(...).en/.zh` lookup locally. It lives in `i18n.ts` alongside `catLabel` because, like `catLabel`, it reads the `lang` signal. Shared label helpers that resolve text from `lang.value` belong in `i18n.ts`, not in `lib/`.
+- `today()` (`new Date().toISOString().slice(0,10)`) lives in `src/lib/dateHelpers.ts` — import it; do not re-inline `new Date().toISOString().slice(0,10)` in a modal. Date helpers that do not read a signal belong in `lib/dateHelpers.ts`.
 
 ## CSS
 
