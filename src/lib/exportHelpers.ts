@@ -2,6 +2,7 @@ import type { Transaction, Category, BackupFile } from '../types'
 import { catLabel } from '../data/i18n'
 import { lang } from '../state/store'
 import { restoreBackup } from '../db/queries'
+import { today } from './dateHelpers'
 
 function dl(name: string, href: string) {
   const a = document.createElement('a')
@@ -32,6 +33,25 @@ export function backupJSON(allTxsList: Transaction[], userCats: Category[]) {
   }
   const json = JSON.stringify(data, null, 2)
   dl('myledger-backup.json', URL.createObjectURL(new Blob([json], { type: 'application/json' })))
+}
+
+export async function writeAutoBackup(
+  handle: FileSystemDirectoryHandle,
+  txsList: Transaction[],
+  userCatsList: Category[]
+): Promise<void> {
+  const name = `myledger-backup-${today()}.json`
+  const data: BackupFile = {
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    txs: txsList,
+    userCats: userCatsList,
+  }
+  const json = JSON.stringify(data, null, 2)
+  const fileHandle = await handle.getFileHandle(name, { create: true })
+  const writable = await fileHandle.createWritable()
+  await writable.write(json)
+  await writable.close()
 }
 
 export async function loadBackupFile(file: File): Promise<void> {

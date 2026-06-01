@@ -42,6 +42,7 @@
 .icon-btn:hover{color:var(--text)}
 
 .danger-zone-card{border-color:var(--r-dim)}
+.auto-backup-actions{gap:8px;justify-content:flex-start}
 
 /* ── EMPTY STATES ── */
 .empty{text-align:center;padding:64px 20px;color:var(--muted)}

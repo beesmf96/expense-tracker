@@ -20,6 +20,9 @@ effect(() => {
   localStorage.setItem('theme', theme.value)
 })
 
+export const autoBackupFolderName = signal<string | null>(null)
+export const needsBackupPermission = signal(false)
+
 export const selCat = signal('lifestyle')
 export const selRCat = signal('bills_sub')
 export const selFreq = signal<'monthly' | 'quarterly' | 'biannual' | 'yearly'>('monthly')

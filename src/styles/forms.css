@@ -13,6 +13,11 @@
 .btn-p{background:var(--accent);color:var(--bg)}
 .btn-r{background:var(--r);color:var(--white)}
 .btn-g{background:var(--s3);color:var(--muted);border:1px solid var(--border2)}
+.btn-small{padding:6px 12px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.02em;transition:opacity .15s}
+.btn-small:active{opacity:.7}
+.btn-small-p{background:var(--accent);color:var(--bg)}
+.btn-small-g{background:var(--s3);color:var(--muted);border:1px solid var(--border2)}
+.btn-small-r{background:var(--r-dim);color:var(--r)}
 
 /* ── CAT GRID ── */
 .cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
