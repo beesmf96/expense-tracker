@@ -128,6 +128,19 @@ import userEvent from '@testing-library/user-event'
 
 Query by accessible role first, then by text. Never query by class name.
 
+A page or component test that needs real signals (`txs`, `getCat`, `catColor`) but a stubbed side-effect helper (`openM`) must **partially** mock `store.ts` with `importOriginal`, not replace the whole module:
+
+```ts
+vi.mock('../state/store', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../state/store')>()
+  return { ...actual, openM: vi.fn() }
+})
+```
+
+Spreading `...actual` keeps the real signals working (so `txs.value = [...]` in the test drives the render), while overriding only `openM`. Do NOT use a bare `vi.mock('../state/store', () => ({ ... }))` for component tests — it nulls out every signal the component reads. Clear the mock per test by re-importing it inside `beforeEach`: `const { openM } = await import('../state/store'); vi.mocked(openM).mockClear()`.
+
+Drive these tests through the UI: set `txs.value`, render, type into the input via `userEvent`, and assert on rendered text / `openM` calls. Querying a search box uses `screen.getByRole('searchbox')` (an `<input type="search">`).
+
 ## Do not
 
 - Snapshot tests — this codebase's UI is actively developed

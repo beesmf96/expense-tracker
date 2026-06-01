@@ -35,6 +35,15 @@ function RepeatIcon(): JSX.Element {
   )
 }
 
+function SearchIcon(): JSX.Element {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+  )
+}
+
 function SettingsIcon(): JSX.Element {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -44,11 +53,12 @@ function SettingsIcon(): JSX.Element {
   )
 }
 
-type NavPage = 'home' | 'transactions' | 'recurring' | 'settings'
-const NAV_PAGES: { id: NavPage; labelKey: 'home' | 'records' | 'recurring' | 'settings'; Icon: () => JSX.Element }[] = [
+type NavPage = 'home' | 'transactions' | 'recurring' | 'search' | 'settings'
+const NAV_PAGES: { id: NavPage; labelKey: 'home' | 'records' | 'recurring' | 'search' | 'settings'; Icon: () => JSX.Element }[] = [
   { id: 'home',         labelKey: 'home',      Icon: HomeIcon      },
   { id: 'transactions', labelKey: 'records',   Icon: ListIcon      },
   { id: 'recurring',    labelKey: 'recurring', Icon: RepeatIcon    },
+  { id: 'search',       labelKey: 'search',    Icon: SearchIcon    },
   { id: 'settings',     labelKey: 'settings',  Icon: SettingsIcon  },
 ]
 
