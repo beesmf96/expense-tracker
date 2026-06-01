@@ -70,6 +70,7 @@ Flag if:
 - A CSS class targets an element by ID when a class would work
 - Tailwind utility classes appear anywhere — not used in this project
 - Inline `style` is used for static values that should be in a CSS class
+- A `class="..."` value in JSX references a class that is not defined in any of the four CSS files (`global.css`, `layout.css`, `components.css`, `forms.css`). For each class name added in the diff, grep the styles dir to confirm it exists. Undefined classes (e.g. `search-input-wrap`, `form-input`) render unstyled and are a real bug, not a style nit. Canonical reuse: standalone inputs use `<div class="field"><input/></div>` (`.field input` is styled in `forms.css`); page headings use `class="page-title"`. If the fix is a class swap on one or two lines, apply it; if it requires writing new CSS rules, flag it for the coder (that is feature work, not a lint fix).
 
 ## i18n
 

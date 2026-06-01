@@ -6,6 +6,7 @@ import { Transactions } from './pages/Transactions'
 import { Recurring } from './pages/Recurring'
 import { Settings } from './pages/Settings'
 import { ManageCats } from './pages/ManageCats'
+import { Search } from './pages/Search'
 import { ExpenseModal } from './modals/ExpenseModal'
 import { RecurringModal } from './modals/RecurringModal'
 import { DetailModal } from './modals/DetailModal'
@@ -33,6 +34,9 @@ export function App() {
       </div>
       <div id="page-manage-cats" class={`page${page === 'manage-cats' ? ' active' : ''}`}>
         <ManageCats />
+      </div>
+      <div id="page-search" class={`page${page === 'search' ? ' active' : ''}`}>
+        <Search />
       </div>
 
       <BottomNav />

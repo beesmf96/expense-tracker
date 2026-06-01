@@ -60,6 +60,12 @@ Add new query functions to `src/db/queries.ts`, not inline in components.
 ### Pages
 - Pages are always mounted in `App.tsx`. Add new pages there and in `src/types/index.ts` (`PageId` union).
 - Navigate by setting `activePage.value = 'my-page'`; never unmount a page
+- Because pages are never unmounted, `useSignal()` state inside a page (e.g. a search query) persists when the user navigates away and back. If a page must reset local state when it becomes active, snapshot the driving signal into a const and key a `useEffect` on it:
+  ```ts
+  const activePageVal = activePage.value      // reactive read → component re-renders on nav
+  useEffect(() => { query.value = '' }, [activePageVal])
+  ```
+  The snapshot const (not `activePage.value` inline in the deps array) is what makes the effect re-fire: the signal read in the body subscribes the component, the re-render produces a new `activePageVal`, and the dependency change runs the effect. This is the sanctioned use of `useEffect` in a page — distinct from the module-scope `effect()` rule, which still applies only to `store.ts`.
 
 ### Modals
 - Wrap content in `<Modal id="my-modal">` — the `id` must be added to `ModalId` in `src/types/index.ts`
@@ -109,6 +115,9 @@ Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(i
 - Inline `style` only for dynamic values (e.g., a color derived from `catColor(id)`)
 - Class names: kebab-case. Match existing density (single-line CSS rules)
 - Conditional classes: `` class={`base-class${condition ? ' modifier' : ''}`} ``
+- Before adding any `class="..."` to JSX, confirm the class is actually defined in one of the four CSS files (`global.css`, `layout.css`, `components.css`, `forms.css`). Do not invent class names like `search-input-wrap` or `form-input` — these do not exist. Grep the styles dir first.
+- Standalone form inputs (a search box, a single field outside a modal) reuse the existing `.field` wrapper with an unclassed `<input>` inside it: `<div class="field"><input .../></div>`. `.field input` is already styled in `forms.css` (full-width, bottom-border, accent focus). There is no `.form-input` class — never add one.
+- Page titles use `<div class="page-title">{t('...')}</div>` (defined in `layout.css`) — not `<h1>` or a custom class.
 
 ## TypeScript
 
