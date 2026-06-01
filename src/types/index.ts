@@ -25,6 +25,7 @@ export interface Category {
 export interface ModalContext {
   detailId?: string
   detailTx?: Transaction
+  editTx?: Transaction
   editCatId?: string
   rclFrom?: string
   rclDelete?: boolean

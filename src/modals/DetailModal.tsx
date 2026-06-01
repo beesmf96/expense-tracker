@@ -1,9 +1,10 @@
 import { Modal } from './Modal'
-import { modalCtx, closeM, txs, getCat, catColor, openM } from '../state/store'
+import { modalCtx, closeM, txs, getCat, catColor, openM, selCat, selRCat, selFreq } from '../state/store'
 import { t, catLabel } from '../data/i18n'
 import { delTx } from '../db/queries'
 import { FREQS } from '../data/cats'
 import { lang } from '../state/store'
+import type { Freq } from '../types'
 
 export function DetailModal() {
   const ctx = modalCtx.value
@@ -11,13 +12,28 @@ export function DetailModal() {
 
   if (!tx) return <Modal id="detail"><div /></Modal>
 
-  const cat = getCat(tx.category)
-  const color = catColor(tx.category)
-  const isTemplate = tx.freq !== 'none'
+  const t2 = tx
+  const cat = getCat(t2.category)
+  const color = catColor(t2.category)
+  const isTemplate = t2.freq !== 'none'
 
   function freqLabel(freq: string): string {
     const f = FREQS.find(x => x.value === freq)
     return f ? (lang.value === 'zh' ? f.zh : f.en) : freq
+  }
+
+  function handleEdit() {
+    if (t2.isGenerated === true) {
+      selCat.value = t2.category
+      openM('expense', { editTx: t2 })
+    } else if (t2.freq !== 'none') {
+      selRCat.value = t2.category
+      selFreq.value = t2.freq as Exclude<Freq, 'none'>
+      openM('recurring', { editTx: t2 })
+    } else {
+      selCat.value = t2.category
+      openM('expense', { editTx: t2 })
+    }
   }
 
   return (
@@ -46,6 +62,7 @@ export function DetailModal() {
         )}
       </div>
 
+      <button class="btn btn-p" onClick={handleEdit}>{t('edit')}</button>
       {!tx.isGenerated && (
         <button class="btn btn-r" onClick={() => {
           openM('confirm', {

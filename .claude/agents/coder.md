@@ -54,10 +54,14 @@ Add new query functions to `src/db/queries.ts`, not inline in components.
 - Open with `openM('my-modal', ctx)` where `ctx` matches `ModalContext` fields
 - Close with `closeM()` — always call this after a successful save
 - Pass data via `modalCtx.value` fields; read them inside the modal with `modalCtx.value.xxx`
+- Modals are never unmounted, so `useSignal()` form state persists between opens. To support edit mode, read `modalCtx.value.editTx` and `openModal.value` at the top of the component (reactive reads), then sync local signals in a `useEffect` keyed on `[editTx?.id, openModalVal]`. Keying on `openModal.value` is required so reopening the modal for a different record (or switching add↔edit) triggers a re-sync even when `editTx?.id` hasn't changed.
+- Edit-mode save must branch on `editTx` presence: spread `...editTx` and override the mutable fields to preserve the original `id` and `createdAt`. Never generate a new `id` when editing.
 
 ## Recurring transactions
 
 Never write generated transactions to IndexedDB. They must only exist as in-memory objects produced by `genRecurring()` in `src/state/recurring.ts`. Detect generated transactions by `tx.isGenerated === true` or `tx.id.includes('_')`.
+
+A real (`freq: 'none'`) transaction can act as an *override* for one generated occurrence: if its `id` equals the derived key `{templateId}_{YYYY-MM}`, `genRecurring` skips that month and the real record is used instead. When editing a generated occurrence, save it as a real tx with `freq: 'none'` and `isGenerated: false` using the same derived ID — do not write it back as a template update.
 
 ## Categories
 
@@ -84,6 +88,7 @@ Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(i
 - Props interfaces: inline in file, not exported
 - Prefer literal union types over enums (matches existing `Freq`, `Lang`, `PageId`, `ModalId`)
 - `noUnusedLocals` and `noUnusedParameters` are enforced — remove unused vars before finishing
+- TypeScript does not propagate narrowing (`if (!x) return`) into nested function declarations that close over `x`, even if the function is defined after the guard. Capture into a fresh const after the guard (`const safe = x`) and use that const inside the closure. Prefer this over `!` non-null assertions.
 
 ## Do not
 

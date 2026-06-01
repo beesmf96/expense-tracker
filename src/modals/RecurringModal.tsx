@@ -1,10 +1,12 @@
 import { useSignal } from '@preact/signals'
+import { useEffect } from 'preact/hooks'
 import { Modal } from './Modal'
-import { selRCat, selFreq, closeM } from '../state/store'
+import { selRCat, selFreq, closeM, modalCtx, openModal } from '../state/store'
 import { t } from '../data/i18n'
 import { CatGrid } from '../components/CatGrid'
 import { FreqGrid } from '../components/FreqGrid'
 import { putTx } from '../db/queries'
+import type { Freq } from '../types'
 
 function today() {
   return new Date().toISOString().slice(0, 10)
@@ -15,18 +17,46 @@ export function RecurringModal() {
   const date = useSignal(today())
   const note = useSignal('')
 
+  const editTx = modalCtx.value.editTx
+  const openModalVal = openModal.value
+
+  useEffect(() => {
+    if (editTx) {
+      amount.value = editTx.amount.toString()
+      date.value = editTx.date
+      note.value = editTx.note
+      selRCat.value = editTx.category
+      selFreq.value = editTx.freq as Exclude<Freq, 'none'>
+    } else {
+      amount.value = ''
+      date.value = today()
+      note.value = ''
+    }
+  }, [editTx?.id, openModalVal])
+
   async function save() {
     const amt = parseFloat(amount.value)
     if (!amt || amt <= 0) return
-    await putTx({
-      id: Date.now().toString(),
-      date: date.value,
-      amount: amt,
-      category: selRCat.value,
-      note: note.value.trim(),
-      freq: selFreq.value,
-      createdAt: new Date().toISOString(),
-    })
+    if (editTx) {
+      await putTx({
+        ...editTx,
+        amount: amt,
+        date: date.value,
+        note: note.value.trim(),
+        category: selRCat.value,
+        freq: selFreq.value,
+      })
+    } else {
+      await putTx({
+        id: Date.now().toString(),
+        date: date.value,
+        amount: amt,
+        category: selRCat.value,
+        note: note.value.trim(),
+        freq: selFreq.value,
+        createdAt: new Date().toISOString(),
+      })
+    }
     amount.value = ''
     note.value = ''
     date.value = today()
@@ -35,7 +65,7 @@ export function RecurringModal() {
 
   return (
     <Modal id="recurring">
-      <div class="modal-title">{t('addRecurring')}</div>
+      <div class="modal-title">{editTx ? t('editRecurring') : t('addRecurring')}</div>
 
       <div class="field">
         <label>{t('amount')}</label>
