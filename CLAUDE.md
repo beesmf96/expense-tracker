@@ -70,7 +70,7 @@ export const putTx = (tx: Transaction) => db.txs.put(tx).then(loadAll)
 All five pages are mounted in `App.tsx` simultaneously. Visibility is controlled only by the `.page.active` CSS class based on `activePage` signal. This avoids unmount/remount state loss.
 
 ### Modal system
-`openModal` signal holds `ModalId | null`. `Modal.tsx` renders its children inside an overlay; if `openModal.value !== id`, the overlay is hidden via CSS. `openM(id, ctx)` sets both signals; `closeM()` clears both.
+`openModal` signal holds `ModalId | null`. `Modal.tsx` renders its children inside an overlay; if `openModal.value !== id`, the overlay is hidden via CSS. `openM(id, ctx)` sets both signals; `closeM()` clears both. Modals that lead with a large category header (`DetailModal`, `CatBreakdownModal`) use the shared `<div class="row-item modal-head">` block — `.modal-head` (in `components.css`) enlarges the icon/title and drops the row border; reuse it rather than inlining the sizing.
 
 ### Recurring transactions
 Templates are stored once in IndexedDB with `freq !== 'none'`. `genRecurring()` synthesizes read-only `Transaction` objects at render time for the current view month. They are never written to the DB. Generated IDs: `{templateId}_{YYYY-MM}`. `isGenerated: true` marks them as virtual.
