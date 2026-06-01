@@ -1,9 +1,9 @@
 ---
 plan: refactor-extract-helpers-2
-status: in-progress
+status: review
 branch: feature/refactor-extract-helpers-2
-pr: ~
-implemented: ~
+pr: #11
+implemented: 2026-06-01
 ---
 
 # Feature: Extract duplicated helper functions — `today()` and `freqLabel()`
