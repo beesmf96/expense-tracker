@@ -20,6 +20,21 @@ You are a coder agent for MyLedger — a Preact + @preact/signals + Dexie expens
 - Never use `useState`, `useReducer`, or Preact Context for application state
 - Never call `.value` inside a computed — access signals directly, Preact tracks them
 
+### Persisted preference signals (theme, future settings)
+A signal that must survive reload and drive a DOM/storage side effect follows this three-part pattern in `store.ts`:
+```ts
+const _stored = (localStorage.getItem('key') as MyType) ?? 'default'
+document.documentElement.setAttribute('data-key', _stored)  // pre-effect: prevents flash before first effect run
+export const mySignal = signal<MyType>(_stored)
+effect(() => {
+  document.documentElement.setAttribute('data-key', mySignal.value)
+  localStorage.setItem('key', mySignal.value)
+})
+```
+- The bare `setAttribute` on line 2 runs at module load (before render) so the correct value is applied with no flash of unstyled content. The `effect()` keeps DOM + storage in sync on every change. Both are required; the pre-effect line is not redundant.
+- Do NOT put localStorage/setAttribute logic in a component `useEffect` or click handler — it belongs in the `effect()` next to the signal so every mutation path stays in sync.
+- `effect()` at module scope is allowed only in `store.ts`. Do not introduce `effect()` in components or pages.
+
 ## DB writes
 
 Every DB mutation must call `loadAll()` at the end. Never update signals manually after a write. Use the existing helpers in `src/db/queries.ts`:
@@ -40,6 +55,7 @@ Add new query functions to `src/db/queries.ts`, not inline in components.
 - Props interface declared inline in the file, not exported
 - Use `import type { ComponentChildren } from 'preact'` for children
 - Named export only — no default exports anywhere in this codebase
+- Icon-only interactive controls (a button whose only child is an emoji/SVG, like the theme toggle) must carry an `aria-label={t('...')}`. Buttons with visible text labels (e.g. the `ZH`/`EN` lang toggle) do not.
 
 ### Pages
 - Pages are always mounted in `App.tsx`. Add new pages there and in `src/types/index.ts` (`PageId` union).

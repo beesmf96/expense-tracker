@@ -77,6 +77,7 @@ Flag if:
 - An English string is hardcoded in JSX template (should use `t('key')`)
 - A new `t()` key was added in a component but not added to both `S.en` and `S.zh` in `src/data/i18n.ts`
 - `cat.en` is read directly instead of using `catLabel(cat)`
+- When a hardcoded English string is found but was NOT introduced by the current feature (it predates the diff), still report it, but do NOT fix it inline if the fix requires adding new `S.en`/`S.zh` keys — that crosses into feature work. Note it as a pre-existing finding for the coder.
 
 ## TypeScript
 
@@ -101,6 +102,7 @@ Flag if:
 - Missing test files (vitest is now installed; `src/state/recurring.test.ts` exists)
 - `catHelpers.ts` re-exporting from `store.ts` (intentional thin wrapper)
 - `const t2 = tx` (or similar capture-after-guard alias) immediately after a narrowing guard — this is the sanctioned workaround for TypeScript's closure-narrowing limitation and is preferred over `!`
+- Raw `rgba()` values inside `body::before` decorative gradients (both `:root`/dark and `[data-theme="light"]`). These ambient gradients predate the token system and are intentionally not variable-driven — match the existing dark gradient.
 
 ## Scope boundary — do not rewrite
 

@@ -135,3 +135,4 @@ Query by accessible role first, then by text. Never query by class name.
 - Mock signals — they work natively
 - Write tests for `CATS`, `COLORS`, `EMOJIS` constants — they are static data
 - Test `t()` or `catLabel()` — they are thin wrappers over static objects
+- Test the `theme` signal or its `effect()` (DOM `data-theme` attribute / `localStorage` sync). It is a runtime binding, not a pure function — there is no logic branch worth covering. Same applies to any future persisted-preference signal whose effect only mirrors the value to the DOM/storage.
