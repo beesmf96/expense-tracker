@@ -14,6 +14,7 @@ import { ConfirmModal } from './modals/ConfirmModal'
 import { NewCatModal } from './modals/NewCatModal'
 import { EditCatModal } from './modals/EditCatModal'
 import { ReclassifyModal } from './modals/ReclassifyModal'
+import { CatBreakdownModal } from './modals/CatBreakdownModal'
 
 export function App() {
   const page = activePage.value
@@ -49,6 +50,7 @@ export function App() {
       <NewCatModal />
       <EditCatModal />
       <ReclassifyModal />
+      <CatBreakdownModal />
     </>
   )
 }

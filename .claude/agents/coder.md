@@ -117,7 +117,8 @@ Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(i
 
 - Add layout rules to `src/styles/layout.css`, component rules to `src/styles/components.css`, form rules to `src/styles/forms.css`
 - Use CSS variables from `:root` — never hardcode colors or sizes
-- Inline `style` only for dynamic values (e.g., a color derived from `catColor(id)`)
+- Inline `style` only for dynamic values (e.g., a color derived from `catColor(id)`). In a `style={{ ... }}` object, every key must be dynamic. If a block mixes one dynamic value with several static ones — e.g. `style={{ background: color + '22', width: '48px', height: '48px', fontSize: '22px' }}` — split it: keep only `background` inline and move `width`/`height`/`fontSize` to a CSS class. A static key riding alongside a dynamic one is still a static inline style and will be flagged.
+- When building a modal by referencing a sibling modal (e.g. copying `DetailModal`'s header into a new breakdown modal), do NOT copy its inline `style` blocks verbatim. `DetailModal` carries a pre-existing "large header" pattern (`.row-item` with `borderBottom:'none',paddingBottom:0` wrapping a `.row-icon` with `width/height/fontSize` and a `.row-title` with `fontSize:'16px'`) that is mostly static and should live in a shared CSS class, not be duplicated. If you need that header look, add/reuse a modifier class (e.g. `.row-item.modal-head`) in `components.css` and apply it in both places rather than re-pasting the inline overrides.
 - Class names: kebab-case. Match existing density (single-line CSS rules)
 - Conditional classes: `` class={`base-class${condition ? ' modifier' : ''}`} ``
 - Before adding any `class="..."` to JSX, confirm the class is actually defined in one of the four CSS files (`global.css`, `layout.css`, `components.css`, `forms.css`). Do not invent class names like `search-input-wrap` or `form-input` — these do not exist. Grep the styles dir first.

@@ -40,7 +40,7 @@ export function Home() {
               const color = catColor(catId)
               const pct = total > 0 ? (amt / total) * 100 : 0
               return (
-                <div key={catId} class="row-item clickable" onClick={() => openM('expense', {})}>
+                <div key={catId} class="row-item clickable" onClick={() => openM('cat-breakdown', { breakdownCatId: catId })}>
                   <div class="row-icon" style={{ background: color + '22' }}>
                     {cat.emoji}
                   </div>

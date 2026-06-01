@@ -2,7 +2,7 @@ export type Freq = 'none' | 'monthly' | 'quarterly' | 'biannual' | 'yearly'
 export type Lang = 'en' | 'zh'
 export type Theme = 'dark' | 'light'
 export type PageId = 'home' | 'transactions' | 'recurring' | 'settings' | 'manage-cats' | 'search'
-export type ModalId = 'expense' | 'recurring' | 'newcat' | 'editcat' | 'detail' | 'reclassify' | 'confirm'
+export type ModalId = 'expense' | 'recurring' | 'newcat' | 'editcat' | 'detail' | 'reclassify' | 'confirm' | 'cat-breakdown'
 
 export interface Transaction {
   id: string
@@ -36,6 +36,7 @@ export interface ModalContext {
   confirmMsg?: string
   confirmOkLabel?: string
   confirmOnOk?: () => void
+  breakdownCatId?: string
 }
 
 export interface BackupFile {
