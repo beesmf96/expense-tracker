@@ -94,6 +94,17 @@ Flag if:
 
 - Dense single-line CSS (this is the established style)
 - Lack of JSDoc or docstrings (not used in this project)
-- Missing test files (no test framework is installed yet)
+- Missing test files (vitest is now installed; `src/state/recurring.test.ts` exists)
 - `catHelpers.ts` re-exporting from `store.ts` (intentional thin wrapper)
 - `const t2 = tx` (or similar capture-after-guard alias) immediately after a narrowing guard — this is the sanctioned workaround for TypeScript's closure-narrowing limitation and is preferred over `!`
+
+## Scope boundary — do not rewrite
+
+Your role is narrow corrections only: fix the specific line(s) that violate a convention above. Do not:
+
+- Rewrite entire files or large sections to a different implementation
+- Change logic, data flow, signal names, component props, or modal context fields beyond what is required to fix the flagged violation
+- Remove or replace working code that is not itself a violation
+- Introduce new patterns or refactor working code — that is the coder's job
+
+If fixing a violation requires rewriting more than ~5 lines, flag it in your report and stop — do not apply the fix. Let the coder address it instead.

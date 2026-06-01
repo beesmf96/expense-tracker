@@ -1,9 +1,9 @@
 import { Modal } from './Modal'
 import { modalCtx, closeM, txs, getCat, catColor, openM, selCat, selRCat, selFreq } from '../state/store'
 import { t, catLabel } from '../data/i18n'
-import { delTx } from '../db/queries'
 import { FREQS } from '../data/cats'
 import { lang } from '../state/store'
+import { confirmDeleteTx } from '../lib/txHelpers'
 import type { Freq } from '../types'
 
 export function DetailModal() {
@@ -64,17 +64,7 @@ export function DetailModal() {
 
       <button class="btn btn-p" onClick={handleEdit}>{t('edit')}</button>
       {!tx.isGenerated && (
-        <button class="btn btn-r" onClick={() => {
-          openM('confirm', {
-            confirmIcon: '🗑️',
-            confirmTitle: t('confirmDel'),
-            confirmMsg: `Delete this ${catLabel(cat)} transaction of −${tx.amount.toFixed(2)}?`,
-            confirmOkLabel: t('delete'),
-            confirmOnOk: async () => { await delTx(tx.id) },
-          })
-        }}>
-          {t('delete')}
-        </button>
+        <button class="btn btn-r" onClick={() => confirmDeleteTx(t2, cat)}>{t('delete')}</button>
       )}
       <button class="btn btn-g" onClick={closeM}>{t('close')}</button>
     </Modal>

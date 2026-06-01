@@ -1,6 +1,8 @@
 import { useSignal } from '@preact/signals'
 import { useEffect } from 'preact/hooks'
 import { Modal } from './Modal'
+import { FormField } from '../components/FormField'
+import { ModalActions } from '../components/ModalActions'
 import { selCat, closeM, modalCtx, openModal } from '../state/store'
 import { t } from '../data/i18n'
 import { CatGrid } from '../components/CatGrid'
@@ -65,8 +67,7 @@ export function ExpenseModal() {
     <Modal id="expense">
       <div class="modal-title">{editTx ? t('editExpense') : t('addExpense')}</div>
 
-      <div class="field">
-        <label>{t('amount')}</label>
+      <FormField label={t('amount')}>
         <input
           class="big-input"
           type="number"
@@ -76,33 +77,29 @@ export function ExpenseModal() {
           value={amount.value}
           onInput={e => { amount.value = (e.target as HTMLInputElement).value }}
         />
-      </div>
+      </FormField>
 
-      <div class="field">
-        <label>{t('date')}</label>
+      <FormField label={t('date')}>
         <input
           type="date"
           value={date.value}
           onInput={e => { date.value = (e.target as HTMLInputElement).value }}
         />
-      </div>
+      </FormField>
 
-      <div class="field">
-        <label>{t('category')}</label>
+      <FormField label={t('category')}>
         <CatGrid selectedId={selCat.value} onSelect={id => { selCat.value = id }} />
-      </div>
+      </FormField>
 
-      <div class="field">
-        <label>{t('note')}</label>
+      <FormField label={t('note')}>
         <textarea
           placeholder="Optional note"
           value={note.value}
           onInput={e => { note.value = (e.target as HTMLTextAreaElement).value }}
         />
-      </div>
+      </FormField>
 
-      <button class="btn btn-p" onClick={save}>{t('save')}</button>
-      <button class="btn btn-g" onClick={closeM}>{t('cancel')}</button>
+      <ModalActions onSave={save} />
     </Modal>
   )
 }

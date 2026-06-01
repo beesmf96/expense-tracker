@@ -2,7 +2,7 @@ import { txs, getCat, catColor, openM, selRCat, selFreq, lang } from '../state/s
 import { t, catLabel } from '../data/i18n'
 import { EmptyState } from '../components/EmptyState'
 import { FREQS } from '../data/cats'
-import { delTx } from '../db/queries'
+import { confirmDeleteTx } from '../lib/txHelpers'
 import type { Freq } from '../types'
 
 export function Recurring() {
@@ -57,16 +57,7 @@ export function Recurring() {
               >{t('edit')}</button>
               <button
                 class="row-act-btn row-act-del"
-                onClick={e => {
-                  e.stopPropagation()
-                  openM('confirm', {
-                    confirmIcon: '🗑️',
-                    confirmTitle: t('confirmDel'),
-                    confirmMsg: `Delete this ${catLabel(cat)} transaction of −${tx.amount.toFixed(2)}?`,
-                    confirmOkLabel: t('delete'),
-                    confirmOnOk: async () => { await delTx(tx.id) },
-                  })
-                }}
+                onClick={e => { e.stopPropagation(); confirmDeleteTx(tx, cat) }}
               >{t('delete')}</button>
             </div>
           </div>

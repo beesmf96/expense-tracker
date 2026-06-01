@@ -1,5 +1,6 @@
 import { useSignal } from '@preact/signals'
 import { Modal } from './Modal'
+import { FormField } from '../components/FormField'
 import { modalCtx, closeM, getCat, txs } from '../state/store'
 import { t, catLabel } from '../data/i18n'
 import { CatGrid } from '../components/CatGrid'
@@ -30,13 +31,12 @@ export function ReclassifyModal() {
         </div>
       )}
 
-      <div class="field">
-        <label>{t('moveTo')}</label>
+      <FormField label={t('moveTo')}>
         <CatGrid
           selectedId={targetId.value}
           onSelect={id => { if (id !== fromId) targetId.value = id }}
         />
-      </div>
+      </FormField>
 
       <button class="btn btn-p" onClick={confirm} disabled={!targetId.value}>
         {t('moveConfirm')}

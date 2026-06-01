@@ -1,5 +1,7 @@
 import { useSignal } from '@preact/signals'
 import { Modal } from './Modal'
+import { FormField } from '../components/FormField'
+import { ModalActions } from '../components/ModalActions'
 import { selEmoji, modalCtx, closeM } from '../state/store'
 import { t } from '../data/i18n'
 import { EmojiGrid } from '../components/EmojiGrid'
@@ -27,23 +29,20 @@ export function NewCatModal() {
     <Modal id="newcat">
       <div class="modal-title">{t('addCat')}</div>
 
-      <div class="field">
-        <label>{t('catName')}</label>
+      <FormField label={t('catName')}>
         <input
           type="text"
           placeholder="e.g. Transport"
           value={name.value}
           onInput={e => { name.value = (e.target as HTMLInputElement).value }}
         />
-      </div>
+      </FormField>
 
-      <div class="field">
-        <label>{t('chooseIcon')}</label>
+      <FormField label={t('chooseIcon')}>
         <EmojiGrid selectedEmoji={selEmoji.value} onSelect={e => { selEmoji.value = e }} />
-      </div>
+      </FormField>
 
-      <button class="btn btn-p" onClick={save}>{t('save')}</button>
-      <button class="btn btn-g" onClick={closeM}>{t('cancel')}</button>
+      <ModalActions onSave={save} />
     </Modal>
   )
 }
