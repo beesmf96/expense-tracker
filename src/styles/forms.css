@@ -10,8 +10,8 @@
 /* ── BUTTONS ── */
 .btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:10px;letter-spacing:.01em;transition:opacity .15s,transform .1s}
 .btn:active{transform:scale(.98);opacity:.8}
-.btn-p{background:var(--accent);color:#0C0B0A}
-.btn-r{background:var(--r);color:#fff}
+.btn-p{background:var(--accent);color:var(--bg)}
+.btn-r{background:var(--r);color:var(--white)}
 .btn-g{background:var(--s3);color:var(--muted);border:1px solid var(--border2)}
 
 /* ── CAT GRID ── */

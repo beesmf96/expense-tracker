@@ -57,7 +57,7 @@ export function Settings() {
         <div class="srow" style={{ cursor: 'default' }}>
           <span class="srow-left">🌐 {t('language')}</span>
           <div class="lang-toggle">
-            <button class={`lang-btn${lang.value === 'zh' ? ' active' : ''}`} onClick={() => setLang('zh')}>中文</button>
+            <button class={`lang-btn${lang.value === 'zh' ? ' active' : ''}`} onClick={() => setLang('zh')}>ZH</button>
             <button class={`lang-btn${lang.value === 'en' ? ' active' : ''}`} onClick={() => setLang('en')}>EN</button>
           </div>
         </div>
