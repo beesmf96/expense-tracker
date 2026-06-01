@@ -1,9 +1,9 @@
 ---
 plan: transactions-month-sync
-status: in-progress
+status: review
 branch: feature/transactions-month-sync
-pr: ~
-implemented: ~
+pr: '#10'
+implemented: '2026-06-01'
 ---
 
 # Feature: Transactions Tab Synced to Home Month
