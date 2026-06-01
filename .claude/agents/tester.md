@@ -153,6 +153,8 @@ Spreading `...actual` keeps the real signals working (so `txs.value = [...]` in 
 
 Drive these tests through the UI: set `txs.value`, render, type into the input via `userEvent`, and assert on rendered text / `openM` calls. Querying a search box uses `screen.getByRole('searchbox')` (an `<input type="search">`).
 
+When the unit under test is a **modal** (renders `<Modal id="x">`), set `openModal.value = 'x'` in `beforeEach` before rendering — `Modal` only shows its children when `openModal.value === id`, so without this the content is CSS-hidden and `screen.getByText` queries fail. Also seed `modalCtx.value` with the fields the modal reads (e.g. `modalCtx.value = { breakdownCatId: 'bills_sub' }`); a modal reads its inputs from `modalCtx`, not props. Pages (`Home`, `Transactions`) are always visible and need neither. To assert the absent-context branch (modal returns the empty `<Modal><div/></Modal>` placeholder), set `modalCtx.value = {}` and assert the title text is not present.
+
 ## Do not
 
 - Snapshot tests — this codebase's UI is actively developed
