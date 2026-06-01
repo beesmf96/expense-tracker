@@ -1,0 +1,2050 @@
+{
+  "version": 2,
+  "exportedAt": "2026-06-01T04:35:40.184Z",
+  "txs": [
+    {
+      "id": "4",
+      "date": "2026-03-07",
+      "amount": 35,
+      "category": "car_petrol",
+      "note": "",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "5",
+      "date": "2026-03-11",
+      "amount": 35,
+      "category": "car_petrol",
+      "note": "",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "6",
+      "date": "2026-03-21",
+      "amount": 35,
+      "category": "car_petrol",
+      "note": "",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "7",
+      "date": "2026-03-25",
+      "amount": 35,
+      "category": "car_petrol",
+      "note": "",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "8",
+      "date": "2026-04-01",
+      "amount": 35,
+      "category": "car_petrol",
+      "note": "",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "9",
+      "date": "2026-03-30",
+      "amount": 23,
+      "category": "general",
+      "note": "Car Wash",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "10",
+      "date": "2026-04-03",
+      "amount": 25.6,
+      "category": "eating_out",
+      "note": "LM-Wong Kok",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "11",
+      "date": "2026-04-01",
+      "amount": 24.9,
+      "category": "eating_out",
+      "note": "Eko-a&w",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "12",
+      "date": "2026-04-01",
+      "amount": 166.07,
+      "category": "loan",
+      "note": "PTPTN",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "13",
+      "date": "2026-05-01",
+      "amount": 166.07,
+      "category": "loan",
+      "note": "PTPTN",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "14",
+      "date": "2026-06-01",
+      "amount": 166.07,
+      "category": "loan",
+      "note": "PTPTN",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "21",
+      "date": "2026-04-25",
+      "amount": 651,
+      "category": "loan",
+      "note": "Car Loan (myvi)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "22",
+      "date": "2026-05-25",
+      "amount": 651,
+      "category": "loan",
+      "note": "Car Loan (myvi)",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "23",
+      "date": "2026-04-09",
+      "amount": 184.5,
+      "category": "insurance",
+      "note": "Manulife 764071-0",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "24",
+      "date": "2026-05-09",
+      "amount": 184.5,
+      "category": "insurance",
+      "note": "Manulife 764071-0",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "25",
+      "date": "2026-04-26",
+      "amount": 100,
+      "category": "insurance",
+      "note": "Manulife 867967-0",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "26",
+      "date": "2026-04-14",
+      "amount": 104.95,
+      "category": "bills_sub",
+      "note": "Maxis 109 Plan",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "29",
+      "date": "2026-04-01",
+      "amount": 22.45,
+      "category": "bills_sub",
+      "note": "Apple iCloud (share)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "31",
+      "date": "2026-04-01",
+      "amount": 7,
+      "category": "bills_sub",
+      "note": "YT premium (share)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "33",
+      "date": "2026-04-01",
+      "amount": 15.73,
+      "category": "bills_sub",
+      "note": "Netflix (share)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "34",
+      "date": "2026-04-01",
+      "amount": 136.74,
+      "category": "bills_sub",
+      "note": "Maxis Fiber (Soo woon) ",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "35",
+      "date": "2026-05-26",
+      "amount": 100,
+      "category": "insurance",
+      "note": "Manulife 867967-0",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "36",
+      "date": "2026-05-14",
+      "amount": 104.95,
+      "category": "bills_sub",
+      "note": "Maxis 109 Plan",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "37",
+      "date": "2026-05-01",
+      "amount": 22.45,
+      "category": "bills_sub",
+      "note": "Apple iCloud (share)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "38",
+      "date": "2026-05-01",
+      "amount": 7,
+      "category": "bills_sub",
+      "note": "YT premium (share)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "39",
+      "date": "2026-05-01",
+      "amount": 15.73,
+      "category": "bills_sub",
+      "note": "Netflix (share)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "40",
+      "date": "2026-05-01",
+      "amount": 136.74,
+      "category": "bills_sub",
+      "note": "Maxis Fiber (Soo woon) ",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "41",
+      "date": "2026-04-01",
+      "amount": 26.8,
+      "category": "bills_sub",
+      "note": "TNB",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "42",
+      "date": "2026-04-01",
+      "amount": 6.5,
+      "category": "bills_sub",
+      "note": "Air Selangor",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "43",
+      "date": "2026-04-01",
+      "amount": 40,
+      "category": "bills_sub",
+      "note": "Tun Perak Maintenance",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "44",
+      "date": "2026-05-01",
+      "amount": 40,
+      "category": "bills_sub",
+      "note": "Tun Perak Maintenance",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "45",
+      "date": "2026-04-03",
+      "amount": 8.9,
+      "category": "coffee",
+      "note": "Zus",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "46",
+      "date": "2026-04-03",
+      "amount": 1.3,
+      "category": "car_tolls",
+      "note": "Plaza Batu 11",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "47",
+      "date": "2026-04-03",
+      "amount": 12,
+      "category": "eating_out",
+      "note": "Kajang老佛爷",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "48",
+      "date": "2026-04-02",
+      "amount": 1.3,
+      "category": "car_tolls",
+      "note": "Plaza Batu 9",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "49",
+      "date": "2026-04-02",
+      "amount": 2,
+      "category": "car_parking",
+      "note": "Park at Leisure mall",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "50",
+      "date": "2026-04-02",
+      "amount": 12.4,
+      "category": "eating_out",
+      "note": "LM-Pan Mee",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "51",
+      "date": "2026-04-02",
+      "amount": 2.5,
+      "category": "car_tolls",
+      "note": "Pantai",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "52",
+      "date": "2026-04-02",
+      "amount": 6,
+      "category": "insurance",
+      "note": "TNG wallet safe pro (insurance)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "53",
+      "date": "2026-04-02",
+      "amount": 22.5,
+      "category": "eating_out",
+      "note": "B2be lunch",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "54",
+      "date": "2026-04-01",
+      "amount": 12,
+      "category": "eating_out",
+      "note": "Tun Perak-福星",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "55",
+      "date": "2026-04-01",
+      "amount": 9.9,
+      "category": "coffee",
+      "note": "Zus",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "56",
+      "date": "2026-04-01",
+      "amount": 13.45,
+      "category": "eating_out",
+      "note": "",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "58",
+      "date": "2026-04-03",
+      "amount": 6,
+      "category": "eating_out",
+      "note": "Nearby perimbun mamak",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "59",
+      "date": "2026-04-04",
+      "amount": 9,
+      "category": "eating_out",
+      "note": "Pasar-nasi lemak",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "60",
+      "date": "2026-04-04",
+      "amount": 12,
+      "category": "groceries",
+      "note": "Pasar-糕点",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "61",
+      "date": "2026-04-04",
+      "amount": 30,
+      "category": "groceries",
+      "note": "Pasar-水果",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "62",
+      "date": "2026-04-04",
+      "amount": 6.4,
+      "category": "groceries",
+      "note": "Pasar-香蕉",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "63",
+      "date": "2026-04-05",
+      "amount": 11.65,
+      "category": "eating_out",
+      "note": "老妈子",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "64",
+      "date": "2026-04-05",
+      "amount": 7.5,
+      "category": "groceries",
+      "note": "CS-油",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "65",
+      "date": "2026-04-04",
+      "amount": 2.8,
+      "category": "groceries",
+      "note": "Wh house buy geh 100 plus",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "66",
+      "date": "2026-03-30",
+      "amount": 101.9,
+      "category": "general",
+      "note": "清明神料",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "67",
+      "date": "2026-04-05",
+      "amount": 99.5,
+      "category": "holidays",
+      "note": "Sunway lagoon (pay to wei hin)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.183Z"
+    },
+    {
+      "id": "68",
+      "date": "2026-04-04",
+      "amount": 2.3,
+      "category": "car_tolls",
+      "note": "SUKE",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "69",
+      "date": "2026-04-04",
+      "amount": 1.3,
+      "category": "car_tolls",
+      "note": "Plaza Batu 11",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "70",
+      "date": "2026-04-04",
+      "amount": 1.66,
+      "category": "car_tolls",
+      "note": "Sg. Balak",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "71",
+      "date": "2026-04-04",
+      "amount": 6.5,
+      "category": "eating_out",
+      "note": "Netizen mamak",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "72",
+      "date": "2026-04-04",
+      "amount": 21.8,
+      "category": "shopping",
+      "note": "Plastic shop-water filter and plastic cup",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "73",
+      "date": "2026-04-05",
+      "amount": 19.2,
+      "category": "eating_out",
+      "note": "Netizen mamak",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "75",
+      "date": "2026-04-06",
+      "amount": 11.5,
+      "category": "eating_out",
+      "note": "Eko cheras foodcourt",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "76",
+      "date": "2026-04-04",
+      "amount": 38.58,
+      "category": "eating_out",
+      "note": "Serdang 叫菜吃饭 pusc",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "77",
+      "date": "2026-04-07",
+      "amount": 12.6,
+      "category": "eating_out",
+      "note": "Tun perak-西刀鱼粉",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "78",
+      "date": "2026-04-07",
+      "amount": 13.6,
+      "category": "eating_out",
+      "note": "Mytown mcd",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "79",
+      "date": "2026-04-07",
+      "amount": 8.5,
+      "category": "eating_out",
+      "note": "Sentul Raya-lunch",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "80",
+      "date": "2026-04-07",
+      "amount": 3.7,
+      "category": "eating_out",
+      "note": "Sentul raya-water",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "81",
+      "date": "2026-04-07",
+      "amount": 2,
+      "category": "car_parking",
+      "note": "Park at Sentul Raya",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "82",
+      "date": "2026-04-07",
+      "amount": 11,
+      "category": "coffee",
+      "note": "Eko-caveman coffee",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "83",
+      "date": "2026-04-07",
+      "amount": 3.5,
+      "category": "car_tolls",
+      "note": "SPE-Chan Sow Lin",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "84",
+      "date": "2026-04-07",
+      "amount": 35,
+      "category": "car_petrol",
+      "note": "",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "85",
+      "date": "2026-04-08",
+      "amount": 35,
+      "category": "shopping",
+      "note": "Ikea-灯",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "86",
+      "date": "2026-04-08",
+      "amount": 6,
+      "category": "eating_out",
+      "note": "Nasi lemak-bf",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "87",
+      "date": "2026-04-08",
+      "amount": 11.2,
+      "category": "eating_out",
+      "note": "Lunch-康樂油條+水",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "88",
+      "date": "2026-04-09",
+      "amount": 8.6,
+      "category": "eating_out",
+      "note": "Office charsat",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "89",
+      "date": "2026-04-10",
+      "amount": 29.35,
+      "category": "groceries",
+      "note": "Cs",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "90",
+      "date": "2026-04-10",
+      "amount": 8,
+      "category": "eating_out",
+      "note": "Lunch-angsana-Zap fan",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "91",
+      "date": "2026-04-10",
+      "amount": 13.45,
+      "category": "eating_out",
+      "note": "C180 魚丸粉",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "92",
+      "date": "2026-04-09",
+      "amount": 10,
+      "category": "eating_out",
+      "note": "Tun perak 福星",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "93",
+      "date": "2026-04-08",
+      "amount": 322.92,
+      "category": "lifestyle",
+      "note": "鋼琴課lv1",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "94",
+      "date": "2026-04-10",
+      "amount": 6.4,
+      "category": "groceries",
+      "note": "99-無糖豆漿",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "95",
+      "date": "2026-04-09",
+      "amount": 14.8,
+      "category": "eating_out",
+      "note": "Pj-一點甜",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "96",
+      "date": "2026-04-09",
+      "amount": 2.5,
+      "category": "car_tolls",
+      "note": "Pantai",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "98",
+      "date": "2026-04-19",
+      "amount": 43.7,
+      "category": "entertainment",
+      "note": "Sing k -eko cheras",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "99",
+      "date": "2026-04-19",
+      "amount": 18,
+      "category": "entertainment",
+      "note": "Movie - eko cheras",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "100",
+      "date": "2026-04-19",
+      "amount": 64.62,
+      "category": "eating_out",
+      "note": "Eko cheras - 木桶鱼",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "101",
+      "date": "2026-04-19",
+      "amount": 15.2,
+      "category": "eating_out",
+      "note": "Petaling street - 云吞面 + 豆浆水",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "102",
+      "date": "2026-04-19",
+      "amount": 9.5,
+      "category": "coffee",
+      "note": "Eko cheras - starbucks",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "103",
+      "date": "2026-04-19",
+      "amount": 8.9,
+      "category": "eating_out",
+      "note": "Eko cheras-lunch",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "104",
+      "date": "2026-04-19",
+      "amount": 6,
+      "category": "eating_out",
+      "note": "Petaling street-糖水",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "105",
+      "date": "2026-04-18",
+      "amount": 9.5,
+      "category": "eating_out",
+      "note": "Dinner - mamak putri jaya",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "106",
+      "date": "2026-04-18",
+      "amount": 9.5,
+      "category": "coffee",
+      "note": "Eko cheras - starbucks",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "107",
+      "date": "2026-04-18",
+      "amount": 21.55,
+      "category": "eating_out",
+      "note": "Lunch-lalaport-sai kee",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "108",
+      "date": "2026-04-18",
+      "amount": 10,
+      "category": "public_transport",
+      "note": "Rapidkl-Daily pass",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "109",
+      "date": "2026-04-18",
+      "amount": 14.6,
+      "category": "eating_out",
+      "note": "Bf-tun perak-linglong",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "110",
+      "date": "2026-04-17",
+      "amount": 8,
+      "category": "eating_out",
+      "note": "Lunch-angsana-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "111",
+      "date": "2026-04-17",
+      "amount": 11,
+      "category": "coffee",
+      "note": "Eko cheras-caves man coffee",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "112",
+      "date": "2026-04-17",
+      "amount": 6,
+      "category": "eating_out",
+      "note": "Bf-tun perak-bihun goreng",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "113",
+      "date": "2026-04-16",
+      "amount": 10,
+      "category": "eating_out",
+      "note": "Dinner-batu11-泰国餐",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "114",
+      "date": "2026-04-16",
+      "amount": 2.5,
+      "category": "car_tolls",
+      "note": "Pantai",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "115",
+      "date": "2026-04-16",
+      "amount": 15.7,
+      "category": "eating_out",
+      "note": "Lunch-b2be",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "116",
+      "date": "2026-04-16",
+      "amount": 8.5,
+      "category": "eating_out",
+      "note": "Bf-Phileo dmsr-kd cafe",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "117",
+      "date": "2026-04-15",
+      "amount": 10,
+      "category": "eating_out",
+      "note": "Lunch-angsana-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "118",
+      "date": "2026-04-15",
+      "amount": 0.8,
+      "category": "car_parking",
+      "note": "Park at angsana",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "119",
+      "date": "2026-04-15",
+      "amount": 7.5,
+      "category": "eating_out",
+      "note": "Bf-tun perak-bihun",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "120",
+      "date": "2026-04-14",
+      "amount": 10,
+      "category": "general",
+      "note": "Clarify-Nor Miezza Resource",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "121",
+      "date": "2026-04-14",
+      "amount": 13.2,
+      "category": "groceries",
+      "note": "99 speedmart",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "122",
+      "date": "2026-04-14",
+      "amount": 8.5,
+      "category": "eating_out",
+      "note": "Lunch-angsana-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "123",
+      "date": "2026-04-12",
+      "amount": 11.99,
+      "category": "bills_sub",
+      "note": "Google ai subscription (1 month)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "124",
+      "date": "2026-04-12",
+      "amount": 9.9,
+      "category": "coffee",
+      "note": "Zus tun Perak",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "125",
+      "date": "2026-04-12",
+      "amount": 17.7,
+      "category": "groceries",
+      "note": "99 speedmart",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "126",
+      "date": "2026-04-12",
+      "amount": 7.4,
+      "category": "coffee",
+      "note": "7eleven nearby metro prima",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "127",
+      "date": "2026-04-12",
+      "amount": 8.7,
+      "category": "eating_out",
+      "note": "Bf-mamak putri jaya",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "128",
+      "date": "2026-04-18",
+      "amount": 9.9,
+      "category": "car_parking",
+      "note": "Park at mrt btho",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "129",
+      "date": "2026-04-19",
+      "amount": 4.5,
+      "category": "car_parking",
+      "note": "Park at mrt btho",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "131",
+      "date": "2026-04-12",
+      "amount": 2,
+      "category": "car_parking",
+      "note": "Park at aeon metro prima",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "132",
+      "date": "2026-04-07",
+      "amount": 4.5,
+      "category": "car_parking",
+      "note": "Park at mrt btho",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "133",
+      "date": "2026-04-07",
+      "amount": 6.4,
+      "category": "public_transport",
+      "note": "Mrt back and forth to Ikea mytown",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "134",
+      "date": "2026-04-05",
+      "amount": 2.2,
+      "category": "car_parking",
+      "note": "Park at Netizen",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "135",
+      "date": "2026-04-05",
+      "amount": 1.2,
+      "category": "public_transport",
+      "note": "From Sri raya to btho mrt station",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "136",
+      "date": "2026-04-05",
+      "amount": 10,
+      "category": "public_transport",
+      "note": "Mrt feeder bus",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "137",
+      "date": "2026-04-05",
+      "amount": 1.2,
+      "category": "public_transport",
+      "note": "From btho to Sri raya station",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "138",
+      "date": "2026-04-16",
+      "amount": 45.59,
+      "category": "car_petrol",
+      "note": "Petron",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "139",
+      "date": "2026-04-15",
+      "amount": 31.3,
+      "category": "groceries",
+      "note": "Cs",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "140",
+      "date": "2026-04-14",
+      "amount": 42.75,
+      "category": "groceries",
+      "note": "Cs",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "141",
+      "date": "2026-04-17",
+      "amount": 8,
+      "category": "bank_charges",
+      "note": "Annual fee for bank card",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "142",
+      "date": "2026-04-14",
+      "amount": 16,
+      "category": "eating_out",
+      "note": "Bf-Tun perak-老妈子",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "143",
+      "date": "2026-04-13",
+      "amount": 10,
+      "category": "eating_out",
+      "note": "Lunch-angsana-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "144",
+      "date": "2026-04-13",
+      "amount": 3.8,
+      "category": "eating_out",
+      "note": "Lunch-kengleyoutiao",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "145",
+      "date": "2026-04-13",
+      "amount": 12.5,
+      "category": "medical",
+      "note": "R pharmacy - tunperak-伤风药物",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "146",
+      "date": "2026-04-13",
+      "amount": 11.4,
+      "category": "general",
+      "note": "Clarify",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "147",
+      "date": "2026-04-12",
+      "amount": 70,
+      "category": "lifestyle",
+      "note": "Aeon metroprima-Yamaha-metronome",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "148",
+      "date": "2026-04-09",
+      "amount": 525.25,
+      "category": "lifestyle",
+      "note": "钢琴课lv2",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "149",
+      "date": "2026-04-12",
+      "amount": 110,
+      "category": "psychology",
+      "note": "My 心理学 (deposit)",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "150",
+      "date": "2026-04-12",
+      "amount": 15,
+      "category": "general",
+      "note": "Clarify",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "151",
+      "date": "2026-04-11",
+      "amount": 11.5,
+      "category": "eating_out",
+      "note": "Lunch-福星",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "152",
+      "date": "2026-04-02",
+      "amount": 4.56,
+      "category": "eating_out",
+      "note": "LM-Food bar air",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "153",
+      "date": "2026-04-21",
+      "amount": 33.25,
+      "category": "groceries",
+      "note": "Cs",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "154",
+      "date": "2026-04-21",
+      "amount": 6.4,
+      "category": "groceries",
+      "note": "99",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "155",
+      "date": "2026-04-21",
+      "amount": 8.5,
+      "category": "eating_out",
+      "note": "Lunch-angsana-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "156",
+      "date": "2026-04-22",
+      "amount": 15,
+      "category": "eating_out",
+      "note": "Eko cheras-food court",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "157",
+      "date": "2026-04-22",
+      "amount": 9,
+      "category": "coffee",
+      "note": "Eko cheras-cavemen coffee",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "158",
+      "date": "2026-04-22",
+      "amount": 20,
+      "category": "gifts",
+      "note": "Eko cheras-donation",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "159",
+      "date": "2026-04-20",
+      "amount": 9.5,
+      "category": "eating_out",
+      "note": "Lunch-angsana-Mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "160",
+      "date": "2026-04-23",
+      "amount": 8.8,
+      "category": "eating_out",
+      "note": "Bf-phileo dmsr",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "161",
+      "date": "2026-04-23",
+      "amount": 2.5,
+      "category": "car_tolls",
+      "note": "Pantai",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "162",
+      "date": "2026-04-24",
+      "amount": 2,
+      "category": "car_parking",
+      "note": "Leisure mall",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "163",
+      "date": "2026-04-24",
+      "amount": 10.05,
+      "category": "coffee",
+      "note": "Eko-rich coffee",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "164",
+      "date": "2026-04-25",
+      "amount": 21.15,
+      "category": "eating_out",
+      "note": "Lunch-b2be",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "165",
+      "date": "2026-04-25",
+      "amount": 14.1,
+      "category": "eating_out",
+      "note": "Lunch-kangleyoutiao",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "166",
+      "date": "2026-04-25",
+      "amount": 2.3,
+      "category": "car_tolls",
+      "note": "suke-Alam damai",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "167",
+      "date": "2026-04-26",
+      "amount": 17.6,
+      "category": "eating_out",
+      "note": "Mcd tun hussien onn",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "168",
+      "date": "2026-04-26",
+      "amount": 8,
+      "category": "eating_out",
+      "note": "Bf-Putri Jaya",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "169",
+      "date": "2026-04-26",
+      "amount": 3.2,
+      "category": "eating_out",
+      "note": "Bf-putrijaya-coffee",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "170",
+      "date": "2026-04-01",
+      "amount": 0.5,
+      "category": "general",
+      "note": "Tissue",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "171",
+      "date": "2026-04-26",
+      "amount": 55,
+      "category": "groceries",
+      "note": "Coffee blends-asean coffee festival",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "172",
+      "date": "2026-04-26",
+      "amount": 12,
+      "category": "coffee",
+      "note": "Asean coffee festival -latte",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "173",
+      "date": "2026-04-26",
+      "amount": 12.4,
+      "category": "eating_out",
+      "note": "Leisure mall-panmee",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "174",
+      "date": "2026-04-27",
+      "amount": 0.7,
+      "category": "car_parking",
+      "note": "",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "175",
+      "date": "2026-04-27",
+      "amount": 9,
+      "category": "eating_out",
+      "note": "Lunch-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "176",
+      "date": "2026-04-28",
+      "amount": 59.74,
+      "category": "entertainment",
+      "note": "Pusc-eat and singk",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "177",
+      "date": "2026-04-28",
+      "amount": 9,
+      "category": "eating_out",
+      "note": "Lunch-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "178",
+      "date": "2026-04-28",
+      "amount": 3.5,
+      "category": "coffee",
+      "note": "kangleyoutiao",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "179",
+      "date": "2026-04-29",
+      "amount": 50,
+      "category": "public_transport",
+      "note": "My50 pass",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "180",
+      "date": "2026-04-29",
+      "amount": 11.9,
+      "category": "eating_out",
+      "note": "Lunch-eko",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "181",
+      "date": "2026-04-29",
+      "amount": 11.5,
+      "category": "eating_out",
+      "note": "Dinner-福星",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "182",
+      "date": "2026-04-30",
+      "amount": 7.5,
+      "category": "eating_out",
+      "note": "Bf-phileo dmsr",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "183",
+      "date": "2026-04-30",
+      "amount": 11.5,
+      "category": "eating_out",
+      "note": "Dinner-福星",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "184",
+      "date": "2026-04-30",
+      "amount": 23.8,
+      "category": "eating_out",
+      "note": "Lunch-b2be",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "185",
+      "date": "2026-04-30",
+      "amount": 4.5,
+      "category": "car_parking",
+      "note": "Mrt btho",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "186",
+      "date": "2026-04-26",
+      "amount": 4.5,
+      "category": "car_parking",
+      "note": "Mrt btho ",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "187",
+      "date": "2026-04-26",
+      "amount": 3.4,
+      "category": "public_transport",
+      "note": "From mrt btho to mrt trx",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "188",
+      "date": "2026-04-26",
+      "amount": 2.3,
+      "category": "public_transport",
+      "note": "From mrt trx to mrt tmn mutiara",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "189",
+      "date": "2026-04-26",
+      "amount": 2.3,
+      "category": "public_transport",
+      "note": "From mrt tmn mutiara to btho",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "190",
+      "date": "2026-04-19",
+      "amount": 18.02,
+      "category": "car_parking",
+      "note": "Eko cheras ",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "191",
+      "date": "2026-04-19",
+      "amount": 3.6,
+      "category": "public_transport",
+      "note": "Mrt btho to lrt masjid jamek ",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "192",
+      "date": "2026-04-19",
+      "amount": 4.4,
+      "category": "public_transport",
+      "note": "From masjid jamek to btho",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "193",
+      "date": "2026-05-10",
+      "amount": 22.5,
+      "category": "eating_out",
+      "note": "With chang-makan at pasar seni ",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "194",
+      "date": "2026-05-10",
+      "amount": 11.9,
+      "category": "eating_out",
+      "note": "Lunch-kangleyoutiao ",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "195",
+      "date": "2026-05-10",
+      "amount": 2.3,
+      "category": "car_tolls",
+      "note": "SUKE-bukit teratai ",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "196",
+      "date": "2026-05-10",
+      "amount": 2.3,
+      "category": "car_tolls",
+      "note": "SUKE-Ampang",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "197",
+      "date": "2026-05-10",
+      "amount": 2.5,
+      "category": "car_tolls",
+      "note": "Ayer panas ",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "198",
+      "date": "2026-05-10",
+      "amount": 2.5,
+      "category": "groceries",
+      "note": "Mineral water",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "199",
+      "date": "2026-05-10",
+      "amount": 4.7,
+      "category": "eating_out",
+      "note": "Bf-mynews",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "200",
+      "date": "2026-05-09",
+      "amount": 10,
+      "category": "eating_out",
+      "note": "Dinner-福星",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "201",
+      "date": "2026-05-08",
+      "amount": 1.3,
+      "category": "car_tolls",
+      "note": "Plaza batu 11",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "202",
+      "date": "2026-05-08",
+      "amount": 2,
+      "category": "car_parking",
+      "note": "Leisure mall",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "203",
+      "date": "2026-05-08",
+      "amount": 12.4,
+      "category": "eating_out",
+      "note": "Lunch-lm-foodcourt-panmee",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "204",
+      "date": "2026-05-07",
+      "amount": 11.9,
+      "category": "entertainment",
+      "note": "Game-NTE reload",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "205",
+      "date": "2026-05-07",
+      "amount": 16.9,
+      "category": "eating_out",
+      "note": "Lunch-大杯茶",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "206",
+      "date": "2026-05-06",
+      "amount": 6.5,
+      "category": "eating_out",
+      "note": "Lunch-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "207",
+      "date": "2026-05-06",
+      "amount": 6,
+      "category": "eating_out",
+      "note": "Bf-bihun goreng",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "208",
+      "date": "2026-05-05",
+      "amount": 8,
+      "category": "eating_out",
+      "note": "Lunch-mixedrice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "209",
+      "date": "2026-05-05",
+      "amount": 6,
+      "category": "eating_out",
+      "note": "Bf-bihun goreng",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "210",
+      "date": "2026-05-03",
+      "amount": 9.6,
+      "category": "eating_out",
+      "note": "Dinner-mamak-netizen",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "211",
+      "date": "2026-05-03",
+      "amount": 20.55,
+      "category": "eating_out",
+      "note": "Bf-mamalove",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "212",
+      "date": "2026-05-02",
+      "amount": 2.3,
+      "category": "car_tolls",
+      "note": "Suke-bukit teratai",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "213",
+      "date": "2026-05-02",
+      "amount": 2.3,
+      "category": "car_tolls",
+      "note": "Suke-ampang",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "214",
+      "date": "2026-05-02",
+      "amount": 2.5,
+      "category": "car_tolls",
+      "note": "Ayer panas",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "215",
+      "date": "2026-05-01",
+      "amount": 22.3,
+      "category": "eating_out",
+      "note": "Lunch-with xfsy after badminton",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "216",
+      "date": "2026-05-01",
+      "amount": 2.6,
+      "category": "eating_out",
+      "note": "Mkh mamak-water",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "217",
+      "date": "2026-05-01",
+      "amount": 17.98,
+      "category": "entertainment",
+      "note": "Game-new game reload",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "218",
+      "date": "2026-05-05",
+      "amount": 53.35,
+      "category": "bills_sub",
+      "note": "TNB",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "219",
+      "date": "2026-05-05",
+      "amount": 6.5,
+      "category": "bills_sub",
+      "note": "Air Selangor",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "220",
+      "date": "2026-04-29",
+      "amount": 51.64,
+      "category": "car_petrol",
+      "note": "Petron",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "221",
+      "date": "2026-05-09",
+      "amount": 20.15,
+      "category": "eating_out",
+      "note": "Bf-You fish noodle c180",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "222",
+      "date": "2026-05-08",
+      "amount": 20.2,
+      "category": "eating_out",
+      "note": "Bf-canton-粥",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "223",
+      "date": "2026-05-07",
+      "amount": 30.85,
+      "category": "groceries",
+      "note": "99-buy 洗衣液",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "224",
+      "date": "2026-05-06",
+      "amount": 45,
+      "category": "medical",
+      "note": "Klinik-no asked for receipt cannot claim this one",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "225",
+      "date": "2026-05-04",
+      "amount": 8,
+      "category": "eating_out",
+      "note": "Lunch-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "226",
+      "date": "2026-05-04",
+      "amount": 11.4,
+      "category": "eating_out",
+      "note": "Dinner-大杯茶",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "227",
+      "date": "2026-05-04",
+      "amount": 3.2,
+      "category": "groceries",
+      "note": "99-豆浆水",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "228",
+      "date": "2026-05-10",
+      "amount": 100,
+      "category": "bills_sub",
+      "note": "Ukmba membership fee - 2023 to 2027",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "229",
+      "date": "2026-05-10",
+      "amount": 380,
+      "category": "psychology",
+      "note": "2 session bundle",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "230",
+      "date": "2026-05-09",
+      "amount": 529.8,
+      "category": "entertainment",
+      "note": "Game-Genshin reload",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "231",
+      "date": "2026-05-08",
+      "amount": 90.3,
+      "category": "eating_out",
+      "note": "Dinner-two pesos-with sister",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "232",
+      "date": "2026-05-04",
+      "amount": 38.7,
+      "category": "groceries",
+      "note": "Cs",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "233",
+      "date": "2026-05-04",
+      "amount": 13,
+      "category": "eating_out",
+      "note": "Bf-Mcd",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "234",
+      "date": "2026-05-03",
+      "amount": 14.8,
+      "category": "eating_out",
+      "note": "Dinner-mcd",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "235",
+      "date": "2026-05-02",
+      "amount": 19.9,
+      "category": "entertainment",
+      "note": "Game-genshin-月卡",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "236",
+      "date": "2026-05-02",
+      "amount": 18.6,
+      "category": "eating_out",
+      "note": "Dinner Mcd",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "237",
+      "date": "2026-05-11",
+      "amount": 8,
+      "category": "eating_out",
+      "note": "Lunch-mixed rice",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "238",
+      "date": "2026-05-12",
+      "amount": 12.8,
+      "category": "eating_out",
+      "note": "Lunch-Eko food court",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "239",
+      "date": "2026-05-12",
+      "amount": 7.5,
+      "category": "eating_out",
+      "note": "Bf-bihun goreng",
+      "freq": "none",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "244",
+      "date": "2026-06-01",
+      "amount": 22.45,
+      "category": "bills_sub",
+      "note": "Apple iCloud (share)",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "245",
+      "date": "2026-06-01",
+      "amount": 7,
+      "category": "bills_sub",
+      "note": "YT premium (share)",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "246",
+      "date": "2026-06-01",
+      "amount": 15.73,
+      "category": "bills_sub",
+      "note": "Netflix (share)",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "247",
+      "date": "2026-06-01",
+      "amount": 136.74,
+      "category": "bills_sub",
+      "note": "Maxis Fiber (Soo woon) ",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    },
+    {
+      "id": "248",
+      "date": "2026-06-01",
+      "amount": 40,
+      "category": "bills_sub",
+      "note": "Tun Perak Maintenance",
+      "freq": "monthly",
+      "createdAt": "2026-06-01T04:35:40.184Z"
+    }
+  ],
+  "userCats": []
+}

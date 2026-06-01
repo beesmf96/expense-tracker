@@ -1,0 +1,39 @@
+/* ── LIST ROWS ── */
+.row-item{padding:13px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.row-item:last-child{border-bottom:none}
+.row-item.clickable{cursor:pointer;transition:opacity .12s}
+.row-item.clickable:active{opacity:.55}
+.row-icon{width:38px;height:38px;border-radius:10px;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.row-info{flex:1;min-width:0}
+.row-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:1px}
+.row-sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-date{font-size:11px;color:var(--faint);margin-top:2px;font-family:'DM Mono',monospace;letter-spacing:.01em}
+.amount{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--r);white-space:nowrap}
+
+/* ── BADGES ── */
+.badge{display:inline-block;font-size:9px;background:var(--adim);color:var(--accent);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle;font-weight:600;letter-spacing:.02em}
+.freq-badge{display:inline-block;font-size:11px;color:var(--accent);background:var(--adim);border-radius:6px;padding:2px 8px;font-weight:500}
+
+/* ── PROGRESS BAR ── */
+.bar-wrap{height:2px;background:var(--faint);border-radius:1px;margin-top:6px;overflow:hidden}
+.bar{height:2px;border-radius:1px;animation:barIn .55s cubic-bezier(.4,0,.2,1) both;transform-origin:left}
+@keyframes barIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* ── MONTH GROUP ── */
+.month-group{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:18px 0 10px;border-bottom:1px solid var(--border2)}
+
+/* ── SETTINGS ── */
+.settings-card{background:var(--s1);border:1px solid var(--border2);border-radius:14px;padding:2px 16px;margin-bottom:12px}
+.srow{padding:14px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.srow:last-child{border-bottom:none}
+.srow-left{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text)}
+.lang-toggle{display:flex;background:var(--s2);border-radius:8px;padding:3px;gap:3px}
+.lang-btn{flex:1;padding:6px 12px;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;background:none;color:var(--muted);font-family:'DM Sans',sans-serif;letter-spacing:.03em}
+.lang-btn.active{background:var(--s3);color:var(--accent)}
+.icon-btn{background:none;border:none;cursor:pointer;padding:4px 6px;font-size:15px;color:var(--muted);transition:color .15s}
+.icon-btn:hover{color:var(--text)}
+
+/* ── EMPTY STATES ── */
+.empty{text-align:center;padding:64px 20px;color:var(--muted)}
+.empty .ei{font-size:40px;margin-bottom:14px;opacity:.4;display:block}
+.empty p{font-size:14px;line-height:1.7;white-space:pre-line}

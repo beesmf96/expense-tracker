@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQLite → MyLedger</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F7F8FC;color:#1a1a2e;min-height:100vh;padding:24px 16px}
+.container{max-width:520px;margin:0 auto}
+h1{font-size:22px;font-weight:700;margin-bottom:6px}
+.sub{font-size:14px;color:#888;margin-bottom:24px}
+.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:16px}
+.card h2{font-size:15px;font-weight:700;margin-bottom:12px;color:#6C63FF}
+.drop-zone{border:2px dashed #ccc;border-radius:12px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s}
+.drop-zone:hover,.drop-zone.over{border-color:#6C63FF;background:#EEF0FF}
+.drop-icon{font-size:40px;margin-bottom:8px}
+.drop-label{font-size:15px;font-weight:600;margin-bottom:4px}
+.drop-sub{font-size:13px;color:#888}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
+.btn-p{background:#6C63FF;color:#fff}
+.btn-p:disabled{opacity:.4;cursor:not-allowed}
+.btn-g{background:#E8E8F0;color:#1a1a2e}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.stat{background:#F7F8FC;border-radius:10px;padding:12px;text-align:center}
+.stat-n{font-size:22px;font-weight:700;color:#6C63FF}
+.stat-l{font-size:11px;color:#888;margin-top:2px}
+.log{background:#F7F8FC;border-radius:10px;padding:12px;max-height:200px;overflow-y:auto;font-size:12px;font-family:monospace;line-height:1.6}
+.log .ok{color:#51CF66}
+.log .warn{color:#FF9F1C}
+.log .err{color:#FF6B6B}
+.hidden{display:none}
+.cat-map{margin-top:10px}
+.cat-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px}
+.cat-row select{flex:1;padding:6px 10px;border:1.5px solid #E8E8F0;border-radius:8px;font-size:13px;background:#F7F8FC}
+.cat-badge{background:#EEF0FF;color:#6C63FF;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>SQLite → MyLedger 🔄</h1>
+  <p class="sub">Upload your old app's SQLite backup to convert it to MyLedger format.</p>
+  <div id="sql-status" style="font-size:13px;color:#888;margin-bottom:16px">⏳ Loading SQL engine...</div>
+
+  <div class="card">
+    <h2>1. Upload SQLite File</h2>
+    <div class="drop-zone" id="drop-zone" onclick="g('file-input').click()">
+      <div class="drop-icon">📂</div>
+      <div class="drop-label">Tap to select file</div>
+      <div class="drop-sub">or drag and drop here</div>
+    </div>
+    <input type="file" id="file-input" style="display:none">
+  </div>
+
+  <div class="card hidden" id="card-map">
+    <h2>2. Map Categories</h2>
+    <p style="font-size:13px;color:#888;margin-bottom:10px">Match your old categories to MyLedger categories (or leave as custom).</p>
+    <div class="cat-map" id="cat-map"></div>
+  </div>
+
+  <div class="card hidden" id="card-result">
+    <h2>3. Result</h2>
+    <div class="stats" id="stats"></div>
+    <div class="log" id="log"></div>
+    <button class="btn btn-p" id="btn-download" disabled>⬇ Download MyLedger JSON</button>
+    <button class="btn btn-g" onclick="reset()">↩ Start Over</button>
+  </div>
+</div>
+
+<script>
+const MYLEDGER_CATS = [
+  {id:'lifestyle',en:'Lifestyle'},
+  {id:'loan',en:'Loan'},
+  {id:'eating_out',en:'Eating Out'},
+  {id:'bills_sub',en:'Bill & Subscription'},
+  {id:'groceries',en:'Groceries'},
+  {id:'insurance',en:'Insurance'},
+  {id:'car_petrol',en:'Car-Petrol'},
+  {id:'entertainment',en:'Entertainment'},
+  {id:'coffee',en:'Coffee Breaks'},
+  {id:'psychology',en:'Psychology'},
+  {id:'holidays',en:'Holidays'},
+  {id:'public_transport',en:'Public Transport'},
+  {id:'car_parking',en:'Car-Parking Fee'},
+  {id:'shopping',en:'Shopping'},
+  {id:'general',en:'General'},
+  {id:'car_tolls',en:'Car-Tolls'},
+  {id:'gifts',en:'Gifts'},
+  {id:'medical',en:'Medical'},
+  {id:'bank_charges',en:'Bank Charges'},
+];
+
+// Auto-match by name similarity
+const AUTO_MAP = {
+  'lifestyle':'lifestyle','loan':'loan','eating out':'eating_out',
+  'bill & subscription':'bills_sub','bill':'bills_sub','subscription':'bills_sub',
+  'groceries':'groceries','insurance':'insurance','car-petrol':'car_petrol',
+  'petrol':'car_petrol','entertainment':'entertainment','coffee breaks':'coffee',
+  'coffee':'coffee','psychology':'psychology','holidays':'holidays',
+  'travel':'holidays','public transport':'public_transport',
+  'car-parking fee':'car_parking','parking':'car_parking',
+  'shopping':'shopping','general':'general','car-tolls':'car_tolls',
+  'tolls':'car_tolls','gifts':'gifts','medical':'medical',
+  'bank charges':'bank_charges','clothes':'shopping','sports':'lifestyle',
+  'salary':'general','car-service':'car_petrol',
+};
+
+const g = id => document.getElementById(id);
+let sqlDb, oldCats=[], txData=[], catMapping={};
+
+// Init sql.js
+let SQL;
+initSqlJs({locateFile: f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/${f}`}).then(s=>{
+  SQL=s;
+  g('sql-status').textContent='✅ SQL engine ready — upload your file';
+  g('sql-status').style.color='#51CF66';
+}).catch(e=>{
+  g('sql-status').textContent='❌ Failed to load SQL engine: '+e.message;
+  g('sql-status').style.color='#FF6B6B';
+});
+
+// File handling
+g('file-input').onchange = e => loadFile(e.target.files[0]);
+const dz = g('drop-zone');
+dz.ondragover = e => {e.preventDefault();dz.classList.add('over');};
+dz.ondragleave = () => dz.classList.remove('over');
+dz.ondrop = e => {e.preventDefault();dz.classList.remove('over');loadFile(e.dataTransfer.files[0]);};
+
+async function loadFile(file){
+  if(!file) return;
+  if(!SQL){
+    g('sql-status').textContent='❌ SQL engine not ready yet, please wait...';
+    return;
+  }
+  dz.querySelector('.drop-label').textContent = file.name;
+  dz.querySelector('.drop-sub').textContent = `${(file.size/1024).toFixed(1)} KB`;
+  const buf = await file.arrayBuffer();
+  try{
+    sqlDb = new SQL.Database(new Uint8Array(buf));
+    g('sql-status').textContent=`✅ File loaded: ${file.name}`;
+    parseDB();
+  } catch(e){
+    dz.querySelector('.drop-sub').textContent = '❌ Could not read file. Is it a valid SQLite file?';
+    g('sql-status').textContent='❌ Error: '+e.message;
+    g('sql-status').style.color='#FF6B6B';
+  }
+}
+
+function parseDB(){
+  // Read categories
+  try{
+    const res = sqlDb.exec("SELECT Id, Name, Type FROM Category WHERE Type='Expense'");
+    if(res.length){
+      oldCats = res[0].values.map(r=>({id:r[0], name:r[1], type:r[2]}));
+    }
+  } catch(e){ oldCats=[]; }
+
+  // Read transactions - log raw first
+  try{
+    const res = sqlDb.exec("SELECT Id, Type, Date, Amount, Note, CategoryId, Recurring, RecurringTransactionId FROM \"Transaction\" WHERE Type='Expense' LIMIT 3");
+    if(res.length){
+      console.log('RAW columns:', res[0].columns);
+      console.log('RAW first 3 rows:', res[0].values);
+      g('sql-status').textContent = 'Raw date sample: ' + JSON.stringify(res[0].values[0]?.[2]);
+    }
+  } catch(e){ console.log('tx error:', e); }
+
+  // Read all transactions
+  try{
+    const res = sqlDb.exec("SELECT Id, Type, Date, Amount, Note, CategoryId, Recurring, RecurringTransactionId FROM \"Transaction\" WHERE Type='Expense'");
+    if(res.length){
+      txData = res[0].values.map(r=>({
+        id: r[0], type: r[1], date: r[2], amount: r[3],
+        note: r[4], categoryId: r[5], recurring: r[6], recurringTxId: r[7]
+      }));
+    }
+  } catch(e){ txData=[]; }
+
+  // Read recurring transactions
+  let recurringMap = {};
+  try{
+    const res = sqlDb.exec("SELECT Id, RecurringType, RecurringPeriod, CategoryId FROM RecurringTransaction");
+    if(res.length){
+      res[0].values.forEach(r=>{
+        recurringMap[r[0]] = {type: r[1], period: r[2], categoryId: r[3]};
+      });
+    }
+  } catch(e){}
+
+  // Attach recurring info to transactions
+  txData.forEach(tx=>{
+    if(tx.recurringTxId && recurringMap[tx.recurringTxId]){
+      const r = recurringMap[tx.recurringTxId];
+      tx.recurringType = r.type;
+      tx.recurringPeriod = r.period;
+    }
+  });
+
+  buildCatMap();
+  showResult();
+}
+
+function buildCatMap(){
+  // Auto-map categories
+  oldCats.forEach(c=>{
+    const key = c.name.toLowerCase().trim();
+    catMapping[c.id] = AUTO_MAP[key] || 'general';
+  });
+
+  // Build UI
+  g('card-map').classList.remove('hidden');
+  g('cat-map').innerHTML = oldCats.map(c=>{
+    const mapped = catMapping[c.id];
+    return `<div class="cat-row">
+      <span class="cat-badge">${c.name}</span>
+      <select onchange="catMapping[${c.id}]=this.value">
+        <option value="__custom__">Keep as custom category</option>
+        ${MYLEDGER_CATS.map(m=>`<option value="${m.id}" ${m.id===mapped?'selected':''}>${m.en}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+
+  buildAndShowResult();
+}
+
+function buildAndShowResult(){
+  g('card-result').classList.remove('hidden');
+  const logs = [];
+  const userCats = [];
+  const usedCustom = new Set();
+
+  // Deduplicate recurring series: group by recurringTxId, keep historical as
+  // freq:'none', keep only the most-recent past instance as the template
+  // (freq:'monthly'), and drop future instances (the app generates those).
+  const today = new Date().toISOString().slice(0,10);
+  const skipIds = new Set();
+  const demoteIds = new Set(); // keep but downgrade to freq:'none'
+  const recurringGroups = {};
+  txData.forEach(tx=>{
+    if(tx.recurringTxId){
+      if(!recurringGroups[tx.recurringTxId]) recurringGroups[tx.recurringTxId]=[];
+      recurringGroups[tx.recurringTxId].push(tx);
+    }
+  });
+  let skippedFuture=0, demotedPast=0;
+  Object.values(recurringGroups).forEach(group=>{
+    group.sort((a,b)=>parseDate(a.date).localeCompare(parseDate(b.date)));
+    const past=group.filter(tx=>parseDate(tx.date)<=today);
+    const future=group.filter(tx=>parseDate(tx.date)>today);
+    // Drop all future instances; app generates them from the template
+    future.forEach(tx=>skipIds.add(tx.id));
+    skippedFuture+=future.length;
+    if(past.length>0){
+      // Earliest past instances are history — keep as freq:'none'
+      past.slice(0,-1).forEach(tx=>{demoteIds.add(tx.id);demotedPast++;});
+      // Most-recent past instance stays as the recurring template
+    } else if(future.length>0){
+      // All future — keep only earliest as template, drop the rest
+      skipIds.delete(future[0].id);
+      skippedFuture-=1;
+    }
+  });
+  if(skippedFuture) logs.push({type:'warn',msg:`↩ ${skippedFuture} future recurring instances removed (app generates them)`});
+  if(demotedPast) logs.push({type:'warn',msg:`📅 ${demotedPast} past recurring instances kept as one-off history`});
+
+  // Build txs
+  const txs = txData.filter(tx=>!skipIds.has(tx.id)).map((tx,i)=>{
+    // Parse date
+    let dateStr = parseDate(tx.date);
+
+    // Map category
+    const oldCat = oldCats.find(c=>c.id===tx.categoryId);
+    const oldCatName = oldCat?.name || 'General';
+    let catId = catMapping[tx.categoryId] || 'general';
+
+    if(catId === '__custom__'){
+      // Create custom category
+      const customId = 'imported_' + oldCatName.toLowerCase().replace(/\s+/g,'_');
+      catId = customId;
+      if(!usedCustom.has(customId)){
+        usedCustom.add(customId);
+        userCats.push({id:customId, zh:oldCatName, en:oldCatName, label:oldCatName, emoji:'📦'});
+        logs.push({type:'warn', msg:`Custom category created: "${oldCatName}"`});
+      }
+    }
+
+    // Map recurring — demoted past instances become one-off
+    let freq = 'none';
+    if(!demoteIds.has(tx.id) && tx.recurringType){
+      const rt = tx.recurringType.toLowerCase();
+      if(rt==='monthly') freq='monthly';
+      else if(rt==='yearly') freq='yearly';
+      else if(rt==='weekly'||rt==='daily') freq='monthly'; // approximate
+    }
+
+    return {
+      id: String(tx.id),
+      date: dateStr,
+      amount: Math.abs(parseFloat(tx.amount)||0),
+      category: catId,
+      note: tx.note||'',
+      freq,
+      createdAt: new Date().toISOString()
+    };
+  }).filter(tx=>tx.amount>0);
+
+  // Stats
+  const total = txs.reduce((s,t)=>s+t.amount,0);
+  g('stats').innerHTML = `
+    <div class="stat"><div class="stat-n">${txs.length}</div><div class="stat-l">Transactions</div></div>
+    <div class="stat"><div class="stat-n">${oldCats.length}</div><div class="stat-l">Categories</div></div>
+    <div class="stat"><div class="stat-n">MYR ${(total/1000).toFixed(1)}k</div><div class="stat-l">Total</div></div>`;
+
+  logs.unshift({type:'ok', msg:`✓ ${txs.length} transactions ready`});
+  logs.unshift({type:'ok', msg:`✓ ${oldCats.length} categories mapped`});
+  if(txData.length>0) logs.push({type:'warn', msg:`Date sample: ${JSON.stringify(txData[0].date)} → ${parseDate(txData[0].date)}`});
+
+  g('log').innerHTML = logs.map(l=>`<div class="${l.type}">${l.msg}</div>`).join('');
+
+  // Prepare download
+  const output = {
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    txs,
+    userCats
+  };
+
+  const btn = g('btn-download');
+  btn.disabled = false;
+  btn.onclick = () => {
+    const blob = new Blob([JSON.stringify(output,null,2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'myledger_import.json';
+    a.click();
+  };
+}
+
+function parseDate(val){
+  if(!val) return new Date().toISOString().slice(0,10);
+  if(typeof val === 'string'){
+    const m = val.match(/(\d{4}-\d{2}-\d{2})/);
+    if(m) return m[1];
+  }
+  if(typeof val === 'number'){
+    // .NET ticks: 100-nanosecond intervals since 0001-01-01
+    // Convert to JS: subtract ticks to Unix epoch (1970-01-01)
+    // Ticks at Unix epoch = 621355968000000000
+    if(val > 600000000000000000){
+      const unixMs = (val - 621355968000000000) / 10000;
+      return new Date(unixMs).toISOString().slice(0,10);
+    }
+    // Julian day
+    if(val > 2000000){
+      const ms = (val - 2440587.5) * 86400000;
+      return new Date(ms).toISOString().slice(0,10);
+    }
+    // Unix seconds
+    if(val > 1000000000){
+      return new Date(val * 1000).toISOString().slice(0,10);
+    }
+    return new Date(val).toISOString().slice(0,10);
+  }
+  return new Date().toISOString().slice(0,10);
+}
+function showResult(){ buildAndShowResult(); }
+function reset(){ location.reload(); }
+
+// Re-build result when cat mapping changes
+document.addEventListener('change', e=>{
+  if(e.target.tagName==='SELECT') buildAndShowResult();
+});
+</script>
+</body>
+</html>
