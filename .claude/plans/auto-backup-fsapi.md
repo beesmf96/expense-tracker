@@ -1,9 +1,9 @@
 ---
 plan: auto-backup-fsapi
-status: in-progress
+status: review
 branch: feature/auto-backup-fsapi
-pr: ~
-implemented: ~
+pr: #14
+implemented: 2026-06-02
 ---
 
 # Feature: Auto Backup via File System Access API
