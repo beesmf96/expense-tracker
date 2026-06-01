@@ -1,3 +1,4 @@
+import { useSignal } from '@preact/signals'
 import { lang, activePage, openM, txs, userCats } from '../state/store'
 import { t } from '../data/i18n'
 import { exportCSV, backupJSON, loadBackupFile } from '../lib/exportHelpers'
@@ -6,6 +7,7 @@ import { clearAll } from '../db/queries'
 import type { Lang } from '../types'
 
 export function Settings() {
+  const dangerOpen = useSignal(false)
   function setLang(l: Lang) {
     lang.value = l
   }
@@ -61,16 +63,22 @@ export function Settings() {
         </div>
       </div>
 
-      <div class="settings-card">
-        <div class="srow" onClick={() => openM('confirm', {
-          confirmIcon: '🗑️',
-          confirmTitle: t('confirmClear'),
-          confirmMsg: 'This will permanently delete all transactions and categories.',
-          confirmOkLabel: t('clearAll'),
-          confirmOnOk: () => clearAll(),
-        })}>
-          <span class="srow-left" style={{ color: 'var(--r)' }}>🗑️ {t('clearAll')}</span>
+      <div class={`settings-card danger-zone-card`}>
+        <div class="srow" onClick={() => { dangerOpen.value = !dangerOpen.value }}>
+          <span class="srow-left" style={{ color: 'var(--r)' }}>⚠️ {t('dangerZone')}</span>
+          <span style={{ color: 'var(--r)', fontSize: '14px', transform: dangerOpen.value ? 'rotate(90deg)' : 'none', display: 'inline-block', transition: 'transform .15s' }}>›</span>
         </div>
+        {dangerOpen.value && (
+          <div class="srow" onClick={() => openM('confirm', {
+            confirmIcon: '🗑️',
+            confirmTitle: t('confirmClear'),
+            confirmMsg: 'This will permanently delete all transactions and categories.',
+            confirmOkLabel: t('clearAll'),
+            confirmOnOk: () => clearAll(),
+          })}>
+            <span class="srow-left" style={{ color: 'var(--r)' }}>🗑️ {t('clearAll')}</span>
+          </div>
+        )}
       </div>
 
       <div style={{ textAlign: 'center', padding: '32px 0 8px', color: 'var(--muted)', fontSize: '12px' }}>
