@@ -39,7 +39,8 @@ src/
   lib/
     catHelpers.ts      # Re-exports getCat/catColor from store; allCats() wrapper
     exportHelpers.ts   # CSV export, JSON backup, restore from file
-  components/          # Reusable UI: BottomNav, FAB, CatGrid, EmojiGrid, FreqGrid, ProgressBar, RowItem, EmptyState
+    txHelpers.ts       # confirmDeleteTx() — opens confirm modal then delTx
+  components/          # Reusable UI: BottomNav, FAB, CatGrid, EmojiGrid, FreqGrid, ProgressBar, FormField, ModalActions, EmptyState
   pages/               # Home, Transactions, Recurring, Settings, ManageCats
   modals/              # Modal (base), ExpenseModal, RecurringModal, DetailModal, ConfirmModal, NewCatModal, EditCatModal, ReclassifyModal
   styles/
@@ -105,7 +106,7 @@ Templates are stored once in IndexedDB with `freq !== 'none'`. `genRecurring()` 
 
 ## Tests
 
-None. No test framework is installed (no vitest, no jest). When tests are added, use Vitest with `@testing-library/preact`. Test pure functions in `state/recurring.ts` and `lib/exportHelpers.ts` first.
+Vitest is installed and configured (`vite.config.ts` `test` block, `npm test` script, `@testing-library/preact` + `happy-dom`). `src/state/recurring.test.ts` exists. Test pure functions in `state/recurring.ts` and `lib/exportHelpers.ts` first; place test files next to the source they cover.
 
 ## Pipeline
 When asked to implement a plan:
