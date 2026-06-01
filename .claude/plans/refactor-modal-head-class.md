@@ -1,9 +1,9 @@
 ---
 plan: refactor-modal-head-class
-status: in-progress
+status: review
 branch: feature/refactor-modal-head-class
-pr: ~
-implemented: ~
+pr: #13
+implemented: 2026-06-02
 ---
 
 # Refactor: Extract `.modal-head` modifier class
