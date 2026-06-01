@@ -1,9 +1,9 @@
 ---
 plan: danger-zone-settings
-status: in-progress
+status: review
 branch: feature/danger-zone-settings
-pr: ~
-implemented: ~
+pr: #1
+implemented: 2026-06-01
 ---
 
 # Feature: Danger Zone in Settings
