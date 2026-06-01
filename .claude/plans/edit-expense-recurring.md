@@ -1,9 +1,9 @@
 ---
 plan: edit-expense-recurring
-status: in-progress
+status: review
 branch: feature/edit-expense-recurring
-pr: ~
-implemented: ~
+pr: '#2'
+implemented: '2026-06-01'
 ---
 
 # Feature: Edit Expense & Recurring Transactions
