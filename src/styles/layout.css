@@ -5,7 +5,7 @@
 
 /* ── HOME HEADER ── */
 .home-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
-.wordmark{font-family:'Playfair Display',serif;font-style:italic;font-size:21px;color:var(--accent);letter-spacing:-.01em}
+.wordmark{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--accent)}
 
 /* ── MONTH NAV ── */
 .month-nav{display:flex;align-items:center;justify-content:space-between;margin:16px 0 20px}
