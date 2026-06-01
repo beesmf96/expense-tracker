@@ -57,6 +57,21 @@ Add new query functions to `src/db/queries.ts`, not inline in components.
 - Modals are never unmounted, so `useSignal()` form state persists between opens. To support edit mode, read `modalCtx.value.editTx` and `openModal.value` at the top of the component (reactive reads), then sync local signals in a `useEffect` keyed on `[editTx?.id, openModalVal]`. Keying on `openModal.value` is required so reopening the modal for a different record (or switching add↔edit) triggers a re-sync even when `editTx?.id` hasn't changed.
 - Edit-mode save must branch on `editTx` presence: spread `...editTx` and override the mutable fields to preserve the original `id` and `createdAt`. Never generate a new `id` when editing.
 
+## Editing from a row (dispatch by tx type)
+
+When wiring an Edit affordance on a transaction row, prime the selection signal then call `openM` — the modal reads these on open:
+
+- Real or generated occurrence (`tx.isGenerated || tx.freq === 'none'`): `selCat.value = tx.category; openM('expense', { editTx: tx })`
+- Template (`tx.freq !== 'none'` and not generated): `selRCat.value = tx.category; selFreq.value = tx.freq as Exclude<Freq, 'none'>; openM('recurring', { editTx: tx })`
+
+The `as Exclude<Freq, 'none'>` cast is sanctioned: the branch guard proves `freq !== 'none'`, but TS cannot narrow `tx.freq` against the signal's narrower type. Do not replace with `!` or `any`.
+
+Editing a generated occurrence opens the *expense* modal (not recurring) — the save produces a real override tx, not a template update.
+
+## Row layout with inline actions
+
+Actionable rows put amount and badges inside `.row-info`; the right-side slot is reserved for a `.row-actions` grid (Edit/Delete buttons). Do not place the amount in the right slot when a row has inline actions. Both button handlers must call `e.stopPropagation()` first so the row's own `onClick` (detail modal) is not also triggered.
+
 ## Recurring transactions
 
 Never write generated transactions to IndexedDB. They must only exist as in-memory objects produced by `genRecurring()` in `src/state/recurring.ts`. Detect generated transactions by `tx.isGenerated === true` or `tx.id.includes('_')`.

@@ -62,6 +62,15 @@ Start with pure functions — they have no side effects and no DOM or DB depende
   - Includes generated txs for the view month
   - Returns them sorted descending by date
 
+### Edit-dispatch routing (when extracted)
+
+The Edit-button logic in `Transactions.tsx` / `Recurring.tsx` decides target modal + selection signal from a tx's type. It is currently inline and untestable (mutates signals, calls `openM`). If extracted to a pure helper (e.g. `editTarget(tx): { modal: ModalId; cat: string; freq?: Exclude<Freq,'none'> }`), test:
+- real tx (`freq: 'none'`) → modal `'expense'`
+- generated tx (`isGenerated: true`) → modal `'expense'`
+- template (`freq: 'monthly'`) → modal `'recurring'`, freq passed through
+
+Do not test the inline version — it cannot be unit-tested as written.
+
 ### `src/lib/exportHelpers.ts`
 
 - `exportCSV` — verify the CSV rows match transaction data (mock `document.createElement`)
