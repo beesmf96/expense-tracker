@@ -7,7 +7,7 @@
 .row-info{flex:1;min-width:0}
 .row-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:1px}
 .row-sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row-date{font-size:11px;color:var(--faint);margin-top:2px;font-family:'DM Mono',monospace;letter-spacing:.01em}
+.row-date{font-size:11px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace;letter-spacing:.01em}
 .amount{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--r);white-space:nowrap}
 .row-actions{display:grid;grid-template-columns:1fr 1fr;gap:4px;flex-shrink:0}
 .row-act-btn{padding:6px 10px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
