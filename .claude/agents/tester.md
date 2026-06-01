@@ -38,6 +38,7 @@ Start with pure functions — they have no side effects and no DOM or DB depende
   - Only includes real txs (freq === 'none') whose date is in the view month
   - Includes generated txs for the view month
   - Returns them sorted descending by date
+  - Both Home and Transactions filter their lists through `monthTxs` — these unit cases cover both pages' month filtering. Do not add separate render tests for Transactions month filtering; the pure-function coverage is sufficient.
 
 ### Edit-dispatch routing (when extracted)
 

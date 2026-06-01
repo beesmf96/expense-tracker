@@ -80,6 +80,9 @@ Templates are stored once in IndexedDB with `freq !== 'none'`. `genRecurring()` 
 ### i18n
 `t(key)` reads `S[lang.value][key]`. `catLabel(cat)` reads `cat[lang]` with fallbacks. `lang` is a signal. `mfmt(y, m)` formats month/year per locale. All strings in `src/data/i18n.ts` — no external i18n library.
 
+### Shared month view (viewY / viewM)
+`viewY` / `viewM` are global signals in `store.ts` — Home and Transactions both read them, so the selected month is shared: paging on one tab changes the other. Each page derives its list with `monthTxs(txs.value, viewY.value, viewM.value)`. The `changeMonth()` helper and `.month-nav` block are duplicated across both pages by design (not extracted).
+
 ### Theme
 `theme` signal (`'dark' | 'light'`, in `store.ts`) is persisted to `localStorage['theme']` and mirrored to `document.documentElement[data-theme]` via an `effect()`. A pre-effect `setAttribute` at module load prevents a flash of the wrong theme. Light-mode token values live under `[data-theme="light"]` in `global.css`, overriding the `:root` (dark) defaults. This is the only `effect()` in the codebase.
 

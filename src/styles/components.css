@@ -17,6 +17,7 @@
 /* ── BADGES ── */
 .badge{display:inline-block;font-size:9px;background:var(--adim);color:var(--accent);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle;font-weight:600;letter-spacing:.02em}
 .freq-badge{display:inline-block;font-size:11px;color:var(--accent);background:var(--adim);border-radius:6px;padding:2px 8px;font-weight:500}
+.row-date .freq-badge{margin-left:6px}
 
 /* ── PROGRESS BAR ── */
 .bar-wrap{height:2px;background:var(--faint);border-radius:1px;margin-top:6px;overflow:hidden}
