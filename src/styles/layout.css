@@ -13,6 +13,9 @@
 .month-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
 #home-month{font-size:15px;font-weight:600;color:var(--text);letter-spacing:.01em}
 
+/* ── PAGE DIVIDER ── */
+.page-divider{border-top:1px solid var(--border2);margin-bottom:16px}
+
 /* ── SUMMARY ── */
 .summary-wrap{padding:20px 0 22px;margin-bottom:24px;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
 .summary-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}

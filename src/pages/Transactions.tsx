@@ -24,6 +24,7 @@ export function Transactions() {
         <span>{mfmt(year, month)}</span>
         <button class="month-nav-btn" onClick={() => changeMonth(1)}>›</button>
       </div>
+      <div class="page-divider" />
       {all.length === 0
         ? <EmptyState icon="📋" message={t('noRecords')} />
         : all.map(tx => {
