@@ -55,6 +55,7 @@ Start with pure functions — they have no side effects and no DOM or DB depende
   - Generated ID follows `{templateId}_{YYYY-MM}` pattern
   - Generated tx has `isGenerated: true`
   - Clamps day to last valid day of the month (e.g., Jan 31 template → Feb 28)
+  - Skips a month when a real override exists: a `freq: 'none'` tx whose `id === \`${templateId}_${YYYY-MM}\`` suppresses that month's generation — add cases: (1) override present → generated tx omitted; (2) override for month A does not suppress month B; (3) matching is exact, not prefix
 
 - `monthTxs(allTxs, viewYear, viewMonth)` — merges real + generated
   - Only includes real txs (freq === 'none') whose date is in the view month

@@ -41,6 +41,7 @@ Flag if any of these appear:
 - Signal updates happening after a DB write without calling `loadAll()`
 - Signals defined outside of `src/state/store.ts` at module scope (unless it's `useSignal` inside a component)
 - Reading `modalCtx` outside a modal component
+- A `useEffect` that syncs modal form signals from `modalCtx`/`openModal` whose dependency array omits `openModal.value` — stale values leak across modal opens
 
 ## DB access
 
@@ -93,3 +94,4 @@ Flag if:
 - Lack of JSDoc or docstrings (not used in this project)
 - Missing test files (no test framework is installed yet)
 - `catHelpers.ts` re-exporting from `store.ts` (intentional thin wrapper)
+- `const t2 = tx` (or similar capture-after-guard alias) immediately after a narrowing guard — this is the sanctioned workaround for TypeScript's closure-narrowing limitation and is preferred over `!`
