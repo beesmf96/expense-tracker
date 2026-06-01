@@ -1,6 +1,8 @@
 import { useSignal } from '@preact/signals'
 import { useEffect } from 'preact/hooks'
 import { Modal } from './Modal'
+import { FormField } from '../components/FormField'
+import { ModalActions } from '../components/ModalActions'
 import { selRCat, selFreq, closeM, modalCtx, openModal } from '../state/store'
 import { t } from '../data/i18n'
 import { CatGrid } from '../components/CatGrid'
@@ -67,8 +69,7 @@ export function RecurringModal() {
     <Modal id="recurring">
       <div class="modal-title">{editTx ? t('editRecurring') : t('addRecurring')}</div>
 
-      <div class="field">
-        <label>{t('amount')}</label>
+      <FormField label={t('amount')}>
         <input
           class="big-input"
           type="number"
@@ -78,41 +79,36 @@ export function RecurringModal() {
           value={amount.value}
           onInput={e => { amount.value = (e.target as HTMLInputElement).value }}
         />
-      </div>
+      </FormField>
 
-      <div class="field">
-        <label>{t('startDate')}</label>
+      <FormField label={t('startDate')}>
         <input
           type="date"
           value={date.value}
           onInput={e => { date.value = (e.target as HTMLInputElement).value }}
         />
-      </div>
+      </FormField>
 
-      <div class="field">
-        <label>{t('frequency')}</label>
+      <FormField label={t('frequency')}>
         <FreqGrid
           selectedFreq={selFreq.value}
           onSelect={f => { selFreq.value = f }}
         />
-      </div>
+      </FormField>
 
-      <div class="field">
-        <label>{t('category')}</label>
+      <FormField label={t('category')}>
         <CatGrid selectedId={selRCat.value} onSelect={id => { selRCat.value = id }} />
-      </div>
+      </FormField>
 
-      <div class="field">
-        <label>{t('note')}</label>
+      <FormField label={t('note')}>
         <textarea
           placeholder="Optional note"
           value={note.value}
           onInput={e => { note.value = (e.target as HTMLTextAreaElement).value }}
         />
-      </div>
+      </FormField>
 
-      <button class="btn btn-p" onClick={save}>{t('save')}</button>
-      <button class="btn btn-g" onClick={closeM}>{t('cancel')}</button>
+      <ModalActions onSave={save} />
     </Modal>
   )
 }

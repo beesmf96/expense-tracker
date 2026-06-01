@@ -2,7 +2,7 @@ import { txs, getCat, catColor, openM, selCat, selRCat, selFreq } from '../state
 import { t, mfmt, catLabel } from '../data/i18n'
 import { EmptyState } from '../components/EmptyState'
 import { allGeneratedUpToDate } from '../state/recurring'
-import { delTx } from '../db/queries'
+import { confirmDeleteTx } from '../lib/txHelpers'
 import type { Transaction, Freq } from '../types'
 
 export function Transactions() {
@@ -75,16 +75,7 @@ export function Transactions() {
                     {!tx.isGenerated && (
                       <button
                         class="row-act-btn row-act-del"
-                        onClick={e => {
-                          e.stopPropagation()
-                          openM('confirm', {
-                            confirmIcon: '🗑️',
-                            confirmTitle: t('confirmDel'),
-                            confirmMsg: `Delete this ${catLabel(cat)} transaction of −${tx.amount.toFixed(2)}?`,
-                            confirmOkLabel: t('delete'),
-                            confirmOnOk: async () => { await delTx(tx.id) },
-                          })
-                        }}
+                        onClick={e => { e.stopPropagation(); confirmDeleteTx(tx, cat) }}
                       >{t('delete')}</button>
                     )}
                   </div>
