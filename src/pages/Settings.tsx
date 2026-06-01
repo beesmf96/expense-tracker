@@ -1,5 +1,5 @@
 import { useSignal } from '@preact/signals'
-import { lang, activePage, openM, txs, userCats } from '../state/store'
+import { lang, theme, activePage, openM, txs, userCats } from '../state/store'
 import { t } from '../data/i18n'
 import { exportCSV, backupJSON, loadBackupFile } from '../lib/exportHelpers'
 import { allCats } from '../lib/catHelpers'
@@ -61,6 +61,13 @@ export function Settings() {
             <button class={`lang-btn${lang.value === 'en' ? ' active' : ''}`} onClick={() => setLang('en')}>EN</button>
           </div>
         </div>
+        <div class="srow" style={{ cursor: 'default' }}>
+          <span class="srow-left">🎨 {t('appearance')}</span>
+          <div class="lang-toggle">
+            <button class={`lang-btn${theme.value === 'dark' ? ' active' : ''}`} aria-label={t('darkTheme')} onClick={() => { theme.value = 'dark' }}>🌙</button>
+            <button class={`lang-btn${theme.value === 'light' ? ' active' : ''}`} aria-label={t('lightTheme')} onClick={() => { theme.value = 'light' }}>☀️</button>
+          </div>
+        </div>
       </div>
 
       <div class={`settings-card danger-zone-card`}>
@@ -82,7 +89,7 @@ export function Settings() {
       </div>
 
       <div style={{ textAlign: 'center', padding: '32px 0 8px', color: 'var(--muted)', fontSize: '12px' }}>
-        MyLedger
+        {t('footer')}
       </div>
     </div>
   )

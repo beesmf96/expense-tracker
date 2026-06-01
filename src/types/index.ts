@@ -1,5 +1,6 @@
 export type Freq = 'none' | 'monthly' | 'quarterly' | 'biannual' | 'yearly'
 export type Lang = 'en' | 'zh'
+export type Theme = 'dark' | 'light'
 export type PageId = 'home' | 'transactions' | 'recurring' | 'settings' | 'manage-cats'
 export type ModalId = 'expense' | 'recurring' | 'newcat' | 'editcat' | 'detail' | 'reclassify' | 'confirm'
 

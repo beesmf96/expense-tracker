@@ -80,6 +80,9 @@ Templates are stored once in IndexedDB with `freq !== 'none'`. `genRecurring()` 
 ### i18n
 `t(key)` reads `S[lang.value][key]`. `catLabel(cat)` reads `cat[lang]` with fallbacks. `lang` is a signal. `mfmt(y, m)` formats month/year per locale. All strings in `src/data/i18n.ts` — no external i18n library.
 
+### Theme
+`theme` signal (`'dark' | 'light'`, in `store.ts`) is persisted to `localStorage['theme']` and mirrored to `document.documentElement[data-theme]` via an `effect()`. A pre-effect `setAttribute` at module load prevents a flash of the wrong theme. Light-mode token values live under `[data-theme="light"]` in `global.css`, overriding the `:root` (dark) defaults. This is the only `effect()` in the codebase.
+
 ## TypeScript conventions
 
 - `strict: true`, `noUnusedLocals: true`, `noUnusedParameters: true`
@@ -90,7 +93,7 @@ Templates are stored once in IndexedDB with `freq !== 'none'`. `genRecurring()` 
 
 ## CSS conventions
 
-- All design tokens as CSS variables on `:root` in `global.css` (dark theme, `--accent: #C8963C` gold)
+- All design tokens as CSS variables on `:root` in `global.css` (dark = default). Light theme overrides the same variable names under `[data-theme="light"]` — never add a light-mode color anywhere else.
 - No CSS Modules, no Tailwind, no utility classes
 - Class names: kebab-case, BEM-adjacent but not strict
 - Inline `style` only for dynamic values derived from signals/data (e.g., `color`, `background`)

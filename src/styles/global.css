@@ -19,6 +19,22 @@
   --pl:var(--adim);
   --card:var(--s1)
 }
+[data-theme="light"]{
+  --bg:#FAF7F2;
+  --s1:#F0EBE3;
+  --s2:#E8E1D7;
+  --s3:#DDD5C8;
+  --accent:#A67828;
+  --accent-hi:#B88A3A;
+  --adim:rgba(160,120,40,.12);
+  --text:#1A1208;
+  --muted:#8C7B68;
+  --faint:#EDE6DC;
+  --r:#B04040;
+  --r-dim:rgba(176,64,64,.15);
+  --border:#D8CFC4;
+  --border2:#C8BDB0
+}
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -27,6 +43,12 @@ body::before{
     radial-gradient(ellipse 55% 35% at 90% 100%,rgba(200,150,60,.05) 0%,transparent 100%)
 }
 input[type=date]{color-scheme:dark}
+[data-theme="light"] input[type=date]{color-scheme:light}
+[data-theme="light"] body::before{
+  background:
+    radial-gradient(ellipse 80% 45% at 10% -5%,rgba(160,120,40,.04) 0%,transparent 100%),
+    radial-gradient(ellipse 55% 35% at 90% 100%,rgba(160,120,40,.03) 0%,transparent 100%)
+}
 input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}

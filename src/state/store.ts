@@ -1,5 +1,5 @@
-import { signal, computed } from '@preact/signals'
-import type { Transaction, Category, Lang, PageId, ModalId, ModalContext } from '../types'
+import { signal, computed, effect } from '@preact/signals'
+import type { Transaction, Category, Lang, Theme, PageId, ModalId, ModalContext } from '../types'
 import { CATS, COLORS } from '../data/cats'
 
 const now = new Date()
@@ -11,6 +11,14 @@ export const viewY = signal(now.getFullYear())
 export const viewM = signal(now.getMonth())
 
 export const lang = signal<Lang>('en')
+
+const _storedTheme = (localStorage.getItem('theme') as Theme) ?? 'dark'
+document.documentElement.setAttribute('data-theme', _storedTheme)
+export const theme = signal<Theme>(_storedTheme)
+effect(() => {
+  document.documentElement.setAttribute('data-theme', theme.value)
+  localStorage.setItem('theme', theme.value)
+})
 
 export const selCat = signal('lifestyle')
 export const selRCat = signal('bills_sub')
