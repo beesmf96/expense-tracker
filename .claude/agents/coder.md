@@ -60,6 +60,18 @@ Add new query functions to `src/db/queries.ts`, not inline in components.
 ### Pages
 - Pages are always mounted in `App.tsx`. Add new pages there and in `src/types/index.ts` (`PageId` union).
 - Navigate by setting `activePage.value = 'my-page'`; never unmount a page
+
+### Month navigation (viewY / viewM)
+`viewY` / `viewM` are shared global signals — both Home and Transactions read the same value, so paging the month on one page changes it on the other (intentional). The month-paging helper and nav block are duplicated verbatim across both pages; this is sanctioned — do NOT extract to a shared hook or component:
+```ts
+function changeMonth(delta: number) {
+  let y = viewY.value, m = viewM.value + delta
+  if (m < 0) { y--; m = 11 }
+  if (m > 11) { y++; m = 0 }
+  viewY.value = y; viewM.value = m
+}
+```
+Render with `.month-nav` / `.month-nav-btn` (layout.css). Filter the page list with `monthTxs(txs.value, viewY.value, viewM.value)` — never show all-time records.
 - Because pages are never unmounted, `useSignal()` state inside a page (e.g. a search query) persists when the user navigates away and back. If a page must reset local state when it becomes active, snapshot the driving signal into a const and key a `useEffect` on it:
   ```ts
   const activePageVal = activePage.value      // reactive read → component re-renders on nav
