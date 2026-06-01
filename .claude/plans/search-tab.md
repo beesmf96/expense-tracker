@@ -1,9 +1,9 @@
 ---
 plan: search-tab
-status: in-progress
+status: review
 branch: feature/search-tab
-pr: ~
-implemented: ~
+pr: '#9'
+implemented: '2026-06-01'
 ---
 
 # Feature: Global Search Tab
