@@ -1,9 +1,9 @@
 ---
 plan: cat-breakdown-modal
-status: in-progress
+status: review
 branch: feature/cat-breakdown-modal
-pr: ~
-implemented: ~
+pr: #12
+implemented: 2026-06-02
 ---
 
 # Feature: Category Breakdown Modal
