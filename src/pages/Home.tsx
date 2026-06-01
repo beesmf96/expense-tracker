@@ -32,7 +32,7 @@ export function Home() {
 
       <div class="month-nav">
         <button class="month-nav-btn" onClick={() => changeMonth(-1)}>‹</button>
-        <span id="home-month">{mfmt(year, month)}</span>
+        <span class="month-nav-label">{mfmt(year, month)}</span>
         <button class="month-nav-btn" onClick={() => changeMonth(1)}>›</button>
       </div>
 

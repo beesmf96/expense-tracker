@@ -21,7 +21,7 @@ export function Transactions() {
       <div class="page-title">{t('records')}</div>
       <div class="month-nav">
         <button class="month-nav-btn" onClick={() => changeMonth(-1)}>‹</button>
-        <span>{mfmt(year, month)}</span>
+        <span class="month-nav-label">{mfmt(year, month)}</span>
         <button class="month-nav-btn" onClick={() => changeMonth(1)}>›</button>
       </div>
       <div class="page-divider" />
