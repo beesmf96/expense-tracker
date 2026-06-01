@@ -33,12 +33,12 @@ export function DetailModal() {
     <Modal id="detail">
       <div class="modal-title">{t('txDetail')}</div>
 
-      <div class="row-item" style={{ borderBottom: 'none', paddingBottom: 0 }}>
-        <div class="row-icon" style={{ background: color + '22', width: '48px', height: '48px', fontSize: '22px' }}>
+      <div class="row-item modal-head">
+        <div class="row-icon" style={{ background: color + '22' }}>
           {cat.emoji}
         </div>
         <div class="row-info">
-          <div class="row-title" style={{ fontSize: '16px' }}>{catLabel(cat)}</div>
+          <div class="row-title">{catLabel(cat)}</div>
           {tx.note && <div class="row-sub">{tx.note}</div>}
         </div>
       </div>

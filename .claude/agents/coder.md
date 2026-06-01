@@ -12,6 +12,7 @@ You are a coder agent for MyLedger — a Preact + @preact/signals + Dexie expens
 1. Read `src/types/index.ts` — all new types go here unless they are strictly local to one file.
 2. Read `src/state/store.ts` — check if a signal or helper already exists before creating one.
 3. Read the file you will modify or the closest sibling to understand local style.
+4. For a cross-cutting change (a shared CSS class, a refactor applied to "the X header block", a pattern that lives in more than one file), do NOT stop after the first file. Grep the whole tree for every site that matches the pattern before concluding — `grep -rn "<old markup or class>" src/`. Modals especially come in near-identical pairs (e.g. `DetailModal.tsx` and `CatBreakdownModal.tsx` share the same category-header block); a change applied to one almost always belongs in the others. If the branch was rebased after you started, re-grep: a sibling file may have arrived from a merge that did not exist when you first read the tree.
 
 ## Signals
 
@@ -124,6 +125,7 @@ Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(i
 - Before adding any `class="..."` to JSX, confirm the class is actually defined in one of the four CSS files (`global.css`, `layout.css`, `components.css`, `forms.css`). Do not invent class names like `search-input-wrap` or `form-input` — these do not exist. Grep the styles dir first.
 - Standalone form inputs (a search box, a single field outside a modal) reuse the existing `.field` wrapper with an unclassed `<input>` inside it: `<div class="field"><input .../></div>`. `.field input` is already styled in `forms.css` (full-width, bottom-border, accent focus). There is no `.form-input` class — never add one.
 - Page titles use `<div class="page-title">{t('...')}</div>` (defined in `layout.css`) — not `<h1>` or a custom class.
+- A modal's large category header (icon + title + sub, shown at the top of `DetailModal`/`CatBreakdownModal`) uses `<div class="row-item modal-head">` — `.modal-head` (in `components.css`) drops the row border and enlarges the icon (48px) and title (16px). Reuse this class for any new modal with a category header block; do not re-create the sizing with inline `style`.
 
 ## TypeScript
 
