@@ -1,8 +1,6 @@
 import { Modal } from './Modal'
 import { modalCtx, closeM, txs, getCat, catColor, openM, selCat, selRCat, selFreq } from '../state/store'
-import { t, catLabel } from '../data/i18n'
-import { FREQS } from '../data/cats'
-import { lang } from '../state/store'
+import { t, catLabel, freqLabel } from '../data/i18n'
 import { confirmDeleteTx } from '../lib/txHelpers'
 import type { Freq } from '../types'
 
@@ -16,11 +14,6 @@ export function DetailModal() {
   const cat = getCat(t2.category)
   const color = catColor(t2.category)
   const isTemplate = t2.freq !== 'none'
-
-  function freqLabel(freq: string): string {
-    const f = FREQS.find(x => x.value === freq)
-    return f ? (lang.value === 'zh' ? f.zh : f.en) : freq
-  }
 
   function handleEdit() {
     if (t2.isGenerated === true) {

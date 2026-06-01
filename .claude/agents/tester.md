@@ -49,6 +49,17 @@ The Edit-button logic in `Transactions.tsx` / `Recurring.tsx` decides target mod
 
 Do not test the inline version — it cannot be unit-tested as written.
 
+### `src/data/i18n.ts` — `freqLabel`
+
+`freqLabel(freq)` is worth testing even though `t()` and `catLabel()` are not (see "Do not"). Unlike those thin static wrappers, `freqLabel` has a real fallback branch (`FREQS.find(...)` returns undefined → returns the raw input) plus a lang-conditional. Cover:
+- known freq returns the `en` label when `lang.value === 'en'` and the `zh` label when `lang.value === 'zh'`
+- unknown freq (e.g. `'none'`, `''`, `'unknown'`) returns the input string unchanged, in both langs
+- switching `lang.value` changes the result of the same call (reactive read)
+
+Because it reads the `lang` signal, drive it by setting `lang.value` directly (no render needed) and restore it in `afterEach(() => { lang.value = 'en' })` so cases don't leak lang state into each other. This is the reference pattern for any future signal-reading label helper that has branching logic — pure `lang.value` mutation + `afterEach` restore, no DOM.
+
+`today()` in `src/lib/dateHelpers.ts` does NOT need a test — it is a one-line `Date().toISOString().slice(0,10)` wrapper with no branch (same rationale as not testing `t()`).
+
 ### `src/lib/exportHelpers.ts`
 
 - `exportCSV` — verify the CSV rows match transaction data (mock `document.createElement`)
@@ -148,5 +159,5 @@ Drive these tests through the UI: set `txs.value`, render, type into the input v
 - Test CSS or visual rendering
 - Mock signals — they work natively
 - Write tests for `CATS`, `COLORS`, `EMOJIS` constants — they are static data
-- Test `t()` or `catLabel()` — they are thin wrappers over static objects
+- Test `t()` or `catLabel()` — they are thin wrappers over static objects (but DO test `freqLabel`, which has a fallback branch — see "What to test first")
 - Test the `theme` signal or its `effect()` (DOM `data-theme` attribute / `localStorage` sync). It is a runtime binding, not a pure function — there is no logic branch worth covering. Same applies to any future persisted-preference signal whose effect only mirrors the value to the DOM/storage.

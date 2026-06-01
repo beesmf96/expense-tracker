@@ -1,5 +1,6 @@
 import type { Lang } from '../types'
 import { lang } from '../state/store'
+import { FREQS } from './cats'
 
 const S = {
   en: {
@@ -73,4 +74,9 @@ export function mfmt(y: number, m: number): string {
 export function catLabel(cat: { en: string; zh: string; label?: string }, l?: Lang): string {
   const lng = l ?? lang.value
   return cat[lng] || cat.label || cat.en || cat.zh
+}
+
+export function freqLabel(freq: string): string {
+  const f = FREQS.find(x => x.value === freq)
+  return f ? (lang.value === 'zh' ? f.zh : f.en) : freq
 }
