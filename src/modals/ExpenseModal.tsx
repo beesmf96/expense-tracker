@@ -1,6 +1,7 @@
 import { useSignal } from '@preact/signals'
+import { useEffect } from 'preact/hooks'
 import { Modal } from './Modal'
-import { selCat, closeM } from '../state/store'
+import { selCat, closeM, modalCtx, openModal } from '../state/store'
 import { t } from '../data/i18n'
 import { CatGrid } from '../components/CatGrid'
 import { putTx } from '../db/queries'
@@ -14,18 +15,46 @@ export function ExpenseModal() {
   const date = useSignal(today())
   const note = useSignal('')
 
+  const editTx = modalCtx.value.editTx
+  const openModalVal = openModal.value
+
+  useEffect(() => {
+    if (editTx) {
+      amount.value = editTx.amount.toString()
+      date.value = editTx.date
+      note.value = editTx.note
+      selCat.value = editTx.category
+    } else {
+      amount.value = ''
+      date.value = today()
+      note.value = ''
+    }
+  }, [editTx?.id, openModalVal])
+
   async function save() {
     const amt = parseFloat(amount.value)
     if (!amt || amt <= 0) return
-    await putTx({
-      id: Date.now().toString(),
-      date: date.value,
-      amount: amt,
-      category: selCat.value,
-      note: note.value.trim(),
-      freq: 'none',
-      createdAt: new Date().toISOString(),
-    })
+    if (editTx) {
+      await putTx({
+        ...editTx,
+        amount: amt,
+        date: date.value,
+        note: note.value.trim(),
+        category: selCat.value,
+        freq: 'none',
+        isGenerated: false,
+      })
+    } else {
+      await putTx({
+        id: Date.now().toString(),
+        date: date.value,
+        amount: amt,
+        category: selCat.value,
+        note: note.value.trim(),
+        freq: 'none',
+        createdAt: new Date().toISOString(),
+      })
+    }
     amount.value = ''
     note.value = ''
     date.value = today()
@@ -34,7 +63,7 @@ export function ExpenseModal() {
 
   return (
     <Modal id="expense">
-      <div class="modal-title">{t('addExpense')}</div>
+      <div class="modal-title">{editTx ? t('editExpense') : t('addExpense')}</div>
 
       <div class="field">
         <label>{t('amount')}</label>

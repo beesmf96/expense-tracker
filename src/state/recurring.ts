@@ -10,6 +10,7 @@ const FREQ_INTERVAL: Record<Exclude<Freq, 'none'>, number> = {
 export function genRecurring(allTxs: Transaction[], viewYear: number, viewMonth: number): Transaction[] {
   const generated: Transaction[] = []
   const templates = allTxs.filter(tx => tx.freq !== 'none')
+  const overrides = new Set(allTxs.filter(tx => tx.freq === 'none').map(tx => tx.id))
 
   for (const tpl of templates) {
     const [sy, sm] = tpl.date.split('-').map(Number)
@@ -28,6 +29,8 @@ export function genRecurring(allTxs: Transaction[], viewYear: number, viewMonth:
     const day = Math.min(origDay, daysInMonth)
     const genDate = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
     const monthKey = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}`
+
+    if (overrides.has(`${tpl.id}_${monthKey}`)) continue
 
     generated.push({
       ...tpl,
