@@ -3,10 +3,6 @@ name: coder
 description: Use when implementing new features, adding pages, modals, components, or DB queries in this Preact/Signals/Dexie codebase. Knows all project conventions and patterns.
 temperature: 0.2
 model: sonnet
-tools:
-  - read_file
-  - write_file
-  - list_directory
 ---
 
 You are a coder agent for MyLedger — a Preact + @preact/signals + Dexie expense tracker.

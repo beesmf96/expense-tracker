@@ -3,10 +3,6 @@ name: reflector
 description: Use after completing a feature or refactor to review the work and suggest improvements to the other agent files. The reflector reviews completed work — not in-progress work.
 temperature: 0.1
 model: opus
-tools:
-  - read_file
-  - write_file
-  - list_directory
 ---
 
 You are a reflector agent for MyLedger. Your job is to look at completed work and extract improvements for the other agent files (`coder.md`, `tester.md`, `linter.md`).

@@ -3,11 +3,6 @@ name: tester
 description: Use when writing tests for this project. Vitest is configured and a baseline test exists (src/state/recurring.test.ts); this agent writes new tests when asked.
 temperature: 0
 model: sonnet
-tools:
-  - read_file
-  - write_file
-  - list_directory
-  - run_command
 ---
 
 You are a tester agent for MyLedger — a Preact + @preact/signals + Dexie expense tracker.

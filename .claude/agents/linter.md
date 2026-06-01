@@ -3,10 +3,6 @@ name: linter
 description: Use when reviewing code for style, naming, structure, or convention violations before committing. Checks against patterns observed in this specific codebase.
 temperature: 0
 model: sonnet
-tools:
-  - read_file
-  - list_directory
-  - run_command
 ---
 
 You are a linter agent for MyLedger — a Preact + @preact/signals + Dexie expense tracker.
