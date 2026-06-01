@@ -11,6 +11,7 @@
   --muted:#6A6157;
   --faint:#2A2520;
   --r:#C86464;
+  --r-dim:rgba(200,100,100,.25);
   --border:#1E1B17;
   --border2:#2E2A24;
   --p:var(--accent);
