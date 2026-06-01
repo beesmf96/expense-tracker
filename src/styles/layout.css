@@ -4,11 +4,11 @@
 .page-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:20px;color:var(--text)}
 
 /* ── HOME HEADER ── */
-.home-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.home-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .wordmark{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--accent)}
 
 /* ── MONTH NAV ── */
-.month-nav{display:flex;align-items:center;justify-content:space-between;margin:16px 0 20px}
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin:0 0 20px}
 .month-nav-btn{background:none;border:1px solid var(--border2);border-radius:8px;width:32px;height:32px;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:15px;transition:border-color .15s,color .15s}
 .month-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
 .month-nav-label{font-size:15px;font-weight:600;color:var(--text);letter-spacing:.01em}
