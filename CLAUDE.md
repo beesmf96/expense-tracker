@@ -31,8 +31,8 @@ src/
     cats.ts            # CATS, COLORS, EMOJIS, FREQS — readonly constant arrays
     i18n.ts            # S object (en/zh strings), t(), mfmt(), catLabel(), freqLabel() — label helpers that read the lang signal
   db/
-    db.ts              # Dexie class — two tables: txs, cats (both keyed by id)
-    queries.ts         # All DB writes; every write ends with loadAll()
+    db.ts              # Dexie class — three tables: txs, cats (keyed by id), settings (keyed by key). settings stores arbitrary {key,value:unknown} rows for non-tx persisted state that can't go in localStorage (e.g. the auto-backup FileSystemDirectoryHandle). Bump version(N) when adding a table.
+    queries.ts         # All DB writes; txs/cats writes end with loadAll(). settings writes update their own signals directly — do NOT call loadAll() on a settings write.
   state/
     store.ts           # All signals + computed; openM()/closeM() helpers
     recurring.ts       # Pure functions: genRecurring(), monthTxs(), allGeneratedUpToDate()
@@ -59,12 +59,15 @@ Local form state inside modals uses `useSignal()` (hook form, not imported from 
 No useState, no Context, no reducers.
 
 ### Write → loadAll() → re-render
-Every DB mutation calls `loadAll()` at the end, which updates `txs` and `userCats` signals, which re-renders anything subscribed to those signals.
+Every `txs`/`cats` mutation calls `loadAll()` at the end, which updates `txs` and `userCats` signals and fires `triggerAutoBackup()` as a fire-and-forget side effect. Writes to the `settings` table update their own signals directly — they must NOT call `loadAll()` (nothing to reload, would trigger a spurious backup).
 
 ```ts
 // Pattern used everywhere in queries.ts:
 export const putTx = (tx: Transaction) => db.txs.put(tx).then(loadAll)
 ```
+
+### Auto-backup (File System Access API)
+Feature-gated on `'showDirectoryPicker' in window` (Chrome/Edge only). A user-picked `FileSystemDirectoryHandle` is persisted in the `settings` Dexie table (key `'autoBackupHandle'`) — handles survive reload but cannot be stored in localStorage. `initAutoBackup()` runs once in `main.tsx` after `loadAll()` to rehydrate the handle into the module-level `_autoHandle` cache in `queries.ts` and re-check permission. `loadAll()` fires `triggerAutoBackup()` after every txs/cats reload, writing a dated JSON backup (`myledger-backup-YYYY-MM-DD.json`) if permission is granted. Two signals back the UI: `autoBackupFolderName` (string|null) and `needsBackupPermission` (boolean — set true when the persisted handle's permission has lapsed; re-grant requires a user gesture via `grantAutoBackupPermission()`, since `requestPermission` cannot be called from `loadAll()`).
 
 ### All pages always rendered
 All five pages are mounted in `App.tsx` simultaneously. Visibility is controlled only by the `.page.active` CSS class based on `activePage` signal. This avoids unmount/remount state loss.

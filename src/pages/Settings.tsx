@@ -1,15 +1,36 @@
 import { useSignal } from '@preact/signals'
-import { lang, theme, activePage, openM, txs, userCats } from '../state/store'
+import { lang, theme, activePage, openM, txs, userCats, autoBackupFolderName, needsBackupPermission } from '../state/store'
 import { t } from '../data/i18n'
-import { exportCSV, backupJSON, loadBackupFile } from '../lib/exportHelpers'
+import { exportCSV, backupJSON, loadBackupFile, writeAutoBackup } from '../lib/exportHelpers'
 import { allCats } from '../lib/catHelpers'
-import { clearAll } from '../db/queries'
+import { clearAll, saveAutoBackupHandle, clearAutoBackupHandle, grantAutoBackupPermission } from '../db/queries'
 import type { Lang } from '../types'
 
 export function Settings() {
   const dangerOpen = useSignal(false)
+  const permError = useSignal('')
   function setLang(l: Lang) {
     lang.value = l
+  }
+
+  async function pickFolder() {
+    permError.value = ''
+    try {
+      const handle = await window.showDirectoryPicker({ mode: 'readwrite' })
+      await saveAutoBackupHandle(handle)
+      await writeAutoBackup(handle, txs.value, userCats.value)
+    } catch (e) {
+      if (e instanceof Error && e.name !== 'AbortError') permError.value = e.message
+    }
+  }
+
+  async function grantAccess() {
+    permError.value = ''
+    try {
+      await grantAutoBackupPermission()
+    } catch (e) {
+      if (e instanceof Error) permError.value = e.message
+    }
   }
 
   return (
@@ -52,6 +73,31 @@ export function Settings() {
           />
         </div>
       </div>
+
+      {'showDirectoryPicker' in window && (
+        <div class="settings-card">
+          <div class="srow" style={{ cursor: 'default' }}>
+            <span class="srow-left">📂 {t('autoBackup')}</span>
+            <span style={{ color: 'var(--muted)', fontSize: '12px' }}>
+              {autoBackupFolderName.value ?? t('folderNotSet')}
+            </span>
+          </div>
+          <div class="srow auto-backup-actions" style={{ cursor: 'default' }}>
+            <button class="btn-small btn-small-p" onClick={pickFolder}>{t('pickFolder')}</button>
+            {needsBackupPermission.value && (
+              <button class="btn-small btn-small-g" onClick={grantAccess}>{t('grantAccess')}</button>
+            )}
+            {autoBackupFolderName.value !== null && (
+              <button class="btn-small btn-small-r" onClick={() => clearAutoBackupHandle()}>{t('clearFolder')}</button>
+            )}
+          </div>
+          {permError.value !== '' && (
+            <div class="srow" style={{ cursor: 'default', color: 'var(--r)', fontSize: '12px' }}>
+              {permError.value}
+            </div>
+          )}
+        </div>
+      )}
 
       <div class="settings-card">
         <div class="srow" style={{ cursor: 'default' }}>

@@ -64,6 +64,7 @@ Because it reads the `lang` signal, drive it by setting `lang.value` directly (n
 
 - `exportCSV` — verify the CSV rows match transaction data (mock `document.createElement`)
 - `backupJSON` — verify the backup object shape matches `BackupFile` type
+- `writeAutoBackup(handle, txs, cats)` — File System Access API helper. Mock the handle as a plain object, not a real FS handle: stub the call chain `getFileHandle({create:true}) → createWritable() → {write, close}` with nested `vi.fn().mockResolvedValue(...)`. Assert: filename matches `/^myledger-backup-\d{4}-\d{2}-\d{2}\.json$/`, written JSON parses to the `BackupFile` shape (`version`/`exportedAt`/`txs`/`userCats`), and `write` is called before `close` via a shared `callOrder` array. See the existing `writeAutoBackup` describe block in `exportHelpers.test.ts` as the reference for any future FS-API helper test. Do not add tests for `triggerAutoBackup`/`initAutoBackup`/`grantAutoBackupPermission` — they are thin glue over the tested `writeAutoBackup` plus signal/permission mutation with no branch logic worth a unit test.
 
 ### `src/lib/txHelpers.ts`
 

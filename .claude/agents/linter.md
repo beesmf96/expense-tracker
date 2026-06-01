@@ -51,7 +51,7 @@ Flag if any of these appear:
 
 Flag if any of these appear:
 - Direct `db.txs` / `db.cats` access in a component or page — all DB access belongs in `src/db/queries.ts`
-- A DB write that does not end with `.then(loadAll)` or `await loadAll()`
+- A write to `db.txs` or `db.cats` that does not end with `.then(loadAll)` or `await loadAll()`. Writes to `db.settings` are EXEMPT — `loadAll()` only reloads `txs`/`cats`, so a settings write correctly updates its own signals (`autoBackupFolderName`, `needsBackupPermission`) directly instead. Do not flag a missing `loadAll()` on a `db.settings` write.
 - Writing a generated (recurring) transaction to IndexedDB — `isGenerated` txs are read-only and virtual
 
 ## Components
@@ -93,7 +93,7 @@ Flag if:
 ## Duplication
 
 Flag if:
-- A function is defined locally that duplicates one already exported from `src/data/i18n.ts` or `src/lib/`. Known centralized helpers: `today()` (in `src/lib/dateHelpers.ts`), `freqLabel()` and `catLabel()` (in `src/data/i18n.ts`). A local `const today = () => new Date().toISOString().slice(0,10)` or an inline `FREQS.find(x => x.value === freq)` label lookup in a component/modal is a duplication — flag it and swap to the import. If the same body appears in two files but no central home exists yet, flag it for the coder to extract (do not extract it yourself — that is feature work beyond a one-line fix).
+- A function is defined locally that duplicates one already exported from `src/data/i18n.ts` or `src/lib/`. Known centralized helpers: `today()` (in `src/lib/dateHelpers.ts`), `freqLabel()` and `catLabel()` (in `src/data/i18n.ts`). A local `const today = () => new Date().toISOString().slice(0,10)` or an inline expression of that form anywhere (modal, page, OR another `lib/` helper) is a duplication — flag it and swap to the import. An inline `FREQS.find(x => x.value === freq)` label lookup in a component/modal is also a duplication — flag it. If the same body appears in two files but no central home exists yet, flag it for the coder to extract (do not extract it yourself — that is feature work beyond a one-line fix).
 - A `lang`-resolving label helper (reads `lang.value` to pick `en`/`zh`) is placed in `src/lib/` instead of `src/data/i18n.ts`. Signal-reading label helpers live next to `catLabel` in `i18n.ts`; only signal-free helpers (e.g. `today()`) belong in `lib/`.
 
 ## Comments
@@ -107,6 +107,7 @@ Flag if:
 
 - Dense single-line CSS (this is the established style)
 - Lack of JSDoc or docstrings (not used in this project)
+- A private module-level `let` cache in a non-store file used to coordinate a side effect (e.g. `_autoHandle` in `queries.ts` holding the rehydrated `FileSystemDirectoryHandle`). The "no module-scope state outside store.ts" rule targets SIGNALS, not plain vars. Leading underscore + not exported + not a signal = intentional private cache.
 - Missing test files (vitest is now installed; `src/state/recurring.test.ts` exists)
 - `catHelpers.ts` re-exporting from `store.ts` (intentional thin wrapper)
 - `const t2 = tx` (or similar capture-after-guard alias) immediately after a narrowing guard — this is the sanctioned workaround for TypeScript's closure-narrowing limitation and is preferred over `!`
