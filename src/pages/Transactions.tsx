@@ -1,9 +1,7 @@
-import { txs, getCat, catColor, openM, selCat, selRCat, selFreq } from '../state/store'
+import { txs, getCat, catColor, openM } from '../state/store'
 import { t, mfmt, catLabel } from '../data/i18n'
 import { EmptyState } from '../components/EmptyState'
 import { allGeneratedUpToDate } from '../state/recurring'
-import { confirmDeleteTx } from '../lib/txHelpers'
-import type { Transaction, Freq } from '../types'
 
 export function Transactions() {
   const all = [
@@ -18,17 +16,6 @@ export function Transactions() {
         <EmptyState icon="📋" message={t('noRecords')} />
       </div>
     )
-  }
-
-  function handleEdit(tx: Transaction) {
-    if (tx.isGenerated || tx.freq === 'none') {
-      selCat.value = tx.category
-      openM('expense', { editTx: tx })
-    } else {
-      selRCat.value = tx.category
-      selFreq.value = tx.freq as Exclude<Freq, 'none'>
-      openM('recurring', { editTx: tx })
-    }
   }
 
   const groups = new Map<string, typeof all>()
@@ -65,20 +52,8 @@ export function Transactions() {
                       {tx.date}
                       {tx.isGenerated && <span class="freq-badge" style={{ marginLeft: '6px' }}>↻</span>}
                     </div>
-                    <div class="amount">−{tx.amount.toFixed(2)}</div>
                   </div>
-                  <div class="row-actions">
-                    <button
-                      class="row-act-btn row-act-edit"
-                      onClick={e => { e.stopPropagation(); handleEdit(tx) }}
-                    >{t('edit')}</button>
-                    {!tx.isGenerated && (
-                      <button
-                        class="row-act-btn row-act-del"
-                        onClick={e => { e.stopPropagation(); confirmDeleteTx(tx, cat) }}
-                      >{t('delete')}</button>
-                    )}
-                  </div>
+                  <div class="amount">−{tx.amount.toFixed(2)}</div>
                 </div>
               )
             })}

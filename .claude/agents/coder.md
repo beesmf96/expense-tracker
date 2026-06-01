@@ -72,6 +72,8 @@ Editing a generated occurrence opens the *expense* modal (not recurring) — the
 
 Actionable rows put amount and badges inside `.row-info`; the right-side slot is reserved for a `.row-actions` grid (Edit/Delete buttons). Do not place the amount in the right slot when a row has inline actions. Both button handlers must call `e.stopPropagation()` first so the row's own `onClick` (detail modal) is not also triggered.
 
+Rows without inline actions (e.g. Transactions list rows) place `<div class="amount">` as a direct child of `.row-item` after `.row-info`, and have no `.row-actions` slot — Edit/Delete for those rows live in `DetailModal`, reached by the row's own `onClick`. Do not add `.row-actions` to a row that opens a detail modal.
+
 ## Recurring transactions
 
 Never write generated transactions to IndexedDB. They must only exist as in-memory objects produced by `genRecurring()` in `src/state/recurring.ts`. Detect generated transactions by `tx.isGenerated === true` or `tx.id.includes('_')`.
@@ -111,3 +113,5 @@ Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(i
 - Add error boundaries, loading spinners, or fallback states for internal DB operations (Dexie throws are unrecoverable — let them propagate)
 - Add backwards-compatibility shims or unused exports
 - Default export anything
+- Invent features, signals, UI, or state that the prompt did not ask for. When a task names specific edits, make exactly those edits and nothing more.
+- Rewrite a whole file when the task is a set of surgical edits — regenerating a file from scratch introduces unrelated drift (new imports, new signals, new UI). Use targeted edits instead.
