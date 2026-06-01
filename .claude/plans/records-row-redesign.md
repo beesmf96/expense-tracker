@@ -1,9 +1,9 @@
 ---
 plan: records-row-redesign
-status: in-progress
+status: review
 branch: feature/records-row-redesign
-pr: ~
-implemented: ~
+pr: #6
+implemented: 2026-06-01
 ---
 
 # Feature: Records Row Redesign — Amount Right-Aligned, Actions in Detail Modal Only
