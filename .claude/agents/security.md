@@ -46,6 +46,9 @@ Read `src/lib/exportHelpers.ts` and check every `JSON.parse` call:
 
 Note: a `JSON.parse(text) as SomeType` cast does not validate anything at runtime — TypeScript will not error if a new field is added to the type without a matching runtime guard. When reviewing after a type change in `src/types/index.ts`, confirm every field that the import path relies on has a corresponding `typeof`/format check in `loadBackupFile`. A new `Transaction` field with no guard is a WARN.
 
+- An empty `txs` or `userCats` array (`[]`) is a **valid backup state** — a user with no transactions or no custom categories produces one legitimately. Do NOT flag an empty array as data-loss. The guard is `Array.isArray`, not "non-empty"; zero-length is not a corruption signal.
+- `data.field ?? []` is NOT a sufficient array guard: nullish-coalescing only substitutes for `null`/`undefined`, so a non-null non-array value (e.g. `"x"`, `{}`) passes through into the iteration or write path. Flag `?? []` on an array field that is subsequently iterated as INFO — the correct guard is `Array.isArray(x) ? x : []`. See `validatedCats` in `loadBackupFile` as the reference.
+
 Check CSV parsing for unvalidated `parseFloat` / integer coercions on imported row fields:
 - `parseFloat` on an attacker-controlled string returns `NaN` — flag if `NaN` can propagate into `amount` without a guard.
 - Date fields: flag if a CSV-imported date string is written directly without format validation (`/^\d{4}-\d{2}-\d{2}$/` or similar).
