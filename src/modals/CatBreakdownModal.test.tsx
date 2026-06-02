@@ -1,37 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/preact'
 import userEvent from '@testing-library/user-event'
-import { txs, viewY, viewM, modalCtx, openModal } from '../state/store'
-import type { Transaction } from '../types'
+import { txs, userCats, modalCtx, openModal } from '../state/store'
+import { makeTx, makeCat, setupStoreTest } from '../test-utils/setup'
 
 vi.mock('../state/store', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../state/store')>()
   return { ...actual, openM: vi.fn() }
 })
 
-function makeTx(overrides: Partial<Transaction>): Transaction {
-  return {
-    id: 'test-1',
-    date: '2025-01-15',
-    amount: 100,
-    category: 'bills_sub',
-    note: '',
-    freq: 'none',
-    createdAt: '2025-01-15T00:00:00.000Z',
-    ...overrides,
-  }
-}
-
 describe('CatBreakdownModal', () => {
   let openM: ReturnType<typeof vi.fn>
 
   beforeEach(async () => {
-    const store = await import('../state/store')
-    openM = vi.mocked(store.openM)
-    openM.mockClear()
-    viewY.value = 2025
-    viewM.value = 0
-    txs.value = []
+    openM = (await setupStoreTest()).openM
     modalCtx.value = {}
     openModal.value = 'cat-breakdown'
   })
@@ -47,6 +29,7 @@ describe('CatBreakdownModal', () => {
 
   it('renders the category name and total amount when breakdownCatId is set', async () => {
     const { CatBreakdownModal } = await import('./CatBreakdownModal')
+    userCats.value = [makeCat()]
     txs.value = [
       makeTx({ id: 'tx-1', category: 'bills_sub', date: '2025-01-10', amount: 50 }),
       makeTx({ id: 'tx-2', category: 'bills_sub', date: '2025-01-15', amount: 30 }),
@@ -119,6 +102,7 @@ describe('CatBreakdownModal', () => {
 
   it('renders empty tx list when no transactions match the breakdownCatId for the view month', async () => {
     const { CatBreakdownModal } = await import('./CatBreakdownModal')
+    userCats.value = [makeCat()]
     txs.value = [
       makeTx({ id: 'tx-grocery', category: 'groceries', date: '2025-01-12', amount: 80 }),
     ]

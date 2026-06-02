@@ -115,7 +115,9 @@ A real (`freq: 'none'`) transaction can act as an *override* for one generated o
 
 ## Categories
 
-Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(id)` from `src/state/store.ts`. Merge built-in and user cats via `allCatsList.value` or `allCats()` from `src/lib/catHelpers.ts`.
+Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(id)` from `src/state/store.ts`. Access the user's category list via `allCatsList.value` or `allCats()` from `src/lib/catHelpers.ts`.
+
+**Blank-slate design**: `allCatsList = computed(() => userCats.value)` — there are no built-in categories merged in. A fresh user and a fresh test start with zero categories. `getCat(id)` falls back to a `{ id, en: id, zh: id, emoji: '📦' }` stub for unknown ids; logic that depends on a real label or emoji must ensure the category is present in `userCats` first.
 
 ## i18n
 

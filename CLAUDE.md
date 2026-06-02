@@ -28,7 +28,7 @@ src/
   main.tsx             # Entry: loadAll() then render(<App />, document.body)
   types/index.ts       # All shared types — Freq, Lang, PageId, ModalId, Transaction, Category, etc.
   data/
-    cats.ts            # CATS, COLORS, EMOJIS, FREQS — readonly constant arrays
+    cats.ts            # COLORS, EMOJIS, FREQS — readonly exported arrays; CATS is a private unexported seed list (not wired into allCatsList)
     i18n.ts            # S object (en/zh strings), t(), mfmt(), catLabel(), freqLabel() — label helpers that read the lang signal
   db/
     db.ts              # Dexie class — three tables: txs, cats (keyed by id), settings (keyed by key). settings stores arbitrary {key,value:unknown} rows for non-tx persisted state that can't go in localStorage (e.g. the auto-backup FileSystemDirectoryHandle). Bump version(N) when adding a table.
@@ -79,7 +79,12 @@ All five pages are mounted in `App.tsx` simultaneously. Visibility is controlled
 Templates are stored once in IndexedDB with `freq !== 'none'`. `genRecurring()` synthesizes read-only `Transaction` objects at render time for the current view month. They are never written to the DB. Generated IDs: `{templateId}_{YYYY-MM}`. `isGenerated: true` marks them as virtual.
 
 ### Category system
-`CATS` (readonly array in memory) = built-in categories. `userCats` signal = user-created categories from Dexie. `allCatsList` computed merges both, with user overrides winning for matching IDs. Colors assigned by array index position in `allCatsList`.
+The app is **blank-slate**: a fresh user has zero categories. There are no built-in categories merged into `allCatsList`.
+- `userCats` signal = the user's categories, loaded from Dexie `cats` table.
+- `allCatsList` computed === `userCats.value` (a direct pass-through — it does NOT merge any `CATS` constant).
+- `CATS` in `data/cats.ts` is a private, unexported seed list — it is not imported by `store.ts`. Do not assume any category id (`bills_sub`, `groceries`, …) exists at runtime unless `userCats` was populated (e.g. by the user or by a test seeding `userCats.value`).
+- `getCat(id)` falls back to `{ id, en: id, zh: id, emoji: '📦' }` for unknown ids — logic that depends on a real label or emoji must ensure the category exists first.
+- Colors assigned by array-index position in `allCatsList` via `catColor` in `store.ts`.
 
 ### i18n
 `t(key)` reads `S[lang.value][key]`. `catLabel(cat)` reads `cat[lang]` with fallbacks. `lang` is a signal. `mfmt(y, m)` formats month/year per locale. All strings in `src/data/i18n.ts` — no external i18n library.

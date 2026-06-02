@@ -1,41 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/preact'
 import userEvent from '@testing-library/user-event'
-import { txs, viewY, viewM } from '../state/store'
-import type { Transaction } from '../types'
+import { txs, userCats } from '../state/store'
+import { makeTx, makeCat, setupStoreTest } from '../test-utils/setup'
 
 vi.mock('../state/store', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../state/store')>()
   return { ...actual, openM: vi.fn() }
 })
 
-function makeTx(overrides: Partial<Transaction>): Transaction {
-  return {
-    id: 'test-1',
-    date: '2025-01-15',
-    amount: 100,
-    category: 'bills_sub',
-    note: '',
-    freq: 'none',
-    createdAt: '2025-01-15T00:00:00.000Z',
-    ...overrides,
-  }
-}
-
 describe('Home — category row click', () => {
   let openM: ReturnType<typeof vi.fn>
 
   beforeEach(async () => {
-    const store = await import('../state/store')
-    openM = vi.mocked(store.openM)
-    openM.mockClear()
-    viewY.value = 2025
-    viewM.value = 0
-    txs.value = []
+    openM = (await setupStoreTest()).openM
   })
 
   it('calls openM with cat-breakdown and the correct breakdownCatId when a category row is clicked', async () => {
     const { Home } = await import('./Home')
+    userCats.value = [makeCat()]
     txs.value = [
       makeTx({ id: 'tx-1', category: 'bills_sub', date: '2025-01-10', amount: 50 }),
     ]
@@ -53,6 +36,10 @@ describe('Home — category row click', () => {
 
   it('calls openM with the correct breakdownCatId when multiple categories are rendered and one is clicked', async () => {
     const { Home } = await import('./Home')
+    userCats.value = [
+      makeCat(),
+      makeCat({ id: 'groceries', en: 'Groceries', zh: '杂货', emoji: '🛒' }),
+    ]
     txs.value = [
       makeTx({ id: 'tx-1', category: 'bills_sub', date: '2025-01-10', amount: 50 }),
       makeTx({ id: 'tx-2', category: 'groceries', date: '2025-01-12', amount: 80 }),
