@@ -32,7 +32,6 @@ export function ManageCats() {
           ‹
         </button>
         <div class="page-title" style={{ marginBottom: 0, flex: 1 }}>{t('manageCats')}</div>
-        <button class="btn-small btn-small-p" onClick={() => openM('newcat')}>+ {t('addCat')}</button>
       </div>
 
       {cats.map(cat => {
@@ -54,6 +53,12 @@ export function ManageCats() {
           </div>
         )
       })}
+      <div class="row-item row-add clickable" onClick={() => openM('newcat')}>
+        <div class="row-icon row-add-icon">➕</div>
+        <div class="row-info">
+          <div class="row-title">{t('addCat')}</div>
+        </div>
+      </div>
     </div>
   )
 }
