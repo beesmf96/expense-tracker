@@ -1,6 +1,6 @@
 import { useSignal } from '@preact/signals'
 import { useEffect } from 'preact/hooks'
-import { txs, getCat, catColor, openM, activePage } from '../state/store'
+import { txs, getCat, catColor, openM, activePage, selCat } from '../state/store'
 import { t, catLabel } from '../data/i18n'
 import { EmptyState } from '../components/EmptyState'
 
@@ -32,8 +32,13 @@ export function Search() {
           onInput={e => { query.value = (e.target as HTMLInputElement).value }}
         />
       </div>
-      {(q === '' || results.length === 0) && (
-        <EmptyState icon="🔍" message={t('searchEmpty')} />
+      {q === '' && (
+        <EmptyState icon="🔍" message={t('searchHint')} />
+      )}
+      {q !== '' && results.length === 0 && (
+        <EmptyState icon="🔍" message={t('searchEmpty')}>
+          <button class="btn-small btn-small-p" onClick={() => { selCat.value = ''; openM('expense') }}>{t('addExpense')}</button>
+        </EmptyState>
       )}
       {results.map(tx => {
         const cat = getCat(tx.category)

@@ -1,5 +1,5 @@
 import { useSignal } from '@preact/signals'
-import { lang, theme, activePage, openM, txs, userCats, autoBackupFolderName, needsBackupPermission } from '../state/store'
+import { lang, theme, activePage, openM, txs, userCats, autoBackupFolderName, needsBackupPermission, showToast } from '../state/store'
 import { t } from '../data/i18n'
 import { exportCSV, backupJSON, loadBackupFile, writeAutoBackup } from '../lib/exportHelpers'
 import { allCats } from '../lib/catHelpers'
@@ -113,6 +113,7 @@ export function Settings() {
                 if (!file) return
                 try {
                   await loadBackupFile(file)
+                  showToast(t('restored'))
                 } catch {
                   alert('Invalid backup file')
                 }
@@ -134,7 +135,7 @@ export function Settings() {
             confirmTitle: t('confirmClear'),
             confirmMsg: 'This will permanently delete all transactions and categories.',
             confirmOkLabel: t('clearAll'),
-            confirmOnOk: () => clearAll(),
+            confirmOnOk: () => clearAll().then(() => showToast(t('cleared'))),
           })}>
             <span class="srow-left" style={{ color: 'var(--r)' }}>🗑️ {t('clearAll')}</span>
           </div>

@@ -15,6 +15,7 @@ import { NewCatModal } from './modals/NewCatModal'
 import { EditCatModal } from './modals/EditCatModal'
 import { ReclassifyModal } from './modals/ReclassifyModal'
 import { CatBreakdownModal } from './modals/CatBreakdownModal'
+import { Toast } from './components/Toast'
 
 export function App() {
   const page = activePage.value
@@ -51,6 +52,7 @@ export function App() {
       <EditCatModal />
       <ReclassifyModal />
       <CatBreakdownModal />
+      <Toast />
     </>
   )
 }

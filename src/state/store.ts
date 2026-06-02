@@ -53,3 +53,12 @@ export function closeM() {
   openModal.value = null
   modalCtx.value = {}
 }
+
+export const toastMsg = signal<string | null>(null)
+let _toastTimer: ReturnType<typeof setTimeout> | null = null
+
+export function showToast(msg: string, durationMs = 2000) {
+  if (_toastTimer) clearTimeout(_toastTimer)
+  toastMsg.value = msg
+  _toastTimer = setTimeout(() => { toastMsg.value = null }, durationMs)
+}
