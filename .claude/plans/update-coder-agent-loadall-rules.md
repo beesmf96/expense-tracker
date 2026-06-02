@@ -1,9 +1,9 @@
 ---
 plan: update-coder-agent-loadall-rules
-status: in-progress
+status: review
 branch: feature/update-coder-agent-loadall-rules
-pr: ~
-implemented: ~
+pr: #15
+implemented: 2026-06-02
 ---
 
 # Task: Update coder.md with loadAll() fan-out rules
