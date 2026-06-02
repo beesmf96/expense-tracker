@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/preact'
 import userEvent from '@testing-library/user-event'
-import { txs } from '../state/store'
-import type { Transaction } from '../types'
+import { txs, userCats } from '../state/store'
+import { makeTx, makeCat } from '../test-utils/setup'
 
 vi.mock('../state/store', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../state/store')>()
@@ -18,22 +18,10 @@ vi.mock('../db/queries', () => ({
   loadAll: vi.fn().mockResolvedValue(undefined),
 }))
 
-function makeTx(overrides: Partial<Transaction>): Transaction {
-  return {
-    id: 'test-1',
-    date: '2025-01-15',
-    amount: 100,
-    category: 'bills_sub',
-    note: '',
-    freq: 'none',
-    createdAt: '2025-01-15T00:00:00.000Z',
-    ...overrides,
-  }
-}
-
 describe('Search page', () => {
   beforeEach(async () => {
     txs.value = []
+    userCats.value = []
     const { openM } = await import('../state/store')
     vi.mocked(openM).mockClear()
   })
@@ -42,7 +30,7 @@ describe('Search page', () => {
     txs.value = [makeTx({ note: 'coffee run' })]
     const { Search } = await import('./Search')
     render(<Search />)
-    expect(screen.getByText('No results')).toBeTruthy()
+    expect(screen.getByText('Search your expenses')).toBeTruthy()
   })
 
   it('shows no result rows when query is empty', async () => {
@@ -64,6 +52,7 @@ describe('Search page', () => {
 
   it('matches a tx by category label (case-insensitive)', async () => {
     const user = userEvent.setup()
+    userCats.value = [makeCat()]
     txs.value = [makeTx({ id: 'tx-2', category: 'bills_sub', note: '', freq: 'none' })]
     const { Search } = await import('./Search')
     render(<Search />)

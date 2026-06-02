@@ -14,7 +14,15 @@ Vitest is already installed and configured — do not re-run setup. In place:
 - Dev deps: `vitest`, `@testing-library/preact`, `@testing-library/user-event`, `happy-dom`
 - `vite.config.ts` has the `test` block (`environment: 'happy-dom'`, `globals: true`)
 - `package.json` has `"test": "vitest"` — run with `npm test`
-- `src/state/recurring.test.ts` exists as the baseline (use it as the reference for the `makeTx` factory and test style; do not duplicate its setup boilerplate from scratch)
+- `src/test-utils/setup.ts` — shared factories and store reset helper (canonical source; import from here, never redefine locally)
+
+### Shared test factories — use these, do not re-create locally
+
+`src/test-utils/setup.ts` exports the canonical factories. Import them; never define a local `makeTx`/`makeCat`:
+
+- `makeTx(overrides)` — Transaction factory (defaults to a real `freq:'none'` tx, `category: 'bills_sub'`).
+- `makeCat(overrides)` — Category factory (defaults to `{ id: 'bills_sub', en: 'Bill & Subscription', zh: '账单订阅', emoji: '💡' }`).
+- `setupStoreTest()` — call in `beforeEach`; clears the `openM` mock and resets `txs`/`userCats`/`viewY`/`viewM` to a known state, returns `{ openM }`. Seed `userCats.value`/`txs.value` for the specific case in each test body after calling it.
 
 New tests go next to the source they cover. Pick up from "What to test first" below.
 
@@ -161,6 +169,14 @@ Spreading `...actual` keeps the real signals working (so `txs.value = [...]` in 
 Drive these tests through the UI: set `txs.value`, render, type into the input via `userEvent`, and assert on rendered text / `openM` calls. Querying a search box uses `screen.getByRole('searchbox')` (an `<input type="search">`).
 
 When the unit under test is a **modal** (renders `<Modal id="x">`), set `openModal.value = 'x'` in `beforeEach` before rendering — `Modal` only shows its children when `openModal.value === id`, so without this the content is CSS-hidden and `screen.getByText` queries fail. Also seed `modalCtx.value` with the fields the modal reads (e.g. `modalCtx.value = { breakdownCatId: 'bills_sub' }`); a modal reads its inputs from `modalCtx`, not props. Pages (`Home`, `Transactions`) are always visible and need neither. To assert the absent-context branch (modal returns the empty `<Modal><div/></Modal>` placeholder), set `modalCtx.value = {}` and assert the title text is not present.
+
+### Seed userCats for any test that renders categories
+
+`allCatsList = computed(() => userCats.value)` — blank-slate, empty by default (see CLAUDE.md "Category system"). A component/modal test that renders category names, colors, or breakdowns MUST set `userCats.value = [makeCat(...)]` before rendering, or `getCat` returns the `{ en: id, zh: id, emoji: '📦' }` fallback stub and label/emoji assertions fail. `setupStoreTest()` resets `userCats.value = []` per test, so seeding must happen in the test body after calling it.
+
+### Assert on real i18n strings, not guessed ones
+
+When asserting empty-state or status text, read the actual key from `S.en` in `src/data/i18n.ts` or trace the component's `t('key')` call — do not guess the wording. Example: the empty Search query state renders `t('searchHint')` = `'Search your expenses'`, not `'No results'` (that is `t('searchEmpty')`, shown only when a query yields zero matches). A guessed string silently fails the run.
 
 ## Do not
 
