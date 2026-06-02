@@ -32,14 +32,14 @@ src/
     i18n.ts            # S object (en/zh strings), t(), mfmt(), catLabel(), freqLabel() — label helpers that read the lang signal
   db/
     db.ts              # Dexie class — three tables: txs, cats (keyed by id), settings (keyed by key). settings stores arbitrary {key,value:unknown} rows for non-tx persisted state that can't go in localStorage (e.g. the auto-backup FileSystemDirectoryHandle). Bump version(N) when adding a table.
-    queries.ts         # All DB writes; txs/cats writes end with loadAll(). settings writes update their own signals directly — do NOT call loadAll() on a settings write.
+    queries.ts         # All DB writes; txs/cats writes end with loadAll(). settings writes update their own signals directly — do NOT call loadAll() on a settings write. restoreBackup({txs, userCats}) bulk-replaces both tables (used by import) and ends with loadAll().
   state/
     store.ts           # All signals + computed; openM()/closeM() helpers
     recurring.ts       # Pure functions: genRecurring(), monthTxs(), allGeneratedUpToDate()
   lib/
     catHelpers.ts      # Re-exports getCat/catColor from store; allCats() wrapper
     dateHelpers.ts     # today() — signal-free date helpers (no lang/signal reads)
-    exportHelpers.ts   # CSV export, JSON backup, restore from file
+    exportHelpers.ts   # CSV export, JSON backup, writeAutoBackup, loadBackupFile (validates then calls restoreBackup)
     txHelpers.ts       # confirmDeleteTx() — opens confirm modal then delTx
   components/          # Reusable UI: BottomNav, FAB, CatGrid, EmojiGrid, FreqGrid, ProgressBar, FormField, ModalActions, EmptyState
   pages/               # Home, Transactions, Recurring, Settings, ManageCats
@@ -125,11 +125,12 @@ When asked to implement a plan:
 1. Create branch: feature/{plan-name}
 2. @.claude/agents/coder.md
 3. @.claude/agents/tester.md
-4. @.claude/agents/linter.md
-5. @.claude/agents/reflector.md
-6. Commit and push
-7. Open PR
-8. Update plan frontmatter:
+4. @.claude/agents/security.md
+5. @.claude/agents/linter.md
+6. @.claude/agents/reflector.md
+7. Commit and push
+8. Open PR
+9. Update plan frontmatter:
    - status: review
    - branch: feature/{plan-name}
    - pr: #{pr-number}

@@ -1,5 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import type { Transaction, Category, BackupFile } from '../types'
+
+vi.mock('../db/queries', () => ({
+  restoreBackup: vi.fn().mockResolvedValue(undefined),
+}))
 
 function makeTx(overrides: Partial<Transaction>): Transaction {
   return {
@@ -117,5 +121,116 @@ describe('writeAutoBackup', () => {
     await writeAutoBackup(mockHandle, [], [])
 
     expect(callOrder).toEqual(['write', 'close'])
+  })
+})
+
+describe('loadBackupFile', () => {
+  function makeBackup(overrides: Record<string, unknown> = {}): string {
+    return JSON.stringify({
+      version: 2,
+      exportedAt: '2025-01-01T00:00:00.000Z',
+      txs: [{
+        id: 'tx-1',
+        date: '2025-01-15',
+        amount: 100,
+        category: 'food',
+        note: '',
+        freq: 'none',
+        createdAt: '2025-01-15T00:00:00.000Z',
+      }],
+      userCats: [],
+      ...overrides,
+    })
+  }
+
+  function makeFile(json: string): File {
+    return new File([json], 'backup.json', { type: 'application/json' })
+  }
+
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('resolves without throwing for a valid backup and calls restoreBackup once', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const { restoreBackup } = await import('../db/queries')
+    await expect(loadBackupFile(makeFile(makeBackup()))).resolves.toBeUndefined()
+    expect(restoreBackup).toHaveBeenCalledOnce()
+  })
+
+  it('throws Unsupported backup version when version !== 2', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    await expect(loadBackupFile(makeFile(makeBackup({ version: 1 })))).rejects.toThrow('Unsupported backup version')
+  })
+
+  it('throws Invalid backup file when txs is missing', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const json = JSON.stringify({ version: 2, exportedAt: '2025-01-01T00:00:00.000Z', userCats: [] })
+    await expect(loadBackupFile(makeFile(json))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when txs is not an array', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    await expect(loadBackupFile(makeFile(makeBackup({ txs: 'not-an-array' })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when a tx amount is a string', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const txs = [{ id: 'tx-1', date: '2025-01-15', amount: '100', category: 'food', note: '', freq: 'none', createdAt: '2025-01-15T00:00:00.000Z' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ txs })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when a tx amount is NaN', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const txs = [{ id: 'tx-1', date: '2025-01-15', amount: NaN, category: 'food', note: '', freq: 'none', createdAt: '2025-01-15T00:00:00.000Z' }]
+    const json = JSON.stringify({ version: 2, exportedAt: '2025-01-01T00:00:00.000Z', txs, userCats: [] }, (_k, v: unknown) => (typeof v === 'number' && isNaN(v) ? null : v))
+    await expect(loadBackupFile(makeFile(json))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when a tx amount is negative', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const txs = [{ id: 'tx-1', date: '2025-01-15', amount: -50, category: 'food', note: '', freq: 'none', createdAt: '2025-01-15T00:00:00.000Z' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ txs })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when a tx date is malformed', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const txs = [{ id: 'tx-1', date: '2025/01/15', amount: 100, category: 'food', note: '', freq: 'none', createdAt: '2025-01-15T00:00:00.000Z' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ txs })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when a tx freq is unknown', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const txs = [{ id: 'tx-1', date: '2025-01-15', amount: 100, category: 'food', note: '', freq: 'weekly', createdAt: '2025-01-15T00:00:00.000Z' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ txs })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when a tx id is an empty string', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const txs = [{ id: '', date: '2025-01-15', amount: 100, category: 'food', note: '', freq: 'none', createdAt: '2025-01-15T00:00:00.000Z' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ txs })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when a tx note is null', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const txs = [{ id: 'tx-1', date: '2025-01-15', amount: 100, category: 'food', note: null, freq: 'none', createdAt: '2025-01-15T00:00:00.000Z' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ txs })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when the second tx is invalid and the first is valid', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const txs = [
+      { id: 'tx-1', date: '2025-01-15', amount: 100, category: 'food', note: '', freq: 'none', createdAt: '2025-01-15T00:00:00.000Z' },
+      { id: 'tx-2', date: '2025-01-16', amount: -99, category: 'food', note: '', freq: 'none', createdAt: '2025-01-16T00:00:00.000Z' },
+    ]
+    await expect(loadBackupFile(makeFile(makeBackup({ txs })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('does not call restoreBackup when validation fails', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const { restoreBackup } = await import('../db/queries')
+    const txs = [{ id: 'tx-1', date: '2025-01-15', amount: 100, category: 'food', note: '', freq: 'weekly', createdAt: '2025-01-15T00:00:00.000Z' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ txs })))).rejects.toThrow('Invalid backup file')
+    expect(restoreBackup).not.toHaveBeenCalled()
   })
 })

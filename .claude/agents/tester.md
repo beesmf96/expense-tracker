@@ -65,6 +65,7 @@ Because it reads the `lang` signal, drive it by setting `lang.value` directly (n
 - `exportCSV` — verify the CSV rows match transaction data (mock `document.createElement`)
 - `backupJSON` — verify the backup object shape matches `BackupFile` type
 - `writeAutoBackup(handle, txs, cats)` — File System Access API helper. Mock the handle as a plain object, not a real FS handle: stub the call chain `getFileHandle({create:true}) → createWritable() → {write, close}` with nested `vi.fn().mockResolvedValue(...)`. Assert: filename matches `/^myledger-backup-\d{4}-\d{2}-\d{2}\.json$/`, written JSON parses to the `BackupFile` shape (`version`/`exportedAt`/`txs`/`userCats`), and `write` is called before `close` via a shared `callOrder` array. See the existing `writeAutoBackup` describe block in `exportHelpers.test.ts` as the reference for any future FS-API helper test. Do not add tests for `triggerAutoBackup`/`initAutoBackup`/`grantAutoBackupPermission` — they are thin glue over the tested `writeAutoBackup` plus signal/permission mutation with no branch logic worth a unit test.
+- `loadBackupFile(file)` — import-restore validator. Build input with `new File([json], 'backup.json', { type: 'application/json' })` and a `makeBackup(overrides?)` JSON-string factory. `vi.mock('../db/queries')` to stub `restoreBackup`. Cover: happy path (resolves, `restoreBackup` called once), bad `version`, missing/non-array `txs`, and one rejecting case per field guard (`amount` non-number/NaN/negative, `date` malformed, `freq` unknown, `id` empty, `note` non-string). Assert `restoreBackup` is NOT called when validation fails. NaN can't survive `JSON.stringify` normally — inject via a replacer (`(_k, v) => typeof v === 'number' && isNaN(v) ? null : v`) or test the string-`amount` branch instead. See the existing `loadBackupFile` describe block in `exportHelpers.test.ts` as the reference pattern for any future file-import validator.
 
 ### `src/lib/txHelpers.ts`
 
@@ -126,6 +127,11 @@ vi.mock('../db/queries', () => ({
   putTx: vi.fn().mockResolvedValue(undefined),
   loadAll: vi.fn().mockResolvedValue(undefined),
 }))
+```
+
+Known mockable query helpers: `putTx`, `delTx`, `putCat`, `delCat`, `loadAll`, `restoreBackup`. Mock only the ones the unit under test calls.
+
+```ts
 ```
 
 Test DB query functions in `src/db/queries.ts` with a real in-memory Dexie instance using `Dexie.delete('myledger')` in `beforeEach` to reset state.
