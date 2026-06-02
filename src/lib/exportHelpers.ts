@@ -21,7 +21,7 @@ export function exportCSV(allTxsList: Transaction[], cats: Category[]) {
     rows.push([tx.date, catName, String(tx.amount), tx.freq, tx.note])
   }
   const csv = rows.map(r => r.map(v => `"${v.replace(/"/g, '""')}"`).join(',')).join('\n')
-  dl('myledger-export.csv', URL.createObjectURL(new Blob([csv], { type: 'text/csv' })))
+  dl('myledger-export.csv', URL.createObjectURL(new Blob(['﻿', csv], { type: 'text/csv;charset=utf-8' })))
 }
 
 export function backupJSON(allTxsList: Transaction[], userCats: Category[]) {

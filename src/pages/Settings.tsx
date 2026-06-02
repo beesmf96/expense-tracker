@@ -8,6 +8,7 @@ import type { Lang } from '../types'
 
 export function Settings() {
   const dangerOpen = useSignal(false)
+  const dataToolsOpen = useSignal(false)
   const permError = useSignal('')
   function setLang(l: Lang) {
     lang.value = l
@@ -45,32 +46,19 @@ export function Settings() {
       </div>
 
       <div class="settings-card">
-        <div class="srow" onClick={() => exportCSV(txs.value, allCats())}>
-          <span class="srow-left">📤 {t('backup')}</span>
-          <span style={{ color: 'var(--muted)', fontSize: '14px' }}>CSV</span>
+        <div class="srow" style={{ cursor: 'default' }}>
+          <span class="srow-left">🌐 {t('language')}</span>
+          <div class="lang-toggle">
+            <button class={`lang-btn${lang.value === 'zh' ? ' active' : ''}`} onClick={() => setLang('zh')}>ZH</button>
+            <button class={`lang-btn${lang.value === 'en' ? ' active' : ''}`} onClick={() => setLang('en')}>EN</button>
+          </div>
         </div>
-        <div class="srow" onClick={() => backupJSON(txs.value, userCats.value)}>
-          <span class="srow-left">💾 {t('backup')}</span>
-          <span style={{ color: 'var(--muted)', fontSize: '14px' }}>JSON</span>
-        </div>
-        <div class="srow" onClick={() => document.getElementById('restore-input')?.click()}>
-          <span class="srow-left">📥 {t('restore')}</span>
-          <input
-            id="restore-input"
-            type="file"
-            accept=".json"
-            style={{ display: 'none' }}
-            onChange={async e => {
-              const file = (e.target as HTMLInputElement).files?.[0]
-              if (!file) return
-              try {
-                await loadBackupFile(file)
-              } catch {
-                alert('Invalid backup file')
-              }
-              ;(e.target as HTMLInputElement).value = ''
-            }}
-          />
+        <div class="srow" style={{ cursor: 'default' }}>
+          <span class="srow-left">🎨 {t('appearance')}</span>
+          <div class="lang-toggle">
+            <button class={`lang-btn${theme.value === 'dark' ? ' active' : ''}`} aria-label={t('darkTheme')} onClick={() => { theme.value = 'dark' }}>🌙</button>
+            <button class={`lang-btn${theme.value === 'light' ? ' active' : ''}`} aria-label={t('lightTheme')} onClick={() => { theme.value = 'light' }}>☀️</button>
+          </div>
         </div>
       </div>
 
@@ -100,20 +88,39 @@ export function Settings() {
       )}
 
       <div class="settings-card">
-        <div class="srow" style={{ cursor: 'default' }}>
-          <span class="srow-left">🌐 {t('language')}</span>
-          <div class="lang-toggle">
-            <button class={`lang-btn${lang.value === 'zh' ? ' active' : ''}`} onClick={() => setLang('zh')}>ZH</button>
-            <button class={`lang-btn${lang.value === 'en' ? ' active' : ''}`} onClick={() => setLang('en')}>EN</button>
-          </div>
+        <div class="srow" onClick={() => { dataToolsOpen.value = !dataToolsOpen.value }}>
+          <span class="srow-left">🗂️ {t('dataTools')}</span>
+          <span style={{ color: 'var(--muted)', fontSize: '14px', transform: dataToolsOpen.value ? 'rotate(90deg)' : 'none', display: 'inline-block', transition: 'transform .15s' }}>›</span>
         </div>
-        <div class="srow" style={{ cursor: 'default' }}>
-          <span class="srow-left">🎨 {t('appearance')}</span>
-          <div class="lang-toggle">
-            <button class={`lang-btn${theme.value === 'dark' ? ' active' : ''}`} aria-label={t('darkTheme')} onClick={() => { theme.value = 'dark' }}>🌙</button>
-            <button class={`lang-btn${theme.value === 'light' ? ' active' : ''}`} aria-label={t('lightTheme')} onClick={() => { theme.value = 'light' }}>☀️</button>
+        {dataToolsOpen.value && (<>
+          <div class="srow" onClick={() => exportCSV(txs.value, allCats())}>
+            <span class="srow-left">📤 {t('backup')}</span>
+            <span style={{ color: 'var(--muted)', fontSize: '14px' }}>CSV</span>
           </div>
-        </div>
+          <div class="srow" onClick={() => backupJSON(txs.value, userCats.value)}>
+            <span class="srow-left">💾 {t('backup')}</span>
+            <span style={{ color: 'var(--muted)', fontSize: '14px' }}>JSON</span>
+          </div>
+          <div class="srow" onClick={() => document.getElementById('restore-input')?.click()}>
+            <span class="srow-left">📥 {t('restore')}</span>
+            <input
+              id="restore-input"
+              type="file"
+              accept=".json"
+              style={{ display: 'none' }}
+              onChange={async e => {
+                const file = (e.target as HTMLInputElement).files?.[0]
+                if (!file) return
+                try {
+                  await loadBackupFile(file)
+                } catch {
+                  alert('Invalid backup file')
+                }
+                ;(e.target as HTMLInputElement).value = ''
+              }}
+            />
+          </div>
+        </>)}
       </div>
 
       <div class={`settings-card danger-zone-card`}>
@@ -135,7 +142,7 @@ export function Settings() {
       </div>
 
       <div style={{ textAlign: 'center', padding: '32px 0 8px', color: 'var(--muted)', fontSize: '12px' }}>
-        {t('footer')}
+        {t('footer')} v{__APP_VERSION__}
       </div>
     </div>
   )
