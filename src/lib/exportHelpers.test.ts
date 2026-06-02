@@ -233,4 +233,52 @@ describe('loadBackupFile', () => {
     await expect(loadBackupFile(makeFile(makeBackup({ txs })))).rejects.toThrow('Invalid backup file')
     expect(restoreBackup).not.toHaveBeenCalled()
   })
+
+  it('resolves and calls restoreBackup with userCats when backup has one valid category', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const { restoreBackup } = await import('../db/queries')
+    const userCats = [{ id: 'cat-1', en: 'Food', zh: '食物', emoji: '🍔' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ userCats })))).resolves.toBeUndefined()
+    expect(restoreBackup).toHaveBeenCalledOnce()
+    const callArg = vi.mocked(restoreBackup).mock.calls[0][0]
+    expect(callArg.userCats).toEqual(userCats)
+  })
+
+  it('resolves when userCats key is absent (treated as empty array)', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const json = JSON.stringify({ version: 2, exportedAt: '2025-01-01T00:00:00.000Z', txs: [] })
+    await expect(loadBackupFile(makeFile(json))).resolves.toBeUndefined()
+  })
+
+  it('throws Invalid backup file when cat.id is an empty string', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const userCats = [{ id: '', en: 'Food', zh: '食物', emoji: '🍔' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ userCats })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when cat.id is null', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const userCats = [{ id: null, en: 'Food', zh: '食物', emoji: '🍔' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ userCats })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when cat.en is a number', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const userCats = [{ id: 'cat-1', en: 42, zh: '食物', emoji: '🍔' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ userCats })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('throws Invalid backup file when cat.emoji is missing (undefined serialised as absent key)', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const userCats = [{ id: 'cat-1', en: 'Food', zh: '食物' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ userCats })))).rejects.toThrow('Invalid backup file')
+  })
+
+  it('does not call restoreBackup when userCats validation fails', async () => {
+    const { loadBackupFile } = await import('./exportHelpers')
+    const { restoreBackup } = await import('../db/queries')
+    const userCats = [{ id: '', en: 'Food', zh: '食物', emoji: '🍔' }]
+    await expect(loadBackupFile(makeFile(makeBackup({ userCats })))).rejects.toThrow('Invalid backup file')
+    expect(restoreBackup).not.toHaveBeenCalled()
+  })
 })

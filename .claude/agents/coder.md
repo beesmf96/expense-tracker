@@ -58,7 +58,7 @@ Add new query functions to `src/db/queries.ts`, not inline in components.
 
 ## Importing untrusted data
 
-Any `JSON.parse(text) as SomeType` of file or user input is an unchecked assertion — the cast is compile-time only and proves nothing at runtime. Before passing parsed data to a write helper (e.g. `restoreBackup`), validate it: check the `version` literal, that array fields are arrays, and every field of each record against its expected type (`typeof`, `isFinite`, format regex, allow-list for union types like `Freq`). Throw on the first failure so no partial or malformed data reaches IndexedDB. See `loadBackupFile` in `src/lib/exportHelpers.ts` as the reference implementation.
+Any `JSON.parse(text) as SomeType` of file or user input is an unchecked assertion — the cast is compile-time only and proves nothing at runtime. Before passing parsed data to a write helper (e.g. `restoreBackup`), validate it: check the `version` literal, that array fields are arrays (use `Array.isArray(x) ? x : []` — never `x ?? []`, which lets a non-null non-array value slip through into the write path), and every field of each record against its expected type (`typeof`, `isFinite`, format regex, allow-list for union types like `Freq`). Throw on the first failure so no partial or malformed data reaches IndexedDB. See `loadBackupFile` in `src/lib/exportHelpers.ts` as the reference implementation.
 
 ## Components
 

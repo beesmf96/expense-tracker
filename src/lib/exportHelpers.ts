@@ -71,5 +71,14 @@ export async function loadBackupFile(file: File): Promise<void> {
       typeof tx.createdAt !== 'string' || !tx.createdAt
     ) throw new Error('Invalid backup file')
   }
-  await restoreBackup({ txs: data.txs, userCats: data.userCats ?? [] })
+  const validatedCats = Array.isArray(data.userCats) ? data.userCats : []
+  for (const cat of validatedCats) {
+    if (
+      typeof cat.id !== 'string' || !cat.id ||
+      typeof cat.en !== 'string' ||
+      typeof cat.zh !== 'string' ||
+      typeof cat.emoji !== 'string'
+    ) throw new Error('Invalid backup file')
+  }
+  await restoreBackup({ txs: data.txs, userCats: validatedCats })
 }
