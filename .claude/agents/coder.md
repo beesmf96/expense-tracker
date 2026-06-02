@@ -36,6 +36,12 @@ effect(() => {
 - Do NOT put localStorage/setAttribute logic in a component `useEffect` or click handler — it belongs in the `effect()` next to the signal so every mutation path stays in sync.
 - `effect()` at module scope is allowed only in `store.ts`. Do not introduce `effect()` in components or pages.
 
+### Persisted state that isn't a tx/cat
+
+Two homes, pick by type:
+- A serializable primitive that drives a DOM/storage side effect → localStorage + signal + effect() in store.ts (the theme pattern).
+- A non-serializable object that must survive reload (e.g. a `FileSystemDirectoryHandle`) → the `settings` Dexie table (`db.settings.put({key, value})`), rehydrated at startup in main.tsx. Settings writes update their backing signal directly and skip `loadAll()` (see "DB writes" below). Add new settings keys as string literals; there is no key enum.
+
 ## DB writes
 
 Every DB mutation must call `loadAll()` at the end. Never update signals manually after a write. Use the existing helpers in `src/db/queries.ts`:
@@ -48,6 +54,7 @@ export const delCat = (id: string)       => db.cats.delete(id).then(loadAll)
 ```
 
 Add new query functions to `src/db/queries.ts`, not inline in components.
+- `loadAll()` reloads ONLY `txs` and `userCats`, then fires `triggerAutoBackup()` as a fire-and-forget side effect. A write to a table other than `txs`/`cats` (e.g. the `settings` table) must NOT call `loadAll()` — there is nothing for it to reload, and it would trigger a spurious backup. The `saveAutoBackupHandle`/`clearAutoBackupHandle` queries deliberately omit `loadAll()` and update their own signals directly. This is the one sanctioned exception to "every write ends with loadAll()": it applies only to `txs`/`cats` writes.
 
 ## Components
 
@@ -135,6 +142,10 @@ Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(i
 - Prefer literal union types over enums (matches existing `Freq`, `Lang`, `PageId`, `ModalId`)
 - `noUnusedLocals` and `noUnusedParameters` are enforced — remove unused vars before finishing
 - TypeScript does not propagate narrowing (`if (!x) return`) into nested function declarations that close over `x`, even if the function is defined after the guard. Capture into a fresh const after the guard (`const safe = x`) and use that const inside the closure. Prefer this over `!` non-null assertions.
+
+### Side-effect writes layered onto loadAll()
+
+The "let Dexie throws propagate" rule applies to core txs/cats persistence only. Side-effect writes fired from within `loadAll()` must not reject the save chain. Use two guards: (1) an inner `try/catch` inside the side-effect function that swallows the write error and surfaces failure via a signal (e.g. `needsBackupPermission.value = true`); (2) an outer `.catch(() => {})` on the call site in `loadAll()` to absorb anything thrown before the inner try (e.g. a `queryPermission` rejection). Both guards are required — the inner one updates the signal, the outer one prevents the tx save promise from rejecting.
 
 ## Do not
 
