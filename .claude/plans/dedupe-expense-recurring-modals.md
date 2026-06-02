@@ -1,9 +1,9 @@
 ---
 plan: dedupe-expense-recurring-modals
-status: in-progress
+status: review
 branch: feature/dedupe-expense-recurring-modals
-pr: ~
-implemented: ~
+pr: #20
+implemented: 2026-06-03
 ---
 
 # Refactor: Deduplicate ExpenseModal and RecurringModal
