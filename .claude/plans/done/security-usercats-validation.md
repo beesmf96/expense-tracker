@@ -1,9 +1,9 @@
 ---
 plan: security-usercats-validation
-status: in-progress
+status: review
 branch: feature/security-usercats-validation
-pr: ~
-implemented: ~
+pr: #18
+implemented: 2026-06-02
 ---
 
 # Fix: Validate userCats Before Restore

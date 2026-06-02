@@ -1,9 +1,9 @@
 ---
 plan: security-backup-validation
-status: in-progress
+status: review
 branch: feature/security-backup-validation
-pr: ~
-implemented: ~
+pr: #17
+implemented: 2026-06-02
 ---
 
 # Fix: Backup Restore Validation

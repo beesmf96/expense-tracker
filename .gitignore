@@ -34,3 +34,6 @@ yarn-error.log*
 
 # Claude
 .claude/settings.local.json
+
+# GStack
+.gstack/
