@@ -1,6 +1,6 @@
 import { signal, computed, effect } from '@preact/signals'
 import type { Transaction, Category, Lang, Theme, PageId, ModalId, ModalContext } from '../types'
-import { CATS, COLORS } from '../data/cats'
+import { COLORS } from '../data/cats'
 
 const now = new Date()
 
@@ -23,8 +23,8 @@ effect(() => {
 export const autoBackupFolderName = signal<string | null>(null)
 export const needsBackupPermission = signal(false)
 
-export const selCat = signal('lifestyle')
-export const selRCat = signal('bills_sub')
+export const selCat = signal('')
+export const selRCat = signal('')
 export const selFreq = signal<'monthly' | 'quarterly' | 'biannual' | 'yearly'>('monthly')
 export const selEmoji = signal('✨')
 
@@ -32,12 +32,7 @@ export const activePage = signal<PageId>('home')
 export const openModal = signal<ModalId | null>(null)
 export const modalCtx = signal<ModalContext>({})
 
-export const allCatsList = computed<Category[]>(() => {
-  const overrides = new Map(userCats.value.map(c => [c.id, c]))
-  return CATS.map(c => overrides.get(c.id) ?? c).concat(
-    userCats.value.filter(c => !CATS.find(b => b.id === c.id))
-  )
-})
+export const allCatsList = computed<Category[]>(() => userCats.value)
 
 export function catColor(id: string): string {
   const idx = allCatsList.value.findIndex(c => c.id === id)

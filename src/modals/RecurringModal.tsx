@@ -36,6 +36,7 @@ export function RecurringModal() {
   async function save() {
     const amt = parseFloat(amount.value)
     if (!amt || amt <= 0) return
+    if (!selRCat.value) return
     if (editTx) {
       await putTx({
         ...editTx,

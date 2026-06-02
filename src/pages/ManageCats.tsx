@@ -31,7 +31,8 @@ export function ManageCats() {
         <button class="icon-btn" onClick={() => { activePage.value = 'settings' }} style={{ fontSize: '20px', padding: '0' }}>
           ‹
         </button>
-        <div class="page-title" style={{ marginBottom: 0 }}>{t('manageCats')}</div>
+        <div class="page-title" style={{ marginBottom: 0, flex: 1 }}>{t('manageCats')}</div>
+        <button class="btn-small btn-small-p" onClick={() => openM('newcat')}>+ {t('addCat')}</button>
       </div>
 
       {cats.map(cat => {

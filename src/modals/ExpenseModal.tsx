@@ -33,6 +33,7 @@ export function ExpenseModal() {
   async function save() {
     const amt = parseFloat(amount.value)
     if (!amt || amt <= 0) return
+    if (!selCat.value) return
     if (editTx) {
       await putTx({
         ...editTx,
