@@ -1,9 +1,9 @@
 ---
 plan: inline-row-actions
-status: in-progress
+status: review
 branch: feature/inline-row-actions
-pr: ~
-implemented: ~
+pr: '#3'
+implemented: 2026-06-01
 ---
 
 # Feature: Inline Edit + Delete Buttons on Rows

@@ -1,9 +1,9 @@
 ---
 plan: ui-polish-recurring-lang
-status: in-progress
+status: review
 branch: feature/ui-polish-recurring-lang
-pr: ~
-implemented: ~
+pr: '#7'
+implemented: 2026-06-01
 ---
 
 # Feature: UI Polish — Recurring Row, Language Toggle, CSS Hex Cleanup

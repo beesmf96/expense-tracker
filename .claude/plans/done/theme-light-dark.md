@@ -1,9 +1,9 @@
 ---
 plan: theme-light-dark
-status: in-progress
+status: review
 branch: feature/theme-light-dark
-pr: ~
-implemented: ~
+pr: '#8'
+implemented: 2026-06-01
 ---
 
 # Feature: Light / Dark Theme Toggle
