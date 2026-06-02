@@ -1,9 +1,9 @@
 ---
 plan: cat-grid-horizontal-scroll
-status: in-progress
+status: review
 branch: feature/cat-grid-horizontal-scroll
-pr: ~
-implemented: ~
+pr: #16
+implemented: 2026-06-02
 ---
 
 # Feature: Horizontal-Scroll Category Grid
