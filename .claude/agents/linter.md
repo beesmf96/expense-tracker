@@ -112,6 +112,8 @@ Flag if:
 - `catHelpers.ts` re-exporting from `store.ts` (intentional thin wrapper)
 - `const t2 = tx` (or similar capture-after-guard alias) immediately after a narrowing guard — this is the sanctioned workaround for TypeScript's closure-narrowing limitation and is preferred over `!`
 - Raw `rgba()` values inside `body::before` decorative gradients (both `:root`/dark and `[data-theme="light"]`). These ambient gradients predate the token system and are intentionally not variable-driven — match the existing dark gradient.
+- A scroll-fade overlay `::after` (e.g. `.cat-grid-wrap::after`) that ends its `linear-gradient` in `var(--bg)` — this is the correct, theme-safe form and must NOT be flagged, nor "fixed" by swapping to a raw `rgba()` (the `body::before` rgba exemption above does NOT extend to these — they are required to use the token). Also do not flag `width:32px`/`pointer-events:none` on such an overlay: the width is a fade extent (not a layout size to tokenize) and `pointer-events:none` is load-bearing (clicks must pass through to the scroller beneath). Do flag a scroll-fade gradient that hardcodes a hex/rgba background instead of `var(--bg)` — that breaks light mode.
+- `scrollbar-width:none` paired with a `::-webkit-scrollbar{display:none}` rule on a scroll container — this is the established scrollbar-hiding pattern (see `.cat-grid`/`.emoji-grid`); do not flag either half as redundant.
 
 ## Scope boundary — do not rewrite
 
