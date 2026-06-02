@@ -1,38 +1,18 @@
-import { useSignal } from '@preact/signals'
-import { useEffect } from 'preact/hooks'
 import { Modal } from './Modal'
 import { FormField } from '../components/FormField'
-import { ModalActions } from '../components/ModalActions'
-import { selCat, closeM, modalCtx, openModal } from '../state/store'
+import { selCat } from '../state/store'
 import { t } from '../data/i18n'
 import { CatGrid } from '../components/CatGrid'
 import { putTx } from '../db/queries'
-import { today } from '../lib/dateHelpers'
+import { useTransactionForm } from './useTransactionForm'
+import { AmountField, NoteField } from './ModalFormFields'
 
 export function ExpenseModal() {
-  const amount = useSignal('')
-  const date = useSignal(today())
-  const note = useSignal('')
-
-  const editTx = modalCtx.value.editTx
-  const openModalVal = openModal.value
-
-  useEffect(() => {
-    if (editTx) {
-      amount.value = editTx.amount.toString()
-      date.value = editTx.date
-      note.value = editTx.note
-      selCat.value = editTx.category
-    } else {
-      amount.value = ''
-      date.value = today()
-      note.value = ''
-    }
-  }, [editTx?.id, openModalVal])
+  const { amount, date, note, editTx, parseAmount, reset } = useTransactionForm(selCat)
 
   async function save() {
-    const amt = parseFloat(amount.value)
-    if (!amt || amt <= 0) return
+    const amt = parseAmount()
+    if (!amt) return
     if (!selCat.value) return
     if (editTx) {
       await putTx({
@@ -55,27 +35,14 @@ export function ExpenseModal() {
         createdAt: new Date().toISOString(),
       })
     }
-    amount.value = ''
-    note.value = ''
-    date.value = today()
-    closeM()
+    reset()
   }
 
   return (
     <Modal id="expense">
       <div class="modal-title">{editTx ? t('editExpense') : t('addExpense')}</div>
 
-      <FormField label={t('amount')}>
-        <input
-          class="big-input"
-          type="number"
-          step="0.01"
-          min="0"
-          placeholder="0.00"
-          value={amount.value}
-          onInput={e => { amount.value = (e.target as HTMLInputElement).value }}
-        />
-      </FormField>
+      <AmountField amount={amount} />
 
       <FormField label={t('date')}>
         <input
@@ -89,15 +56,7 @@ export function ExpenseModal() {
         <CatGrid selectedId={selCat.value} onSelect={id => { selCat.value = id }} />
       </FormField>
 
-      <FormField label={t('note')}>
-        <textarea
-          placeholder="Optional note"
-          value={note.value}
-          onInput={e => { note.value = (e.target as HTMLTextAreaElement).value }}
-        />
-      </FormField>
-
-      <ModalActions onSave={save} />
+      <NoteField note={note} onSave={save} />
     </Modal>
   )
 }

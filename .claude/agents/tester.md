@@ -57,6 +57,17 @@ The Edit-button logic in `Transactions.tsx` / `Recurring.tsx` decides target mod
 
 Do not test the inline version — it cannot be unit-tested as written.
 
+### Amount parsing (when extracted)
+
+`parseAmount()` inside `useTransactionForm` (`src/modals/useTransactionForm.ts`) holds the only amount-validation branch in the modal pair: `parseFloat` → `null` when falsy (NaN/0) or `<= 0`, else the number. As written it closes over the `amount` signal and is not unit-testable in isolation. If extracted to a pure helper `parseAmount(raw: string): number | null`, test:
+- empty string → `null`
+- `"0"` → `null`
+- `"-5"` → `null`
+- `"abc"` (NaN) → `null`
+- `"12.50"` → `12.5`
+
+Do not test the hook's sync `useEffect` or `reset()` — those are signal/DOM bindings with no branch logic worth covering.
+
 ### `src/data/i18n.ts` — `freqLabel`
 
 `freqLabel(freq)` is worth testing even though `t()` and `catLabel()` are not (see "Do not"). Unlike those thin static wrappers, `freqLabel` has a real fallback branch (`FREQS.find(...)` returns undefined → returns the raw input) plus a lang-conditional. Cover:

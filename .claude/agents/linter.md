@@ -46,6 +46,7 @@ Flag if any of these appear:
 - Signals defined outside of `src/state/store.ts` at module scope (unless it's `useSignal` inside a component)
 - Reading `modalCtx` outside a modal component
 - A `useEffect` that syncs modal form signals from `modalCtx`/`openModal` whose dependency array omits `openModal.value` — stale values leak across modal opens
+- A modal form-sync `useEffect` (or shared hook like `useTransactionForm`) that resets caller-owned selection signals (`selFreq`, `selCat`, `selRCat`) in the add/else branch — selection signals are reset on add only by the modal's open path, not inside the sync effect; resetting them there clobbers user selection/defaults
 
 ## DB access
 
@@ -62,6 +63,10 @@ Flag if:
 - A page is conditionally mounted/unmounted instead of hidden via `.active` class
 - A button or interactive control nested inside a clickable `.row-item` whose handler does not begin with `e.stopPropagation()` — the row's own click handler will also fire
 - A Delete control rendered on a generated (recurring) row without a `!tx.isGenerated` guard — generated txs have no IndexedDB row; calling `delTx` on their derived id is a no-op or logic error
+
+Do NOT flag:
+- A file in `src/modals/` (e.g. `ModalFormFields.tsx`, `useTransactionForm.ts`) for not being in `src/components/`. Modal-only helpers that read modal plumbing (`modalCtx`/`openModal`/`closeM`) or exist solely to compose a specific modal pair correctly live in `src/modals/`. The `src/components/` rule applies to modal-agnostic reusable UI only.
+- A `Signal<T>` prop on a leaf form-field component (e.g. `AmountField`/`NoteField`) that mutates `.value` directly. This is the sanctioned extracted-field pattern — distinct from the `value` + `onSelect` convention used by `CatGrid`/`FreqGrid`.
 
 ## CSS
 
