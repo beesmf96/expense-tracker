@@ -2,7 +2,7 @@ import type { Category } from '../types'
 
 type ActiveFreq = 'monthly' | 'quarterly' | 'biannual' | 'yearly'
 
-export const CATS: readonly Category[] = [
+const CATS: readonly Category[] = [
   { id: 'lifestyle',        zh: '生活方式',   en: 'Lifestyle',           emoji: '✨' },
   { id: 'loan',             zh: '贷款',       en: 'Loan',                emoji: '🏦' },
   { id: 'eating_out',       zh: '外食',       en: 'Eating Out',          emoji: '🍽️' },
