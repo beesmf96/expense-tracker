@@ -1,9 +1,9 @@
 ---
 plan: pin-lock
-status: in-progress
+status: review
 branch: feature/pin-lock
-pr: ~
-implemented: ~
+pr: #23
+implemented: 2026-06-03
 ---
 
 # Feature: PIN Lock
