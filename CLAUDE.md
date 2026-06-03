@@ -43,7 +43,7 @@ src/
     txHelpers.ts       # confirmDeleteTx() — opens confirm modal then delTx
   components/          # Reusable UI: BottomNav, FAB, CatGrid, EmojiGrid, FreqGrid, ProgressBar, FormField, ModalActions, EmptyState
   pages/               # Home, Transactions, Recurring, Settings, ManageCats
-  modals/              # Modal (base), ExpenseModal, RecurringModal, DetailModal, ConfirmModal, NewCatModal, EditCatModal, ReclassifyModal
+  modals/              # Modal (base), ExpenseModal, RecurringModal, DetailModal, ConfirmModal, NewCatModal, EditCatModal, ReclassifyModal, useTransactionForm.ts (shared hook: amount/date/note signals + editTx sync + parseAmount/reset for ExpenseModal & RecurringModal), ModalFormFields.tsx (AmountField/NoteField — leaf fields taking a Signal<string> prop)
   styles/
     global.css         # CSS vars (:root), reset, body background
     layout.css         # Pages, bottom nav, FAB, overlay/modal
@@ -74,6 +74,8 @@ All five pages are mounted in `App.tsx` simultaneously. Visibility is controlled
 
 ### Modal system
 `openModal` signal holds `ModalId | null`. `Modal.tsx` renders its children inside an overlay; if `openModal.value !== id`, the overlay is hidden via CSS. `openM(id, ctx)` sets both signals; `closeM()` clears both. Modals that lead with a large category header (`DetailModal`, `CatBreakdownModal`) use the shared `<div class="row-item modal-head">` block — `.modal-head` (in `components.css`) enlarges the icon/title and drops the row border; reuse it rather than inlining the sizing.
+
+`ExpenseModal` and `RecurringModal` share their `amount`/`date`/`note` form signals and the `editTx`-sync `useEffect` via the `useTransactionForm` hook; the amount and note inputs are extracted as `AmountField`/`NoteField` in `ModalFormFields.tsx`, which take the form signal directly as a `Signal<string>` prop.
 
 ### Recurring transactions
 Templates are stored once in IndexedDB with `freq !== 'none'`. `genRecurring()` synthesizes read-only `Transaction` objects at render time for the current view month. They are never written to the DB. Generated IDs: `{templateId}_{YYYY-MM}`. `isGenerated: true` marks them as virtual.

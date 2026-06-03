@@ -64,10 +64,14 @@ Any `JSON.parse(text) as SomeType` of file or user input is an unchecked asserti
 
 ### New component checklist
 - File goes in `src/components/` (reusable) or `src/pages/` (page) or `src/modals/` (modal)
+- Components and hooks used ONLY by modals — that read modal plumbing (`modalCtx`, `openModal`, `closeM`) or exist solely to compose a specific modal pair — live in `src/modals/`, not `src/components/`. `src/components/` is for genuinely reusable UI with no modal coupling. `ModalFormFields.tsx` and `useTransactionForm.ts` are the reference: they belong in `src/modals/` because they depend on modal state and are not used outside modals.
 - Props interface declared inline in the file, not exported
 - Use `import type { ComponentChildren } from 'preact'` for children
 - Named export only — no default exports anywhere in this codebase
 - Icon-only interactive controls (a button whose only child is an emoji/SVG, like the theme toggle) must carry an `aria-label={t('...')}`. Buttons with visible text labels (e.g. the `ZH`/`EN` lang toggle) do not.
+
+### Passing a signal as a prop
+A leaf form-field component extracted from a modal (e.g. `AmountField`, `NoteField` in `ModalFormFields.tsx`) may take a `Signal<string>` directly as a prop and mutate `.value` in its `onInput` handler. Import the type with `import type { Signal } from '@preact/signals'`. Use this pattern only for leaf fields with no local state — components that select from a fixed set (`CatGrid`, `FreqGrid`) still use a plain `value` + `onSelect` callback. Do not pass a signal down merely to avoid writing a callback.
 
 ### Pages
 - Pages are always mounted in `App.tsx`. Add new pages there and in `src/types/index.ts` (`PageId` union).
@@ -89,6 +93,14 @@ Any `JSON.parse(text) as SomeType` of file or user input is an unchecked asserti
 - Pass data via `modalCtx.value` fields; read them inside the modal with `modalCtx.value.xxx`
 - Modals are never unmounted, so `useSignal()` form state persists between opens. To support edit mode, read `modalCtx.value.editTx` and `openModal.value` at the top of the component (reactive reads), then sync local signals in a `useEffect` keyed on `[editTx?.id, openModalVal]`. Keying on `openModal.value` is required so reopening the modal for a different record (or switching add↔edit) triggers a re-sync even when `editTx?.id` hasn't changed.
 - Edit-mode save must branch on `editTx` presence: spread `...editTx` and override the mutable fields to preserve the original `id` and `createdAt`. Never generate a new `id` when editing.
+
+### Shared modal form state (useTransactionForm)
+When two or more modals share identical form signals (`amount`, `date`, `note`) and the same `editTx`/`openModal` sync `useEffect`, extract them into `useTransactionForm` in `src/modals/useTransactionForm.ts` rather than re-inlining per modal. The hook accepts `catSignal: Signal<string>` (both `selCat` and `selRCat` satisfy this type) and an optional `onEditSync?: (tx: Transaction) => void` callback, and returns `{ amount, date, note, editTx, parseAmount, reset }`.
+
+- `onEditSync` fires ONLY inside the `if (editTx)` branch of the sync effect — NEVER in the `else`/add branch. `RecurringModal` uses it to set `selFreq`; if it ran on add, it would clobber the user's frequency selection. The hook resets only the signals it owns (`amount`/`date`/`note`) in the else branch; caller-owned selection signals (`selFreq`, the cat signal) are left alone on add. Do not symmetrize the two branches.
+- `parseAmount()` returns `null` for NaN, zero, and negatives — callers guard with `if (!amt) return`.
+- `reset()` clears `amount`/`date`/`note` and calls `closeM()`.
+- This is the only sanctioned custom hook pattern in the codebase. Do not move shared form state into `store.ts` signals — it is per-modal-instance form state, not global state.
 
 ## Editing from a row (dispatch by tx type)
 
