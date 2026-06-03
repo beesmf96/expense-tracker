@@ -19,7 +19,7 @@ export function AmountField({ amount }: { amount: Signal<string> }) {
   )
 }
 
-export function NoteField({ note, onSave }: { note: Signal<string>; onSave: () => void }) {
+export function NoteField({ note, onSave, errMsg }: { note: Signal<string>; onSave: () => void; errMsg?: Signal<string> }) {
   return (
     <>
       <FormField label={t('note')}>
@@ -29,6 +29,7 @@ export function NoteField({ note, onSave }: { note: Signal<string>; onSave: () =
           onInput={e => { note.value = (e.target as HTMLTextAreaElement).value }}
         />
       </FormField>
+      {errMsg?.value && <div class="field-err">{errMsg.value}</div>}
       <ModalActions onSave={onSave} />
     </>
   )

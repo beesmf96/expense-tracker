@@ -5,6 +5,7 @@
 .field input:focus,.field textarea:focus{border-bottom-color:var(--accent)}
 .field textarea{resize:none;height:58px}
 .big-input{font-family:'Playfair Display',serif!important;font-size:36px!important;font-style:italic;font-weight:700;color:var(--accent-hi)!important}
+.field-err{font-size:13px;color:var(--r);margin-bottom:8px;text-align:center}
 .big-input::placeholder{color:var(--faint)!important}
 
 /* ── BUTTONS ── */

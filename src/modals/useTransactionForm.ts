@@ -12,11 +12,13 @@ export function useTransactionForm(
   const amount = useSignal('')
   const date   = useSignal(today())
   const note   = useSignal('')
+  const errMsg = useSignal('')
 
   const editTx       = modalCtx.value.editTx
   const openModalVal = openModal.value
 
   useEffect(() => {
+    errMsg.value = ''
     if (editTx) {
       amount.value    = editTx.amount.toString()
       date.value      = editTx.date
@@ -39,8 +41,9 @@ export function useTransactionForm(
     amount.value = ''
     note.value   = ''
     date.value   = today()
+    errMsg.value = ''
     closeM()
   }
 
-  return { amount, date, note, editTx, parseAmount, reset }
+  return { amount, date, note, errMsg, editTx, parseAmount, reset }
 }

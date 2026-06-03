@@ -8,12 +8,13 @@ import { useTransactionForm } from './useTransactionForm'
 import { AmountField, NoteField } from './ModalFormFields'
 
 export function ExpenseModal() {
-  const { amount, date, note, editTx, parseAmount, reset } = useTransactionForm(selCat)
+  const { amount, date, note, errMsg, editTx, parseAmount, reset } = useTransactionForm(selCat)
 
   async function save() {
+    errMsg.value = ''
     const amt = parseAmount()
-    if (!amt) return
-    if (!selCat.value) return
+    if (!amt) { errMsg.value = t('errAmount'); return }
+    if (!selCat.value) { errMsg.value = t('errCat'); return }
     if (editTx) {
       await putTx({
         ...editTx,
@@ -56,7 +57,7 @@ export function ExpenseModal() {
         <CatGrid selectedId={selCat.value} onSelect={id => { selCat.value = id }} />
       </FormField>
 
-      <NoteField note={note} onSave={save} />
+      <NoteField note={note} onSave={save} errMsg={errMsg} />
     </Modal>
   )
 }

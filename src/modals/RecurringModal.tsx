@@ -10,15 +10,16 @@ import { useTransactionForm } from './useTransactionForm'
 import { AmountField, NoteField } from './ModalFormFields'
 
 export function RecurringModal() {
-  const { amount, date, note, editTx, parseAmount, reset } = useTransactionForm(
+  const { amount, date, note, errMsg, editTx, parseAmount, reset } = useTransactionForm(
     selRCat,
     tx => { selFreq.value = tx.freq as Exclude<Freq, 'none'> }
   )
 
   async function save() {
+    errMsg.value = ''
     const amt = parseAmount()
-    if (!amt) return
-    if (!selRCat.value) return
+    if (!amt) { errMsg.value = t('errAmount'); return }
+    if (!selRCat.value) { errMsg.value = t('errCat'); return }
     if (editTx) {
       await putTx({
         ...editTx,
@@ -67,7 +68,7 @@ export function RecurringModal() {
         <CatGrid selectedId={selRCat.value} onSelect={id => { selRCat.value = id }} />
       </FormField>
 
-      <NoteField note={note} onSave={save} />
+      <NoteField note={note} onSave={save} errMsg={errMsg} />
     </Modal>
   )
 }
