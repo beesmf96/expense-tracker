@@ -49,24 +49,3 @@ export function monthTxs(allTxs: Transaction[], viewYear: number, viewMonth: num
   const generated = genRecurring(allTxs, viewYear, viewMonth)
   return [...real, ...generated].sort((a, b) => b.date.localeCompare(a.date))
 }
-
-export function allGeneratedUpToDate(allTxs: Transaction[]): Transaction[] {
-  const templates = allTxs.filter(tx => tx.freq !== 'none')
-  if (templates.length === 0) return []
-
-  const today = new Date()
-  const todayYear = today.getFullYear()
-  const todayMonth = today.getMonth()
-
-  const earliest = templates.reduce((min, t) => t.date < min ? t.date : min, templates[0].date)
-  const [startY, startM1] = earliest.split('-').map(Number)
-
-  const result: Transaction[] = []
-  let y = startY, m = startM1 - 1
-  while (y < todayYear || (y === todayYear && m <= todayMonth)) {
-    result.push(...genRecurring(allTxs, y, m))
-    m++
-    if (m > 11) { y++; m = 0 }
-  }
-  return result
-}

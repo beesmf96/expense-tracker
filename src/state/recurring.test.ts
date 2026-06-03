@@ -1,19 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { genRecurring, monthTxs } from './recurring'
-import type { Transaction } from '../types'
-
-function makeTx(overrides: Partial<Transaction>): Transaction {
-  return {
-    id: 'test-1',
-    date: '2025-01-15',
-    amount: 100,
-    category: 'bills_sub',
-    note: '',
-    freq: 'none',
-    createdAt: '2025-01-15T00:00:00.000Z',
-    ...overrides,
-  }
-}
+import { makeTx } from '../test-utils/setup'
 
 describe('genRecurring', () => {
   it('returns empty array when no templates exist', () => {
