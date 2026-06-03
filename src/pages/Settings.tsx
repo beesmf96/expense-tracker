@@ -1,5 +1,5 @@
 import { useSignal } from '@preact/signals'
-import { lang, theme, activePage, openM, txs, userCats, autoBackupFolderName, needsBackupPermission, showToast } from '../state/store'
+import { lang, theme, activePage, openM, txs, userCats, autoBackupFolderName, needsBackupPermission, showToast, pinEnabled } from '../state/store'
 import { t } from '../data/i18n'
 import { exportCSV, backupJSON, writeAutoBackup } from '../lib/exportHelpers'
 import { loadBackupFile } from '../lib/importHelpers'
@@ -85,6 +85,26 @@ export function Settings() {
               {permError.value}
             </div>
           )}
+        </div>
+      )}
+
+      {pinEnabled.value === false ? (
+        <div class="settings-card">
+          <div class="srow" style={{ cursor: 'default' }}>
+            <span class="srow-left">🔒 {t('appLock')}</span>
+            <button class="btn-small btn-small-p" onClick={() => openM('pin-setup', { pinSetupMode: 'set' })}>{t('setPIN')}</button>
+          </div>
+        </div>
+      ) : (
+        <div class="settings-card">
+          <div class="srow" style={{ cursor: 'default' }}>
+            <span class="srow-left">🔒 {t('appLock')}</span>
+            <span style={{ color: 'var(--g)', fontSize: '12px' }}>{t('lockOn')}</span>
+          </div>
+          <div class="srow" style={{ cursor: 'default' }}>
+            <button class="btn-small btn-small-p" onClick={() => openM('pin-setup', { pinSetupMode: 'change' })}>{t('changePIN')}</button>
+            <button class="btn-small btn-small-r" onClick={() => openM('pin-setup', { pinSetupMode: 'disable' })}>{t('disablePIN')}</button>
+          </div>
         </div>
       )}
 

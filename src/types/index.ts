@@ -2,7 +2,7 @@ export type Freq = 'none' | 'monthly' | 'quarterly' | 'biannual' | 'yearly'
 export type Lang = 'en' | 'zh'
 export type Theme = 'dark' | 'light'
 export type PageId = 'home' | 'transactions' | 'recurring' | 'settings' | 'manage-cats' | 'search'
-export type ModalId = 'expense' | 'recurring' | 'newcat' | 'editcat' | 'detail' | 'reclassify' | 'confirm' | 'cat-breakdown'
+export type ModalId = 'expense' | 'recurring' | 'newcat' | 'editcat' | 'detail' | 'reclassify' | 'confirm' | 'cat-breakdown' | 'pin-setup'
 
 export interface Transaction {
   id: string
@@ -37,6 +37,7 @@ export interface ModalContext {
   confirmOkLabel?: string
   confirmOnOk?: () => void
   breakdownCatId?: string
+  pinSetupMode?: 'set' | 'change' | 'disable'
 }
 
 export interface BackupFile {

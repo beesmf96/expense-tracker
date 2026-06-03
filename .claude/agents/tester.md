@@ -79,6 +79,12 @@ Because it reads the `lang` signal, drive it by setting `lang.value` directly (n
 
 `today()` in `src/lib/dateHelpers.ts` does NOT need a test — it is a one-line `Date().toISOString().slice(0,10)` wrapper with no branch (same rationale as not testing `t()`).
 
+### `src/lib/lockHelpers.ts` — async hash + signal-mutating helpers
+
+`hashPin`, `verifyPin`, `setupPin`, `clearPin` are async and read/write the lock signals (`pinHash`, `pinEnabled`, `isLocked`). `crypto.subtle` works natively in happy-dom — no mock needed. Use `async it`, drive inputs by setting `pinHash.value` directly, and reset the touched signals in `afterEach` (`pinHash.value = null; pinEnabled.value = false; isLocked.value = false`) so cases don't leak — same restore discipline as the `lang` signal in `freqLabel`. Cover: `hashPin` returns a 64-char `/^[0-9a-f]{64}$/` hex string and is deterministic; `verifyPin` true/false/`null`-hash branches; `setupPin` sets all three signals; `clearPin` clears all three. Do NOT test `initLockWatcher` — it is `document` event-listener + timer wiring with no branch logic (same rationale as not testing the theme `effect()`).
+
+The PIN-pad step-machine logic in `PinSetupModal.tsx` is currently inline and closes over `useSignal` state, so it is not unit-testable as written — do not test it. If the set/change/disable step transitions are ever extracted to a pure reducer, test those transitions then.
+
 ### `src/lib/exportHelpers.ts`
 
 - `exportCSV` — verify the CSV rows match transaction data (mock `document.createElement`)

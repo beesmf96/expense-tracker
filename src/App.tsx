@@ -15,6 +15,8 @@ import { NewCatModal } from './modals/NewCatModal'
 import { EditCatModal } from './modals/EditCatModal'
 import { ReclassifyModal } from './modals/ReclassifyModal'
 import { CatBreakdownModal } from './modals/CatBreakdownModal'
+import { PinSetupModal } from './modals/PinSetupModal'
+import { LockScreen } from './components/LockScreen'
 import { Toast } from './components/Toast'
 
 export function App() {
@@ -52,6 +54,8 @@ export function App() {
       <EditCatModal />
       <ReclassifyModal />
       <CatBreakdownModal />
+      <PinSetupModal />
+      <LockScreen />
       <Toast />
     </>
   )
