@@ -47,6 +47,23 @@
 /* ── CONFIRM DIALOG ── */
 #m-confirm .modal{padding:14px 22px 36px}
 
+/* ── LOCK SCREEN ── */
+.lock-screen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.lock-title{font-size:22px;font-weight:700;color:var(--text)}
+.lock-dots{display:flex;gap:16px}
+.lock-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--muted)}
+.lock-dot.filled{background:var(--accent);border-color:var(--accent)}
+.lock-numpad{display:grid;grid-template-columns:repeat(3,72px);gap:12px}
+.lock-numpad-btn{height:72px;border-radius:50%;border:none;background:var(--card);color:var(--text);font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.lock-numpad-btn:active{background:var(--accent);color:var(--white)}
+.lock-numpad-btn:disabled{opacity:0.35;cursor:default}
+.lock-numpad-btn.empty{background:transparent;cursor:default;pointer-events:none}
+.lock-countdown{font-size:14px;color:var(--muted)}
+.pin-modal-body{display:flex;flex-direction:column;align-items:center;gap:24px;padding-bottom:8px}
+.pin-step-label{font-size:14px;color:var(--muted)}
+@keyframes pin-shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.pin-shake{animation:pin-shake 0.4s ease}
+
 /* ── TOAST ── */
 .toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:99px;font-size:14px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:200;}
 .toast.toast-visible{opacity:1;transform:translateX(-50%) translateY(0);}

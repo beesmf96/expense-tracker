@@ -20,6 +20,19 @@ effect(() => {
   localStorage.setItem('theme', theme.value)
 })
 
+export const pinEnabled = signal<boolean>(localStorage.getItem('pinEnabled') === 'true')
+effect(() => { localStorage.setItem('pinEnabled', String(pinEnabled.value)) })
+
+export const pinHash = signal<string | null>(localStorage.getItem('pinHash'))
+effect(() => {
+  if (pinHash.value) localStorage.setItem('pinHash', pinHash.value)
+  else localStorage.removeItem('pinHash')
+})
+
+export const isLocked = signal<boolean>(false)
+export const pinFailCount = signal<number>(0)
+export const pinLockedUntil = signal<number>(0)
+
 export const autoBackupFolderName = signal<string | null>(null)
 export const needsBackupPermission = signal(false)
 

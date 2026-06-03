@@ -42,6 +42,16 @@ Two homes, pick by type:
 - A serializable primitive that drives a DOM/storage side effect → localStorage + signal + effect() in store.ts (the theme pattern).
 - A non-serializable object that must survive reload (e.g. a `FileSystemDirectoryHandle`) → the `settings` Dexie table (`db.settings.put({key, value})`), rehydrated at startup in main.tsx. Settings writes update their backing signal directly and skip `loadAll()` (see "DB writes" below). Add new settings keys as string literals; there is no key enum.
 
+### Session/security signals are intentionally NOT persisted
+
+Transient security and session state — `isLocked`, `pinFailCount`, `pinLockedUntil` — are plain in-memory `signal()`s in `store.ts` with **no** `effect()` and **no** localStorage. They reset to their defaults on reload by design: a page reload must re-lock the app and clear any lockout cooldown, not preserve an "unlocked" or mid-cooldown state. Only the *enablement* flag (`pinEnabled`) and the *credential* (`pinHash`) persist. Do not add an `effect()` to persist a fail count or lock timestamp — that would let an attacker dodge the cooldown by reloading, and would let a reload skip the lock screen.
+
+### Startup-init watchers (initAutoBackup, initLockWatcher)
+
+A module that needs global listeners or a rehydrated cache exposes a single `initX()` called once in `main.tsx` after `loadAll()` (e.g. `initAutoBackup`, `initLockWatcher`). Module-level `let` caches that coordinate the side effect (`_autoHandle`, `_idleTimer`, `_hiddenAt`) live in that module, not `store.ts` — they are plumbing, not application state. Mutating signals from inside these listeners (e.g. `isLocked.value = true`) is fine; reading a signal's `.value` inside a `setTimeout`/event handler is fine (it's not a `computed`).
+
+Hashing uses the Web Crypto API: `await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))`, hex-encoded. This is the only crypto in the codebase — do not pull in a hashing library.
+
 ## DB writes
 
 Every DB mutation must call `loadAll()` at the end. Never update signals manually after a write. Use the existing helpers in `src/db/queries.ts`:
@@ -89,7 +99,7 @@ A leaf form-field component extracted from a modal (e.g. `AmountField`, `NoteFie
 ### Modals
 - Wrap content in `<Modal id="my-modal">` — the `id` must be added to `ModalId` in `src/types/index.ts`
 - Open with `openM('my-modal', ctx)` where `ctx` matches `ModalContext` fields
-- Close with `closeM()` — always call this after a successful save
+- Close with `closeM()` — always call this after a successful save. For saves with no other visible result (PIN set, backup restored), call `showToast(t('...'))` from `store.ts` before `closeM()` — the toast auto-dismisses (2s); do not build a custom confirmation UI.
 - Pass data via `modalCtx.value` fields; read them inside the modal with `modalCtx.value.xxx`
 - Modals are never unmounted, so `useSignal()` form state persists between opens. To support edit mode, read `modalCtx.value.editTx` and `openModal.value` at the top of the component (reactive reads), then sync local signals in a `useEffect` keyed on `[editTx?.id, openModalVal]`. Keying on `openModal.value` is required so reopening the modal for a different record (or switching add↔edit) triggers a re-sync even when `editTx?.id` hasn't changed.
 - Edit-mode save must branch on `editTx` presence: spread `...editTx` and override the mutable fields to preserve the original `id` and `createdAt`. Never generate a new `id` when editing.
@@ -143,7 +153,7 @@ Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(i
 
 - Add layout rules to `src/styles/layout.css`, component rules to `src/styles/components.css`, form rules to `src/styles/forms.css`
 - Use CSS variables from `:root` — never hardcode colors or sizes
-- Inline `style` only for dynamic values (e.g., a color derived from `catColor(id)`). In a `style={{ ... }}` object, every key must be dynamic. If a block mixes one dynamic value with several static ones — e.g. `style={{ background: color + '22', width: '48px', height: '48px', fontSize: '22px' }}` — split it: keep only `background` inline and move `width`/`height`/`fontSize` to a CSS class. A static key riding alongside a dynamic one is still a static inline style and will be flagged.
+- Inline `style` only for dynamic values (e.g., a color derived from `catColor(id)`). In a `style={{ ... }}` object, every key must be dynamic. A `style={{ ... }}` object where **every** key is static (all literal strings/numbers, no signal- or data-derived value) must not be written inline at all — extract the whole block to a CSS class in the appropriate file. Inline `style` is reserved for objects that contain at least one dynamic value; a fully-static inline style block is always a violation, not just a mixed one. If a block mixes one dynamic value with several static ones — e.g. `style={{ background: color + '22', width: '48px', height: '48px', fontSize: '22px' }}` — split it: keep only `background` inline and move `width`/`height`/`fontSize` to a CSS class. A static key riding alongside a dynamic one is still a static inline style and will be flagged.
 - When building a modal by referencing a sibling modal (e.g. copying `DetailModal`'s header into a new breakdown modal), do NOT copy its inline `style` blocks verbatim. `DetailModal` carries a pre-existing "large header" pattern (`.row-item` with `borderBottom:'none',paddingBottom:0` wrapping a `.row-icon` with `width/height/fontSize` and a `.row-title` with `fontSize:'16px'`) that is mostly static and should live in a shared CSS class, not be duplicated. If you need that header look, add/reuse a modifier class (e.g. `.row-item.modal-head`) in `components.css` and apply it in both places rather than re-pasting the inline overrides.
 - Class names: kebab-case. Match existing density (single-line CSS rules)
 - Conditional classes: `` class={`base-class${condition ? ' modifier' : ''}`} ``

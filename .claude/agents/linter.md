@@ -71,7 +71,7 @@ Do NOT flag:
 ## CSS
 
 Flag if:
-- A hardcoded color value is used instead of a CSS variable (e.g., `color: #C8963C` instead of `color: var(--accent)`)
+- A hardcoded color value is used instead of a CSS variable (e.g., `color: #C8963C` instead of `color: var(--accent)`). The most common offender is a raw `#fff`/`#FFF`/`white` — the token is `var(--white)` (defined in `global.css`); swap any literal white in a CSS rule to it. This is a one-line fix; apply it.
 - A CSS class targets an element by ID when a class would work
 - Tailwind utility classes appear anywhere — not used in this project
 - Inline `style` is used for static values that should be in a CSS class; when moving the value to CSS, scope it to the context selector (e.g. `.row-date .freq-badge{margin-left:6px}`) rather than mutating a shared base class used in other contexts

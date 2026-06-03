@@ -69,6 +69,9 @@ export const putTx = (tx: Transaction) => db.txs.put(tx).then(loadAll)
 ### Auto-backup (File System Access API)
 Feature-gated on `'showDirectoryPicker' in window` (Chrome/Edge only). A user-picked `FileSystemDirectoryHandle` is persisted in the `settings` Dexie table (key `'autoBackupHandle'`) — handles survive reload but cannot be stored in localStorage. `initAutoBackup()` runs once in `main.tsx` after `loadAll()` to rehydrate the handle into the module-level `_autoHandle` cache in `queries.ts` and re-check permission. `loadAll()` fires `triggerAutoBackup()` after every txs/cats reload, writing a dated JSON backup (`myledger-backup-YYYY-MM-DD.json`) if permission is granted. Two signals back the UI: `autoBackupFolderName` (string|null) and `needsBackupPermission` (boolean — set true when the persisted handle's permission has lapsed; re-grant requires a user gesture via `grantAutoBackupPermission()`, since `requestPermission` cannot be called from `loadAll()`).
 
+### App lock (PIN)
+`lockHelpers.ts` holds `hashPin`/`verifyPin`/`setupPin`/`clearPin` (SHA-256 via `crypto.subtle`) and `initLockWatcher()` (idle + visibility-change auto-lock, called once in `main.tsx`). Persisted to localStorage: `pinEnabled` and `pinHash` (the SHA-256 hex). In-memory only (reset on reload, by design): `isLocked`, `pinFailCount`, `pinLockedUntil`. `<LockScreen />` is a fixed-overlay **component** mounted in `App.tsx` (not a page/`PageId`) — returns null unless `isLocked && pinEnabled`. `PinSetupModal` (`ModalId 'pin-setup'`) drives set/change/disable via `modalCtx.pinSetupMode`. Failed-attempt cooldowns: 3 fails → 30s, 5 fails → 5min, via `pinLockedUntil`.
+
 ### All pages always rendered
 All five pages are mounted in `App.tsx` simultaneously. Visibility is controlled only by the `.page.active` CSS class based on `activePage` signal. This avoids unmount/remount state loss.
 
