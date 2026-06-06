@@ -42,7 +42,10 @@
 .quick-add-bar{position:fixed;bottom:68px;left:0;right:0;height:var(--qab-h);background:var(--s1);border-top:1px solid var(--border2);z-index:98;display:flex;align-items:center;gap:8px;padding:0 14px}
 .qab-amount{width:72px;flex-shrink:0;padding:6px 0;border:none;border-bottom:1.5px solid var(--border2);background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;-webkit-appearance:none}
 .qab-amount:focus{border-bottom-color:var(--accent)}
-.qab-cats{display:flex;gap:6px;flex:1;overflow:hidden}
+.qab-cats-wrap{position:relative;flex:1;overflow:hidden}
+.qab-cats-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:32px;background:linear-gradient(to right,transparent,var(--s1));pointer-events:none}
+.qab-cats{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+.qab-cats::-webkit-scrollbar{display:none}
 .qab-pill{padding:5px 8px;font-size:12px}
 .qab-no-cats{font-size:12px;color:var(--muted);cursor:pointer;flex:1;white-space:nowrap}
 .qab-err{font-size:11px;color:var(--r);flex-shrink:0;white-space:nowrap}

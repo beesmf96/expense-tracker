@@ -53,24 +53,26 @@ export function QuickAddBar() {
         onInput={e => { amount.value = (e.target as HTMLInputElement).value; errMsg.value = '' }}
         onKeyDown={e => { if (e.key === 'Enter') handleSubmit() }}
       />
-      <div class="qab-cats">
-        {cats.length === 0
-          ? <span class="qab-no-cats" onClick={() => { activePage.value = 'manage-cats' }}>{t('quickNoCats')}</span>
-          : cats.map(id => {
-              const cat = getCat(id)
-              return (
-                <div
-                  key={id}
-                  class={`cat-pill qab-pill${localCat.value === id ? ' selected' : ''}`}
-                  style={{ background: catColor(id) + '22' }}
-                  onClick={() => { localCat.value = id; errMsg.value = '' }}
-                >
-                  <span class="cemoji">{cat.emoji}</span>
-                  <span class="clabel">{catLabel(cat)}</span>
-                </div>
-              )
-            })
-        }
+      <div class="qab-cats-wrap">
+        <div class="qab-cats">
+          {cats.length === 0
+            ? <span class="qab-no-cats" onClick={() => { activePage.value = 'manage-cats' }}>{t('quickNoCats')}</span>
+            : cats.map(id => {
+                const cat = getCat(id)
+                return (
+                  <div
+                    key={id}
+                    class={`cat-pill qab-pill${localCat.value === id ? ' selected' : ''}`}
+                    style={{ background: catColor(id) + '22' }}
+                    onClick={() => { localCat.value = id; errMsg.value = '' }}
+                  >
+                    <span class="cemoji">{cat.emoji}</span>
+                    <span class="clabel">{catLabel(cat)}</span>
+                  </div>
+                )
+              })
+          }
+        </div>
       </div>
       {errMsg.value && <span class="qab-err">{errMsg.value}</span>}
       <button class="qab-more btn-small btn-small-g" onClick={handleMore}>{t('more')}</button>
