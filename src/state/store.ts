@@ -47,6 +47,20 @@ export const modalCtx = signal<ModalContext>({})
 
 export const allCatsList = computed<Category[]>(() => userCats.value)
 
+export const recentCatIds = computed<string[]>(() => {
+  const seen = new Set<string>()
+  const result: string[] = []
+  const valid = new Set(allCatsList.value.map(c => c.id))
+  for (const tx of txs.value) {
+    if (!seen.has(tx.category) && valid.has(tx.category)) {
+      seen.add(tx.category)
+      result.push(tx.category)
+      if (result.length === 3) break
+    }
+  }
+  return result
+})
+
 export function catColor(id: string): string {
   const idx = allCatsList.value.findIndex(c => c.id === id)
   return COLORS[(idx >= 0 ? idx : 0) % COLORS.length]

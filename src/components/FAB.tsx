@@ -2,7 +2,7 @@ import { activePage, openM } from '../state/store'
 
 export function FAB() {
   const page = activePage.value
-  if (page === 'settings' || page === 'manage-cats' || page === 'search') return null
+  if (page === 'settings' || page === 'manage-cats' || page === 'search' || page === 'home' || page === 'transactions') return null
 
   function handleClick() {
     if (page === 'recurring') {

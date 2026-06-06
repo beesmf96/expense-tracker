@@ -16,6 +16,7 @@ import { EditCatModal } from './modals/EditCatModal'
 import { ReclassifyModal } from './modals/ReclassifyModal'
 import { CatBreakdownModal } from './modals/CatBreakdownModal'
 import { PinSetupModal } from './modals/PinSetupModal'
+import { QuickAddBar } from './components/QuickAddBar'
 import { LockScreen } from './components/LockScreen'
 import { Toast } from './components/Toast'
 
@@ -24,10 +25,10 @@ export function App() {
 
   return (
     <>
-      <div id="page-home" class={`page${page === 'home' ? ' active' : ''}`}>
+      <div id="page-home" class={`page page-qab${page === 'home' ? ' active' : ''}`}>
         <Home />
       </div>
-      <div id="page-transactions" class={`page${page === 'transactions' ? ' active' : ''}`}>
+      <div id="page-transactions" class={`page page-qab${page === 'transactions' ? ' active' : ''}`}>
         <Transactions />
       </div>
       <div id="page-recurring" class={`page${page === 'recurring' ? ' active' : ''}`}>
@@ -43,6 +44,7 @@ export function App() {
         <Search />
       </div>
 
+      <QuickAddBar />
       <BottomNav />
       <FAB />
 
