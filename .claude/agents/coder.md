@@ -83,6 +83,9 @@ Any `JSON.parse(text) as SomeType` of file or user input is an unchecked asserti
 ### Passing a signal as a prop
 A leaf form-field component extracted from a modal (e.g. `AmountField`, `NoteField` in `ModalFormFields.tsx`) may take a `Signal<string>` directly as a prop and mutate `.value` in its `onInput` handler. Import the type with `import type { Signal } from '@preact/signals'`. Use this pattern only for leaf fields with no local state — components that select from a fixed set (`CatGrid`, `FreqGrid`) still use a plain `value` + `onSelect` callback. Do not pass a signal down merely to avoid writing a callback.
 
+### Tabbed/filtered selector wrappers
+When a fixed-set selector needs grouping (tabs/categories over a flat option list), keep the leaf grid presentational — it takes the already-filtered slice as a `readonly T[]` prop plus `selectedX`/`onSelect` — and add a wrapper component that owns the active-group `useSignal` and slices the data. Reference: `EmojiGrid` (leaf, `emojis: readonly string[]`) + `EmojiPicker` (wrapper, `useSignal<EmojiGroupKey>('money')`, renders the tab strip + grid). The wrapper keeps the `value`+`onSelect` callback convention — do NOT pass a `Signal<T>` down (that pattern is for leaf form fields only). Group data is a `readonly { key; emojis: readonly string[] }[]` constant in `data/cats.ts`, not signals.
+
 ### Pages
 - Pages are always mounted in `App.tsx`. Add new pages there and in `src/types/index.ts` (`PageId` union).
 - Navigate by setting `activePage.value = 'my-page'`; never unmount a page
@@ -103,6 +106,7 @@ A leaf form-field component extracted from a modal (e.g. `AmountField`, `NoteFie
 - Pass data via `modalCtx.value` fields; read them inside the modal with `modalCtx.value.xxx`
 - Modals are never unmounted, so `useSignal()` form state persists between opens. To support edit mode, read `modalCtx.value.editTx` and `openModal.value` at the top of the component (reactive reads), then sync local signals in a `useEffect` keyed on `[editTx?.id, openModalVal]`. Keying on `openModal.value` is required so reopening the modal for a different record (or switching add↔edit) triggers a re-sync even when `editTx?.id` hasn't changed.
 - Edit-mode save must branch on `editTx` presence: spread `...editTx` and override the mutable fields to preserve the original `id` and `createdAt`. Never generate a new `id` when editing.
+- When a modal syncs into a **global** selection signal (e.g. `EditCatModal` writes `modalCtx.editCatId`'s emoji into the global `selEmoji`), the sync effect must overwrite it on every open path — a missing else/default branch leaks the prior record's value because the global signal (unlike a local `useSignal`) is never reset by re-render. Prefer a local `useSignal` for transient form state; use a global signal only when another component must read the in-progress value.
 
 ### Shared modal form state (useTransactionForm)
 When two or more modals share identical form signals (`amount`, `date`, `note`) and the same `editTx`/`openModal` sync `useEffect`, extract them into `useTransactionForm` in `src/modals/useTransactionForm.ts` rather than re-inlining per modal. The hook accepts `catSignal: Signal<string>` (both `selCat` and `selRCat` satisfy this type) and an optional `onEditSync?: (tx: Transaction) => void` callback, and returns `{ amount, date, note, editTx, parseAmount, reset }`.
@@ -149,6 +153,7 @@ Never hardcode category IDs in component logic. Use `getCat(id)` and `catColor(i
 - Category names: always use `catLabel(cat)` — never `cat.en` directly
 - Freq labels: always use `freqLabel(freq)` from `src/data/i18n.ts` — never re-derive the `FREQS.find(...).en/.zh` lookup locally. It lives in `i18n.ts` alongside `catLabel` because, like `catLabel`, it reads the `lang` signal. Shared label helpers that resolve text from `lang.value` belong in `i18n.ts`, not in `lib/`.
 - `today()` (`new Date().toISOString().slice(0,10)`) lives in `src/lib/dateHelpers.ts` — import it; never re-inline `new Date().toISOString().slice(0,10)` anywhere (modal, page, OR another `lib/` helper). `exportHelpers.ts` imports it — match that pattern. Date helpers that do not read a signal belong in `lib/dateHelpers.ts`.
+- Computed `t()` keys (e.g. iterating a group constant to build `` `emojiGroup_${g.key}` ``) lose `t()`'s literal-key checking. Cast with `as Parameters<typeof t>[0]` (NOT `as any`), and ensure every generated key exists in both `S.en` and `S.zh` — TS will not catch a missing one, so a render test that asserts each tab label is the safety net. Reference: `EmojiPicker.tsx`.
 
 ## CSS
 
