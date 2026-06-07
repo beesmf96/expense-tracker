@@ -33,14 +33,12 @@ export function Home() {
           <div class="summary-amount">{total.toFixed(2)}</div>
           <div class="summary-month">{mfmt(year, month)}</div>
         </div>
+        {sorted.length > 0 && <div class="section-title">{t('byCat')}</div>}
       </div>
 
       {sorted.length === 0
         ? <EmptyState icon="💸" message={t('noExpense')} />
-        : (
-          <>
-            <div class="section-title">{t('byCat')}</div>
-            {sorted.map(([catId, amt]) => {
+        : sorted.map(([catId, amt]) => {
               const cat = getCat(catId)
               const color = catColor(catId)
               const pct = total > 0 ? (amt / total) * 100 : 0
@@ -56,9 +54,7 @@ export function Home() {
                   <span class="amount">−{amt.toFixed(2)}</span>
                 </div>
               )
-            })}
-          </>
-        )
+        })
       }
     </div>
   )
