@@ -65,7 +65,7 @@ export function RecurringModal() {
       </FormField>
 
       <FormField label={t('category')}>
-        <CatGrid selectedId={selRCat.value} onSelect={id => { selRCat.value = id }} />
+        <CatGrid selectedId={selRCat.value} onSelect={id => { selRCat.value = selRCat.value === id ? '' : id }} />
       </FormField>
 
       <NoteField note={note} onSave={save} errMsg={errMsg} />

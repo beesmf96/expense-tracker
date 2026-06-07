@@ -54,7 +54,7 @@
 /* ── OVERLAY & MODAL ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:200;align-items:flex-end;justify-content:center}
 .overlay.open{display:flex}
-.modal{background:var(--s1);border-radius:22px 22px 0 0;border-top:1px solid var(--border2);padding:14px 22px 48px;width:100%;max-width:480px;animation:slideUp .28s cubic-bezier(.32,.72,0,1);max-height:92vh;overflow-y:auto}
+.modal{background:var(--s1);border-radius:22px 22px 0 0;border-top:1px solid var(--border2);padding:14px 22px 48px;width:100%;max-width:480px;animation:slideUp .28s cubic-bezier(.32,.72,0,1);max-height:70vh;overflow-y:auto}
 @keyframes slideUp{from{transform:translateY(80px);opacity:0}to{transform:translateY(0);opacity:1}}
 .modal-handle{width:36px;height:3px;background:var(--border2);border-radius:3px;margin:0 auto 18px}
 .modal-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:24px;color:var(--text)}

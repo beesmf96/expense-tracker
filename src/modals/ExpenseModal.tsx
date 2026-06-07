@@ -54,7 +54,7 @@ export function ExpenseModal() {
       </FormField>
 
       <FormField label={t('category')}>
-        <CatGrid selectedId={selCat.value} onSelect={id => { selCat.value = id }} />
+        <CatGrid selectedId={selCat.value} onSelect={id => { selCat.value = selCat.value === id ? '' : id }} />
       </FormField>
 
       <NoteField note={note} onSave={save} errMsg={errMsg} />

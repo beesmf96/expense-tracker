@@ -51,11 +51,15 @@ export const recentCatIds = computed<string[]>(() => {
   const seen = new Set<string>()
   const result: string[] = []
   const valid = new Set(allCatsList.value.map(c => c.id))
+  const cutoff = new Date()
+  cutoff.setDate(cutoff.getDate() - 30)
+  const cutoffStr = cutoff.toISOString().slice(0, 10)
   for (const tx of txs.value) {
+    if (tx.date < cutoffStr) break
     if (!seen.has(tx.category) && valid.has(tx.category)) {
       seen.add(tx.category)
       result.push(tx.category)
-      if (result.length === 3) break
+      if (result.length === 5) break
     }
   }
   return result

@@ -64,7 +64,7 @@ export function QuickAddBar() {
                     key={id}
                     class={`cat-pill qab-pill${localCat.value === id ? ' selected' : ''}`}
                     style={{ background: catColor(id) + '22' }}
-                    onClick={() => { localCat.value = id; errMsg.value = '' }}
+                    onClick={() => { localCat.value = localCat.value === id ? '' : id; errMsg.value = '' }}
                   >
                     <span class="cemoji">{cat.emoji}</span>
                     <span class="clabel">{catLabel(cat)}</span>
