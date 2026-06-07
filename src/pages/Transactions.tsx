@@ -1,4 +1,4 @@
-import { txs, getCat, catColor, openM, viewY, viewM, changeMonth } from '../state/store'
+import { txs, getCat, catColor, openM, viewY, viewM, changeMonth, swipeNav } from '../state/store'
 import { t, catLabel } from '../data/i18n'
 import { EmptyState } from '../components/EmptyState'
 import { MonthNav } from '../components/MonthNav'
@@ -14,7 +14,7 @@ export function Transactions() {
   return (
     <div
       onTouchStart={(e) => { _swipeX = e.touches[0].clientX }}
-      onTouchEnd={(e) => { const dx = e.changedTouches[0].clientX - _swipeX; if (Math.abs(dx) > 50) changeMonth(dx < 0 ? 1 : -1) }}
+      onTouchEnd={(e) => { if (!swipeNav.value) return; const dx = e.changedTouches[0].clientX - _swipeX; if (Math.abs(dx) > 50) changeMonth(dx < 0 ? 1 : -1) }}
     >
       <div class="page-title">{t('records')}</div>
       <MonthNav />

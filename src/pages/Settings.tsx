@@ -1,5 +1,5 @@
 import { useSignal } from '@preact/signals'
-import { lang, theme, activePage, openM, txs, userCats, autoBackupFolderName, needsBackupPermission, showToast, pinEnabled } from '../state/store'
+import { lang, theme, activePage, openM, txs, userCats, autoBackupFolderName, needsBackupPermission, showToast, pinEnabled, swipeNav } from '../state/store'
 import { t } from '../data/i18n'
 import { exportCSV, backupJSON, writeAutoBackup } from '../lib/exportHelpers'
 import { loadBackupFile } from '../lib/importHelpers'
@@ -59,6 +59,13 @@ export function Settings() {
           <div class="lang-toggle">
             <button class={`lang-btn${theme.value === 'dark' ? ' active' : ''}`} aria-label={t('darkTheme')} onClick={() => { theme.value = 'dark' }}>🌙</button>
             <button class={`lang-btn${theme.value === 'light' ? ' active' : ''}`} aria-label={t('lightTheme')} onClick={() => { theme.value = 'light' }}>☀️</button>
+          </div>
+        </div>
+        <div class="srow" style={{ cursor: 'default' }}>
+          <span class="srow-left">👆 {t('swipeNav')}</span>
+          <div class="lang-toggle">
+            <button class={`lang-btn${swipeNav.value ? ' active' : ''}`} onClick={() => { swipeNav.value = true }}>On</button>
+            <button class={`lang-btn${!swipeNav.value ? ' active' : ''}`} onClick={() => { swipeNav.value = false }}>Off</button>
           </div>
         </div>
       </div>

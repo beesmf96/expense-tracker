@@ -20,6 +20,9 @@ effect(() => {
   localStorage.setItem('theme', theme.value)
 })
 
+export const swipeNav = signal<boolean>(localStorage.getItem('swipeNav') !== 'false')
+effect(() => { localStorage.setItem('swipeNav', String(swipeNav.value)) })
+
 export const pinEnabled = signal<boolean>(localStorage.getItem('pinEnabled') === 'true')
 effect(() => { localStorage.setItem('pinEnabled', String(pinEnabled.value)) })
 
