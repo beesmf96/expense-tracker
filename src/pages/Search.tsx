@@ -23,14 +23,16 @@ export function Search() {
 
   return (
     <div>
-      <div class="page-title">{t('search')}</div>
-      <div class="field">
-        <input
-          type="search"
-          placeholder={t('searchPlaceholder')}
-          value={query.value}
-          onInput={e => { query.value = (e.target as HTMLInputElement).value }}
-        />
+      <div class="sticky-hd">
+        <div class="page-title">{t('search')}</div>
+        <div class="field">
+          <input
+            type="search"
+            placeholder={t('searchPlaceholder')}
+            value={query.value}
+            onInput={e => { query.value = (e.target as HTMLInputElement).value }}
+          />
+        </div>
       </div>
       {q === '' && (
         <EmptyState icon="🔍" message={t('searchHint')} />

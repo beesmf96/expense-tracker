@@ -2,6 +2,7 @@
 .page{display:none;padding:20px 20px 100px;max-width:480px;margin:0 auto;position:relative;z-index:1}
 .page.active{display:block}
 .page-qab.active{padding-bottom:calc(100px + var(--qab-h))}
+.sticky-hd{position:sticky;top:0;z-index:10;background:var(--bg);margin:-20px -20px 0;padding:20px 20px 0}
 .page-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:20px;color:var(--text)}
 
 /* ── HOME HEADER ── */

@@ -37,7 +37,7 @@ export function Settings() {
 
   return (
     <div>
-      <div class="page-title">{t('settings')}</div>
+      <div class="sticky-hd"><div class="page-title">{t('settings')}</div></div>
 
       <div class="settings-card">
         <div class="srow" onClick={() => { activePage.value = 'manage-cats' }}>

@@ -8,7 +8,7 @@ export function Recurring() {
   if (templates.length === 0) {
     return (
       <div>
-        <div class="page-title">{t('recurring')}</div>
+        <div class="sticky-hd"><div class="page-title">{t('recurring')}</div></div>
         <EmptyState icon="🔄" message={t('noRecurring')} />
       </div>
     )

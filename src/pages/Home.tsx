@@ -23,16 +23,16 @@ export function Home() {
       onTouchStart={(e) => { _swipeX = e.touches[0].clientX }}
       onTouchEnd={(e) => { if (!swipeNav.value) return; const dx = e.changedTouches[0].clientX - _swipeX; if (Math.abs(dx) > 50) { navigator.vibrate?.(10); changeMonth(dx < 0 ? 1 : -1) } }}
     >
-      <div class="home-hd">
-        <span class="wordmark">MyLedger</span>
-      </div>
-
-      <MonthNav />
-
-      <div class="summary-wrap">
-        <div class="summary-label">{t('thisMonth')}</div>
-        <div class="summary-amount">{total.toFixed(2)}</div>
-        <div class="summary-month">{mfmt(year, month)}</div>
+      <div class="sticky-hd">
+        <div class="home-hd">
+          <span class="wordmark">MyLedger</span>
+        </div>
+        <MonthNav />
+        <div class="summary-wrap">
+          <div class="summary-label">{t('thisMonth')}</div>
+          <div class="summary-amount">{total.toFixed(2)}</div>
+          <div class="summary-month">{mfmt(year, month)}</div>
+        </div>
       </div>
 
       {sorted.length === 0

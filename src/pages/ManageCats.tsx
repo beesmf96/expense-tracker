@@ -27,7 +27,7 @@ export function ManageCats() {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+      <div class="sticky-hd" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <button class="icon-btn" onClick={() => { activePage.value = 'settings' }} style={{ fontSize: '20px', padding: '0' }}>
           ‹
         </button>
