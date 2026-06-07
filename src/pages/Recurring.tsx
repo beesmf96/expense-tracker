@@ -16,7 +16,7 @@ export function Recurring() {
 
   return (
     <div>
-      <div class="page-title">{t('recurring')}</div>
+      <div class="sticky-hd"><div class="page-title">{t('recurring')}</div></div>
       {templates.map(tx => {
         const cat = getCat(tx.category)
         const color = catColor(tx.category)
