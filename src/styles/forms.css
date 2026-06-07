@@ -39,6 +39,14 @@
 .freq-pill{background:var(--s2);border:1px solid var(--border2);border-radius:8px;padding:10px;text-align:center;cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s}
 .freq-pill.selected{border-color:var(--accent);background:var(--adim);color:var(--accent);font-weight:600}
 
+/* ── EMOJI TABS ── */
+.emoji-tabs-wrap{position:relative;overflow:hidden;margin-bottom:8px}
+.emoji-tabs-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:32px;background:linear-gradient(to right,transparent,var(--bg));pointer-events:none}
+.emoji-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.emoji-tabs::-webkit-scrollbar{display:none}
+.emoji-tabs button{flex-shrink:0;padding:4px 12px;border-radius:16px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:12px;cursor:pointer}
+.emoji-tabs button.active{background:var(--accent);border-color:var(--accent);color:var(--white)}
+
 /* ── EMOJI GRID ── */
 .emoji-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-height:160px;overflow-y:auto}
 .emoji-opt{font-size:22px;text-align:center;padding:6px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:all .1s}

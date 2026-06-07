@@ -4,7 +4,7 @@ import { FormField } from '../components/FormField'
 import { ModalActions } from '../components/ModalActions'
 import { selEmoji, modalCtx, closeM } from '../state/store'
 import { t } from '../data/i18n'
-import { EmojiGrid } from '../components/EmojiGrid'
+import { EmojiPicker } from '../components/EmojiPicker'
 import { putCat } from '../db/queries'
 
 export function NewCatModal() {
@@ -39,7 +39,7 @@ export function NewCatModal() {
       </FormField>
 
       <FormField label={t('chooseIcon')}>
-        <EmojiGrid selectedEmoji={selEmoji.value} onSelect={e => { selEmoji.value = e }} />
+        <EmojiPicker selectedEmoji={selEmoji.value} onSelect={e => { selEmoji.value = e }} />
       </FormField>
 
       <ModalActions onSave={save} />

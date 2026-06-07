@@ -93,6 +93,7 @@ Flag if:
 - `any` appears anywhere without a clear necessity
 - Non-null assertion (`!`) is used on a value that could genuinely be null
 - A type is duplicated when it already exists in `src/types/index.ts`
+- `type ActiveFreq = 'monthly' | 'quarterly' | 'biannual' | 'yearly'` is currently duplicated in `src/data/cats.ts` and `src/components/FreqGrid.tsx`. Flag any new copy of this literal. The two existing copies are a known pre-existing duplication — flag for the coder to consolidate into `Exclude<Freq, 'none'>` in `types/index.ts`. Do not fix inline (touches three files — exceeds the ~5-line scope boundary).
 - An enum is used — the project uses literal union types instead
 - `import { Foo }` is used for a type-only import — should be `import type { Foo }`
 

@@ -3,15 +3,16 @@ import { useEffect } from 'preact/hooks'
 import { Modal } from './Modal'
 import { FormField } from '../components/FormField'
 import { ModalActions } from '../components/ModalActions'
-import { selEmoji, modalCtx, closeM, getCat } from '../state/store'
+import { selEmoji, modalCtx, openModal, closeM, getCat } from '../state/store'
 import { t } from '../data/i18n'
-import { EmojiGrid } from '../components/EmojiGrid'
+import { EmojiPicker } from '../components/EmojiPicker'
 import { putCat } from '../db/queries'
 
 export function EditCatModal() {
   const name = useSignal('')
 
   const catId = modalCtx.value.editCatId ?? ''
+  const openModalVal = openModal.value
   const cat = catId ? getCat(catId) : null
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export function EditCatModal() {
       name.value = cat.en
       selEmoji.value = cat.emoji
     }
-  }, [catId])
+  }, [catId, openModalVal])
 
   async function save() {
     if (!name.value.trim() || !catId) return
@@ -46,7 +47,7 @@ export function EditCatModal() {
       </FormField>
 
       <FormField label={t('chooseIcon')}>
-        <EmojiGrid selectedEmoji={selEmoji.value} onSelect={e => { selEmoji.value = e }} />
+        <EmojiPicker selectedEmoji={selEmoji.value} onSelect={e => { selEmoji.value = e }} />
       </FormField>
 
       <ModalActions onSave={save} />
