@@ -15,7 +15,8 @@ export async function loadBackupFile(file: File): Promise<void> {
       !VALID_FREQS.includes(tx.freq) ||
       typeof tx.category !== 'string' || !tx.category ||
       typeof tx.note !== 'string' ||
-      typeof tx.createdAt !== 'string' || !tx.createdAt
+      typeof tx.createdAt !== 'string' || !tx.createdAt ||
+      (tx.occurrences !== undefined && (typeof tx.occurrences !== 'number' || !Number.isInteger(tx.occurrences) || tx.occurrences < 1))
     ) throw new Error('Invalid backup file')
   }
   const validatedCats = Array.isArray(data.userCats) ? data.userCats : []

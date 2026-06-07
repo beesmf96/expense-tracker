@@ -13,6 +13,7 @@ export interface Transaction {
   freq: Freq
   createdAt: string
   isGenerated?: boolean
+  occurrences?: number
 }
 
 export interface Category {

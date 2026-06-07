@@ -15,15 +15,15 @@ export function genRecurring(allTxs: Transaction[], viewYear: number, viewMonth:
   for (const tpl of templates) {
     const [sy, sm] = tpl.date.split('-').map(Number)
     const startYear = sy
-    const startMonth = sm - 1  // 0-indexed
+    const startMonth = sm - 1
 
     const delta = (viewYear - startYear) * 12 + (viewMonth - startMonth)
     if (delta < 0) continue
 
     const interval = FREQ_INTERVAL[tpl.freq as Exclude<Freq, 'none'>]
     if (delta % interval !== 0) continue
+    if (tpl.occurrences && Math.floor(delta / interval) >= tpl.occurrences) continue
 
-    // Preserve the original day; clamp to valid days in view month
     const origDay = parseInt(tpl.date.split('-')[2])
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
     const day = Math.min(origDay, daysInMonth)
@@ -48,4 +48,20 @@ export function monthTxs(allTxs: Transaction[], viewYear: number, viewMonth: num
   const real = allTxs.filter(tx => tx.freq === 'none' && tx.date.startsWith(monthKey))
   const generated = genRecurring(allTxs, viewYear, viewMonth)
   return [...real, ...generated].sort((a, b) => b.date.localeCompare(a.date))
+}
+
+export function countOccurrences(tpl: Transaction, nowYear: number, nowMonth: number): number {
+  const [sy, sm] = tpl.date.split('-').map(Number)
+  const startYear = sy
+  const startMonth = sm - 1
+  const delta = (nowYear - startYear) * 12 + (nowMonth - startMonth)
+  if (delta < 0) return 0
+  const interval = FREQ_INTERVAL[tpl.freq as Exclude<Freq, 'none'>]
+  const idx = Math.floor(delta / interval)
+  return Math.min(idx + 1, tpl.occurrences ?? Infinity)
+}
+
+export function isTemplateCompleted(tpl: Transaction, nowYear: number, nowMonth: number): boolean {
+  if (!tpl.occurrences) return false
+  return countOccurrences(tpl, nowYear, nowMonth) >= tpl.occurrences
 }

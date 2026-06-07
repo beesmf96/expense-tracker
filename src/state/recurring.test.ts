@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { genRecurring, monthTxs } from './recurring'
+import { genRecurring, monthTxs, countOccurrences, isTemplateCompleted } from './recurring'
 import { makeTx } from '../test-utils/setup'
 
 describe('genRecurring', () => {
@@ -154,5 +154,118 @@ describe('monthTxs', () => {
     expect(result).toHaveLength(1)
     expect(result[0].id).toBe('tpl-1_2025-01')
     expect(result[0].isGenerated).toBeUndefined()
+  })
+})
+
+describe('genRecurring with occurrences', () => {
+  it('generates on months 0, 1, 2 from start when occurrences: 3 and freq: monthly', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15', occurrences: 3 })
+    expect(genRecurring([tpl], 2025, 0)).toHaveLength(1)
+    expect(genRecurring([tpl], 2025, 1)).toHaveLength(1)
+    expect(genRecurring([tpl], 2025, 2)).toHaveLength(1)
+  })
+
+  it('does NOT generate on month 3 from start when occurrences: 3 and freq: monthly', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15', occurrences: 3 })
+    expect(genRecurring([tpl], 2025, 3)).toHaveLength(0)
+  })
+
+  it('does NOT generate on months beyond the limit', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15', occurrences: 3 })
+    expect(genRecurring([tpl], 2025, 4)).toHaveLength(0)
+    expect(genRecurring([tpl], 2025, 11)).toHaveLength(0)
+  })
+
+  it('generates only on start month when occurrences: 1', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15', occurrences: 1 })
+    expect(genRecurring([tpl], 2025, 0)).toHaveLength(1)
+    expect(genRecurring([tpl], 2025, 1)).toHaveLength(0)
+  })
+
+  it('behaves as before when occurrences is absent', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15' })
+    expect(genRecurring([tpl], 2025, 0)).toHaveLength(1)
+    expect(genRecurring([tpl], 2025, 6)).toHaveLength(1)
+    expect(genRecurring([tpl], 2025, 11)).toHaveLength(1)
+  })
+
+  it('quarterly with occurrences: 2 generates on months 0 and 3 from start', () => {
+    const tpl = makeTx({ id: 'tpl-q', freq: 'quarterly', date: '2025-01-10', occurrences: 2 })
+    expect(genRecurring([tpl], 2025, 0)).toHaveLength(1)
+    expect(genRecurring([tpl], 2025, 3)).toHaveLength(1)
+  })
+
+  it('quarterly with occurrences: 2 does NOT generate on month 6+ from start', () => {
+    const tpl = makeTx({ id: 'tpl-q', freq: 'quarterly', date: '2025-01-10', occurrences: 2 })
+    expect(genRecurring([tpl], 2025, 6)).toHaveLength(0)
+    expect(genRecurring([tpl], 2025, 9)).toHaveLength(0)
+  })
+})
+
+describe('countOccurrences', () => {
+  it('returns 0 when nowYear/nowMonth is before the start date (delta < 0)', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-03-01' })
+    expect(countOccurrences(tpl, 2025, 0)).toBe(0)
+    expect(countOccurrences(tpl, 2024, 11)).toBe(0)
+  })
+
+  it('returns 1 on the exact start month', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15' })
+    expect(countOccurrences(tpl, 2025, 0)).toBe(1)
+  })
+
+  it('returns 2 one interval after start for monthly', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15' })
+    expect(countOccurrences(tpl, 2025, 1)).toBe(2)
+  })
+
+  it('returns 2 one interval after start for quarterly', () => {
+    const tpl = makeTx({ id: 'tpl-q', freq: 'quarterly', date: '2025-01-10' })
+    expect(countOccurrences(tpl, 2025, 3)).toBe(2)
+  })
+
+  it('caps at tpl.occurrences even if more months have passed', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15', occurrences: 3 })
+    expect(countOccurrences(tpl, 2025, 4)).toBe(3)
+    expect(countOccurrences(tpl, 2025, 11)).toBe(3)
+  })
+
+  it('returns a large uncapped number when occurrences is undefined', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15' })
+    expect(countOccurrences(tpl, 2025, 3)).toBeGreaterThanOrEqual(4)
+  })
+})
+
+describe('isTemplateCompleted', () => {
+  it('returns false when occurrences is undefined', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15' })
+    expect(isTemplateCompleted(tpl, 2025, 5)).toBe(false)
+  })
+
+  it('returns false when count < occurrences (middle of a plan)', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15', occurrences: 3 })
+    expect(isTemplateCompleted(tpl, 2025, 0)).toBe(false)
+    expect(isTemplateCompleted(tpl, 2025, 1)).toBe(false)
+  })
+
+  it('returns true on the exact last occurrence month (count === occurrences)', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15', occurrences: 3 })
+    expect(isTemplateCompleted(tpl, 2025, 2)).toBe(true)
+  })
+
+  it('returns true when all occurrences have clearly passed', () => {
+    const tpl = makeTx({ id: 'tpl-1', freq: 'monthly', date: '2025-01-15', occurrences: 3 })
+    expect(isTemplateCompleted(tpl, 2025, 3)).toBe(true)
+    expect(isTemplateCompleted(tpl, 2025, 11)).toBe(true)
+  })
+
+  it('returns false when count < occurrences for quarterly', () => {
+    const tpl = makeTx({ id: 'tpl-q', freq: 'quarterly', date: '2025-01-10', occurrences: 2 })
+    expect(isTemplateCompleted(tpl, 2025, 0)).toBe(false)
+  })
+
+  it('returns true when quarterly plan is on its last occurrence', () => {
+    const tpl = makeTx({ id: 'tpl-q', freq: 'quarterly', date: '2025-01-10', occurrences: 2 })
+    expect(isTemplateCompleted(tpl, 2025, 3)).toBe(true)
   })
 })
