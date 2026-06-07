@@ -1,8 +1,10 @@
-import { txs, getCat, catColor, openM, viewY, viewM } from '../state/store'
+import { txs, getCat, catColor, openM, viewY, viewM, changeMonth } from '../state/store'
 import { t, catLabel } from '../data/i18n'
 import { EmptyState } from '../components/EmptyState'
 import { MonthNav } from '../components/MonthNav'
 import { monthTxs } from '../state/recurring'
+
+let _swipeX = 0
 
 export function Transactions() {
   const year = viewY.value
@@ -10,7 +12,10 @@ export function Transactions() {
   const all = monthTxs(txs.value, year, month)
 
   return (
-    <div>
+    <div
+      onTouchStart={(e) => { _swipeX = e.touches[0].clientX }}
+      onTouchEnd={(e) => { const dx = e.changedTouches[0].clientX - _swipeX; if (Math.abs(dx) > 50) changeMonth(dx < 0 ? 1 : -1) }}
+    >
       <div class="page-title">{t('records')}</div>
       <MonthNav />
       <div class="page-divider" />

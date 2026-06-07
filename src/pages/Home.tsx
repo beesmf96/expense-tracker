@@ -1,9 +1,11 @@
-import { viewY, viewM, txs, catColor, getCat, openM } from '../state/store'
+import { viewY, viewM, txs, catColor, getCat, openM, changeMonth } from '../state/store'
 import { t, mfmt, catLabel } from '../data/i18n'
 import { monthTxs } from '../state/recurring'
 import { ProgressBar } from '../components/ProgressBar'
 import { EmptyState } from '../components/EmptyState'
 import { MonthNav } from '../components/MonthNav'
+
+let _swipeX = 0
 
 export function Home() {
   const year = viewY.value
@@ -17,7 +19,10 @@ export function Home() {
   const sorted = [...byCat.entries()].sort((a, b) => b[1] - a[1])
 
   return (
-    <div>
+    <div
+      onTouchStart={(e) => { _swipeX = e.touches[0].clientX }}
+      onTouchEnd={(e) => { const dx = e.changedTouches[0].clientX - _swipeX; if (Math.abs(dx) > 50) changeMonth(dx < 0 ? 1 : -1) }}
+    >
       <div class="home-hd">
         <span class="wordmark">MyLedger</span>
       </div>

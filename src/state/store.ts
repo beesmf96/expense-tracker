@@ -65,6 +65,14 @@ export const recentCatIds = computed<string[]>(() => {
   return result
 })
 
+export function changeMonth(delta: number) {
+  let y = viewY.value, m = viewM.value + delta
+  if (m < 0) { y--; m = 11 }
+  if (m > 11) { y++; m = 0 }
+  viewY.value = y
+  viewM.value = m
+}
+
 export function catColor(id: string): string {
   const idx = allCatsList.value.findIndex(c => c.id === id)
   return COLORS[(idx >= 0 ? idx : 0) % COLORS.length]
