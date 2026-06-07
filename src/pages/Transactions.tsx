@@ -14,7 +14,7 @@ export function Transactions() {
   return (
     <div
       onTouchStart={(e) => { _swipeX = e.touches[0].clientX }}
-      onTouchEnd={(e) => { if (!swipeNav.value) return; const dx = e.changedTouches[0].clientX - _swipeX; if (Math.abs(dx) > 50) changeMonth(dx < 0 ? 1 : -1) }}
+      onTouchEnd={(e) => { if (!swipeNav.value) return; const dx = e.changedTouches[0].clientX - _swipeX; if (Math.abs(dx) > 50) { navigator.vibrate?.(10); changeMonth(dx < 0 ? 1 : -1) } }}
     >
       <div class="page-title">{t('records')}</div>
       <MonthNav />
