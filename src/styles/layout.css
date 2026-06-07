@@ -15,6 +15,11 @@
 .month-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
 .month-nav-label{font-size:15px;font-weight:600;color:var(--text);letter-spacing:.01em}
 
+/* ── PAGE TABS ── */
+.page-tabs{display:flex;gap:4px;background:var(--s2);border-radius:10px;padding:3px;margin-bottom:16px}
+.tab-btn{flex:1;padding:6px 0;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:none;color:var(--muted);font-family:'DM Sans',sans-serif;letter-spacing:.02em;transition:background .15s,color .15s}
+.tab-btn.active{background:var(--s3);color:var(--accent)}
+
 /* ── PAGE DIVIDER ── */
 .page-divider{border-top:1px solid var(--border2);margin-bottom:16px}
 
