@@ -52,4 +52,4 @@
 .empty .ei{font-size:40px;margin-bottom:14px;opacity:.4;display:block}
 .empty p{font-size:14px;line-height:1.7;white-space:pre-line}
 
-.cat-breakdown-list{margin-top:12px}
+.cat-breakdown-list{margin-top:12px;flex:1;overflow-y:auto;min-height:0}

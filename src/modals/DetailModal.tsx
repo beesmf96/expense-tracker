@@ -15,6 +15,10 @@ export function DetailModal() {
   const color = catColor(t2.category)
   const isTemplate = t2.freq !== 'none'
 
+  function handleClose() {
+    ctx.returnTo ? openM(ctx.returnTo.id, ctx.returnTo.ctx) : closeM()
+  }
+
   function handleEdit() {
     if (t2.isGenerated === true) {
       selCat.value = t2.category
@@ -59,7 +63,7 @@ export function DetailModal() {
       {!tx.isGenerated && (
         <button class="btn btn-r" onClick={() => confirmDeleteTx(t2, cat)}>{t('delete')}</button>
       )}
-      <button class="btn btn-g" onClick={closeM}>{t('close')}</button>
+      <button class="btn btn-g" onClick={handleClose}>{t('close')}</button>
     </Modal>
   )
 }

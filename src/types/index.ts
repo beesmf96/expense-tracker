@@ -38,6 +38,7 @@ export interface ModalContext {
   confirmOnOk?: () => void
   breakdownCatId?: string
   pinSetupMode?: 'set' | 'change' | 'disable'
+  returnTo?: { id: ModalId; ctx: ModalContext }
 }
 
 export interface BackupFile {

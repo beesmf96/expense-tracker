@@ -32,7 +32,7 @@ export function CatBreakdownModal() {
 
       <div class="cat-breakdown-list">
         {catTxs.map(tx => (
-          <div key={tx.id} class="row-item clickable" onClick={() => openM('detail', { detailTx: tx })}>
+          <div key={tx.id} class="row-item clickable" onClick={() => openM('detail', { detailTx: tx, returnTo: { id: 'cat-breakdown', ctx: { breakdownCatId: catId } } })}>
             <div class="row-info">
               <div class="row-title">{tx.date}</div>
               {tx.note && <div class="row-sub">{tx.note}</div>}
