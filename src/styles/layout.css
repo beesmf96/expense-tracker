@@ -27,7 +27,7 @@
 .section-title{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
 
 /* ── BOTTOM NAV ── */
-.bot-nav{position:fixed;bottom:0;left:0;right:0;background:var(--s1);border-top:1px solid var(--border2);display:flex;z-index:100}
+.bot-nav{position:fixed;bottom:0;left:0;right:0;height:68px;background:var(--s1);border-top:1px solid var(--border2);display:flex;z-index:100}
 .nav-btn{flex:1;padding:10px 4px 18px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted);font-size:10px;font-family:'DM Sans',sans-serif;letter-spacing:.04em;transition:color .2s}
 .nav-btn.active{color:var(--accent-hi)}
 .nav-btn svg{width:20px;height:20px;transition:opacity .2s}
