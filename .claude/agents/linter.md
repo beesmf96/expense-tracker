@@ -133,3 +133,12 @@ Your role is narrow corrections only: fix the specific line(s) that violate a co
 - Introduce new patterns or refactor working code — that is the coder's job
 
 If fixing a violation requires rewriting more than ~5 lines, flag it in your report and stop — do not apply the fix. Let the coder address it instead.
+
+## Verdict line (required)
+
+End your report with a single machine-readable line the pipeline orchestrator parses:
+
+- `VERDICT: pass` — no violations remain (either none found, or all were one-line fixes you applied).
+- `VERDICT: fail` — list the violations the coder must fix (those exceeding the ~5-line scope boundary) above the line, one per bullet.
+
+This line is mandatory on every run; omitting it makes the orchestrator treat the run as a fail.

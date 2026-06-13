@@ -129,19 +129,15 @@ The app is **blank-slate**: a fresh user has zero categories. There are no built
 Vitest is installed and configured (`vite.config.ts` `test` block, `npm test` script, `@testing-library/preact` + `happy-dom`). `src/state/recurring.test.ts` exists. Test pure functions in `state/recurring.ts` and `lib/exportHelpers.ts` first; place test files next to the source they cover.
 
 ## Pipeline
-When asked to implement a plan:
+When asked to "run the pipeline for plan X" (or to implement a plan), invoke the **`/pipeline X`**
+command — defined in `.claude/commands/pipeline.md`. It orchestrates a dynamic, verdict-gated flow:
 
-0. Update plan frontmatter status to `in-progress`
-1. Create branch: feature/{plan-name}
-2. @.claude/agents/coder.md
-3. @.claude/agents/tester.md
-4. @.claude/agents/security.md
-5. @.claude/agents/linter.md
-6. @.claude/agents/reflector.md
-7. Commit and push
-8. Open PR
-9. Update plan frontmatter:
-   - status: review
-   - branch: feature/{plan-name}
-   - pr: #{pr-number}
-   - implemented: {today's date}
+- **Worktree-isolated** run on branch `feature/{plan-name}`.
+- **Build → parallel review → auto-fix loop → meta → land.** Each phase is a spawned `Agent` call
+  (never inline), so reviewer verdicts come back as structured results.
+- tester/security/linter run in parallel as background agents; any `fail`/`BLOCK` feeds the findings
+  back into a fresh coder agent (cap: 3 rounds). The land phase (commit → push → PR → frontmatter)
+  is unreachable until all reviewers are green. reflector is advisory and runs once, outside the loop.
+
+The reviewers emit a machine-readable verdict line (`VERDICT: pass|fail`, or BLOCK/WARN/INFO for
+security) that the orchestrator parses to gate progression.
