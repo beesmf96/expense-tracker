@@ -1,9 +1,9 @@
 ---
 plan: recurring-occurrences
-status: in-progress
+status: review
 branch: feature/recurring-occurrences
-pr: ~
-implemented: ~
+pr: #26
+implemented: 2026-06-07
 ---
 
 # Feature: Timed Recurring (Installments / Occurrences)

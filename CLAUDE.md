@@ -130,19 +130,34 @@ The app is **blank-slate**: a fresh user has zero categories. There are no built
 Vitest is installed and configured (`vite.config.ts` `test` block, `npm test` script, `@testing-library/preact` + `happy-dom`). `src/state/recurring.test.ts` exists. Test pure functions in `state/recurring.ts` and `lib/exportHelpers.ts` first; place test files next to the source they cover.
 
 ## Pipeline
-When asked to implement a plan:
+When asked to run the pipeline for a plan (e.g. "run the pipeline for plan xxx"), the main thread acts as **orchestrator**: it does not hand-run the roles inline but spawns each as an Agent and reacts to what each produces. Every role (`coder`, `tester`, `security`, `linter`, `reflector`) is a spawned Agent call, never inline — see `.claude/agents/<role>.md` for each role's brief.
 
-0. Update plan frontmatter status to `in-progress`
-1. Create branch: feature/{plan-name}
-2. @.claude/agents/coder.md
-3. @.claude/agents/tester.md
-4. @.claude/agents/security.md
-5. @.claude/agents/linter.md
-6. @.claude/agents/reflector.md
-7. Commit and push
-8. Open PR
-9. Update plan frontmatter:
-   - status: review
-   - branch: feature/{plan-name}
-   - pr: #{pr-number}
-   - implemented: {today's date}
+The flow is a gated loop, not a fixed script:
+
+### SETUP — deterministic
+- Update plan frontmatter `status: in-progress`.
+- Create branch `feature/{plan-name}`.
+
+### BUILD
+- Spawn the `coder` agent to implement the plan. Keep its agent id — VERIFY findings are sent back to *this same* coder, not a fresh spawn.
+
+### VERIFY — parallel fan-out
+- Spawn `tester`, `security`, and `linter` **in a single turn** (three Agent calls in one assistant message) so they run concurrently. They each read the diff independently and do not depend on one another.
+- Each returns structured findings. `security` uses BLOCK / WARN / INFO; treat a red `npm test` run from `tester`, or any BLOCK from `security`/`linter`, as a **gate failure**.
+
+### GATE — classify and loop
+- **Any BLOCK or red tests** → consolidate every blocking finding into one message and `SendMessage` it to the original `coder` agent (preserves its context so it fixes rather than re-derives). Then re-run VERIFY. Repeat.
+- **Cap: 3 verify rounds.** If BLOCK findings remain after the 3rd round → **halt**: do NOT commit or open a PR, leave the branch in place, leave frontmatter at `in-progress`, and report the unresolved BLOCK findings to the user. Stop here.
+- **Only WARN/INFO (no BLOCK, tests green)** → proceed.
+
+### REFLECT — non-gating
+- Spawn the `reflector` agent. It only suggests edits to `.claude/agents/*` / `CLAUDE.md`; it never gates the PR. Surface its suggestions to the user; apply them only if asked.
+
+### FINALIZE
+- Commit and push.
+- Open PR.
+- Update plan frontmatter:
+  - `status: review`
+  - `branch: feature/{plan-name}`
+  - `pr: #{pr-number}`
+  - `implemented: {today's date}`
