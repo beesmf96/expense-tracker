@@ -37,3 +37,7 @@ yarn-error.log*
 
 # GStack
 .gstack/
+
+# Deduplication (generated artifacts — tooling/config is committed, output is not)
+.dedup-backups/
+.dedup-report.md
