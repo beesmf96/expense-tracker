@@ -50,6 +50,10 @@ export function monthTxs(allTxs: Transaction[], viewYear: number, viewMonth: num
   return [...real, ...generated].sort((a, b) => b.date.localeCompare(a.date))
 }
 
+export function monthTotal(allTxs: Transaction[], viewYear: number, viewMonth: number): number {
+  return monthTxs(allTxs, viewYear, viewMonth).reduce((s, tx) => s + tx.amount, 0)
+}
+
 export function countOccurrences(tpl: Transaction, nowYear: number, nowMonth: number): number {
   const [sy, sm] = tpl.date.split('-').map(Number)
   const startYear = sy

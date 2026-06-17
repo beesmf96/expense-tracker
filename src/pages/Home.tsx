@@ -1,6 +1,6 @@
 import { viewY, viewM, txs, catColor, getCat, openM, changeMonth, swipeNav } from '../state/store'
 import { t, mfmt, catLabel } from '../data/i18n'
-import { monthTxs } from '../state/recurring'
+import { monthTxs, monthTotal } from '../state/recurring'
 import { ProgressBar } from '../components/ProgressBar'
 import { EmptyState } from '../components/EmptyState'
 import { MonthNav } from '../components/MonthNav'
@@ -18,6 +18,12 @@ export function Home() {
   }
   const sorted = [...byCat.entries()].sort((a, b) => b[1] - a[1])
 
+  const prevY = month === 0 ? year - 1 : year
+  const prevM = month === 0 ? 11 : month - 1
+  const prevTotal = monthTotal(txs.value, prevY, prevM)
+  const deltaPct = prevTotal > 0 ? Math.round(((total - prevTotal) / prevTotal) * 100) : null
+  const deltaUp = total > prevTotal
+
   return (
     <div
       onTouchStart={(e) => { _swipeX = e.touches[0].clientX }}
@@ -31,6 +37,11 @@ export function Home() {
         <div class="summary-wrap">
           <div class="summary-label">{t('thisMonth')}</div>
           <div class="summary-amount">{total.toFixed(2)}</div>
+          {deltaPct !== null && deltaPct !== 0 && (
+            <div class={`summary-delta${deltaUp ? ' up' : ' down'}`}>
+              {deltaUp ? '▲' : '▼'} {Math.abs(deltaPct)}% {t('vsMonth')} {mfmt(prevY, prevM)}
+            </div>
+          )}
           <div class="summary-month">{mfmt(year, month)}</div>
         </div>
         {sorted.length > 0 && <div class="section-title">{t('byCat')}</div>}
@@ -41,15 +52,22 @@ export function Home() {
         : sorted.map(([catId, amt]) => {
               const cat = getCat(catId)
               const color = catColor(catId)
-              const pct = total > 0 ? (amt / total) * 100 : 0
+              const hasBudget = cat.budget != null && cat.budget > 0
+              const pct = hasBudget
+                ? (amt / cat.budget!) * 100
+                : total > 0 ? (amt / total) * 100 : 0
+              const over = hasBudget && amt > cat.budget!
               return (
                 <div key={catId} class="row-item clickable" onClick={() => openM('cat-breakdown', { breakdownCatId: catId })}>
                   <div class="row-icon" style={{ background: color + '22' }}>
                     {cat.emoji}
                   </div>
                   <div class="row-info">
-                    <div class="row-title">{catLabel(cat)}</div>
-                    <ProgressBar pct={pct} color={color} />
+                    <div class="row-title">
+                      {catLabel(cat)}
+                      {hasBudget && <span class={`progress-badge${over ? ' over' : ''}`}>{Math.round(pct)}%</span>}
+                    </div>
+                    <ProgressBar pct={pct} color={color} over={over} />
                   </div>
                   <span class="amount">−{amt.toFixed(2)}</span>
                 </div>

@@ -12,6 +12,7 @@
   --faint:#2A2520;
   --r:#C86464;
   --r-dim:rgba(200,100,100,.25);
+  --g:#6FA86F;
   --border:#1E1B17;
   --border2:#2E2A24;
   --white:#fff;
@@ -32,6 +33,7 @@
   --faint:#EDE6DC;
   --r:#B04040;
   --r-dim:rgba(176,64,64,.15);
+  --g:#4E8A4E;
   --border:#D8CFC4;
   --border2:#C8BDB0
 }

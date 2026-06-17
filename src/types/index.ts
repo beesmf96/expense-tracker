@@ -22,6 +22,7 @@ export interface Category {
   zh: string
   label?: string
   emoji: string
+  budget?: number
 }
 
 export interface ModalContext {

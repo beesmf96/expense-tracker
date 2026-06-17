@@ -26,7 +26,11 @@ export function CatBreakdownModal() {
         </div>
         <div class="row-info">
           <div class="row-title">{catLabel(cat)}</div>
-          <div class="row-sub">−{amt.toFixed(2)} · {pct.toFixed(0)}%</div>
+          <div class="row-sub">
+            {cat.budget != null && cat.budget > 0
+              ? `−${amt.toFixed(2)} / ${cat.budget.toFixed(2)} · ${Math.round((amt / cat.budget) * 100)}% ${t('ofBudget')}`
+              : `−${amt.toFixed(2)} · ${pct.toFixed(0)}%`}
+          </div>
         </div>
       </div>
 

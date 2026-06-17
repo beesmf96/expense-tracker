@@ -25,6 +25,7 @@
 .freq-badge{display:inline-block;font-size:11px;color:var(--accent);background:var(--adim);border-radius:6px;padding:2px 8px;font-weight:500}
 .row-date .freq-badge{margin-left:6px}
 .progress-badge{display:inline-block;font-size:11px;color:var(--accent);background:var(--adim);border-radius:6px;padding:2px 8px;font-weight:600;margin-left:6px;font-family:'DM Mono',monospace}
+.progress-badge.over{color:var(--r);background:var(--r-dim)}
 
 /* ── PROGRESS BAR ── */
 .bar-wrap{height:2px;background:var(--faint);border-radius:1px;margin-top:6px;overflow:hidden}
@@ -33,6 +34,8 @@
 
 /* ── MONTH GROUP ── */
 .month-group{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:18px 0 10px;border-bottom:1px solid var(--border2)}
+.day-group{display:flex;align-items:center;justify-content:space-between;font-family:'DM Mono',monospace}
+.day-total{color:var(--text);font-weight:600}
 
 /* ── SETTINGS ── */
 .settings-card{background:var(--s1);border:1px solid var(--border2);border-radius:14px;padding:2px 16px;margin-bottom:12px}

@@ -64,3 +64,70 @@ describe('Home — category row click', () => {
     expect(screen.queryByText('Bill & Subscription')).toBeNull()
   })
 })
+
+describe('Home — budgets', () => {
+  beforeEach(async () => { await setupStoreTest() })
+
+  it('shows a percent-of-budget badge when the category has a budget', async () => {
+    const { Home } = await import('./Home')
+    userCats.value = [makeCat({ budget: 100 })]
+    txs.value = [makeTx({ id: 'tx-1', category: 'bills_sub', date: '2025-01-10', amount: 50 })]
+
+    render(<Home />)
+
+    const badge = screen.getByText('50%')
+    expect(badge.className).toContain('progress-badge')
+    expect(badge.className).not.toContain('over')
+  })
+
+  it('marks the badge over when spend exceeds the budget', async () => {
+    const { Home } = await import('./Home')
+    userCats.value = [makeCat({ budget: 100 })]
+    txs.value = [makeTx({ id: 'tx-1', category: 'bills_sub', date: '2025-01-10', amount: 150 })]
+
+    render(<Home />)
+
+    const badge = screen.getByText('150%')
+    expect(badge.className).toContain('over')
+  })
+
+  it('shows no budget badge when the category has no budget', async () => {
+    const { Home } = await import('./Home')
+    userCats.value = [makeCat()]
+    txs.value = [makeTx({ id: 'tx-1', category: 'bills_sub', date: '2025-01-10', amount: 50 })]
+
+    render(<Home />)
+
+    expect(screen.queryByText(/%$/)).toBeNull()
+  })
+})
+
+describe('Home — month-over-month delta', () => {
+  beforeEach(async () => { await setupStoreTest() })
+
+  it('shows an upward delta when this month exceeds the previous month', async () => {
+    const { Home } = await import('./Home')
+    userCats.value = [makeCat()]
+    txs.value = [
+      makeTx({ id: 'prev', category: 'bills_sub', date: '2024-12-10', amount: 100 }),
+      makeTx({ id: 'cur', category: 'bills_sub', date: '2025-01-10', amount: 150 }),
+    ]
+
+    render(<Home />)
+
+    const delta = document.querySelector('.summary-delta')
+    expect(delta).not.toBeNull()
+    expect(delta!.className).toContain('up')
+    expect(delta!.textContent).toContain('50%')
+  })
+
+  it('renders no delta when there is no previous-month data', async () => {
+    const { Home } = await import('./Home')
+    userCats.value = [makeCat()]
+    txs.value = [makeTx({ id: 'cur', category: 'bills_sub', date: '2025-01-10', amount: 150 })]
+
+    render(<Home />)
+
+    expect(document.querySelector('.summary-delta')).toBeNull()
+  })
+})

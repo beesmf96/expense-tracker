@@ -10,6 +10,7 @@ import { putCat } from '../db/queries'
 
 export function EditCatModal() {
   const name = useSignal('')
+  const budget = useSignal('')
 
   const catId = modalCtx.value.editCatId ?? ''
   const openModalVal = openModal.value
@@ -19,17 +20,21 @@ export function EditCatModal() {
     if (cat) {
       name.value = cat.en
       selEmoji.value = cat.emoji
+      budget.value = cat.budget != null ? String(cat.budget) : ''
     }
   }, [catId, openModalVal])
 
   async function save() {
     if (!name.value.trim() || !catId) return
+    const b = parseFloat(budget.value)
+    const existing = getCat(catId)
     await putCat({
-      ...getCat(catId),
       id: catId,
+      label: existing.label,
       en: name.value.trim(),
       zh: name.value.trim(),
       emoji: selEmoji.value,
+      ...(isFinite(b) && b > 0 ? { budget: b } : {}),
     })
     closeM()
   }
@@ -48,6 +53,17 @@ export function EditCatModal() {
 
       <FormField label={t('chooseIcon')}>
         <EmojiPicker selectedEmoji={selEmoji.value} onSelect={e => { selEmoji.value = e }} />
+      </FormField>
+
+      <FormField label={`${t('monthlyBudget')} · ${t('budgetOptional')}`}>
+        <input
+          type="number"
+          step="0.01"
+          min="0"
+          placeholder="0.00"
+          value={budget.value}
+          onInput={e => { budget.value = (e.target as HTMLInputElement).value }}
+        />
       </FormField>
 
       <ModalActions onSave={save} />

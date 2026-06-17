@@ -1,6 +1,22 @@
 import { describe, it, expect } from 'vitest'
-import { genRecurring, monthTxs, countOccurrences, isTemplateCompleted } from './recurring'
+import { genRecurring, monthTxs, monthTotal, countOccurrences, isTemplateCompleted } from './recurring'
 import { makeTx } from '../test-utils/setup'
+
+describe('monthTotal', () => {
+  it('sums real and generated transactions for the view month', () => {
+    const txs = [
+      makeTx({ id: 'a', freq: 'none', date: '2025-01-05', amount: 10 }),
+      makeTx({ id: 'b', freq: 'none', date: '2025-01-20', amount: 5.5 }),
+      makeTx({ id: 'tpl', freq: 'monthly', date: '2025-01-01', amount: 4 }),
+      makeTx({ id: 'c', freq: 'none', date: '2025-02-01', amount: 99 }),
+    ]
+    expect(monthTotal(txs, 2025, 0)).toBe(19.5)
+  })
+
+  it('returns 0 for a month with no transactions', () => {
+    expect(monthTotal([makeTx({ freq: 'none', date: '2025-03-01', amount: 7 })], 2025, 0)).toBe(0)
+  })
+})
 
 describe('genRecurring', () => {
   it('returns empty array when no templates exist', () => {

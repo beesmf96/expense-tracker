@@ -31,7 +31,18 @@ describe('Transactions page', () => {
     ]
     render(<Transactions />)
     expect(screen.getAllByText('Food')).toHaveLength(2)
-    expect(screen.getByText('−12.00')).toBeTruthy()
+    expect(screen.getByText('2025-01-10')).toBeTruthy()
+    expect(screen.getByText('2025-01-20')).toBeTruthy()
+  })
+
+  it('groups transactions by day with a per-day subtotal', () => {
+    txs.value = [
+      makeTx({ id: 't1', category: 'food', date: '2025-01-10', amount: 12 }),
+      makeTx({ id: 't2', category: 'food', date: '2025-01-10', amount: 8 }),
+    ]
+    render(<Transactions />)
+    expect(screen.getByText('2025-01-10')).toBeTruthy()
+    expect(screen.getByText('−20.00', { selector: '.day-total' })).toBeTruthy()
   })
 
   it('opens the detail modal with the clicked transaction', async () => {

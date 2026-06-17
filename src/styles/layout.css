@@ -27,6 +27,9 @@
 .summary-wrap{padding:20px 0 22px;margin-bottom:24px;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
 .summary-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .summary-amount{font-family:'Playfair Display',serif;font-style:italic;font-size:42px;font-weight:700;color:var(--accent-hi);letter-spacing:-.02em;line-height:1.05}
+.summary-delta{font-size:11px;font-weight:600;margin-top:10px;letter-spacing:.02em}
+.summary-delta.up{color:var(--r)}
+.summary-delta.down{color:var(--g)}
 .summary-month{font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.03em}
 
 /* ── SECTION TITLE ── */

@@ -53,6 +53,23 @@ describe('loadBackupFile validation', () => {
     expect(mockRestore).not.toHaveBeenCalled()
   })
 
+  it('accepts a valid category budget and writes it', async () => {
+    await loadBackupFile(fileOf(backup({ userCats: [{ ...validCat, budget: 200 }] })))
+    expect(mockRestore.mock.calls[0][0].userCats[0].budget).toBe(200)
+  })
+
+  it('omits budget when absent', async () => {
+    await loadBackupFile(fileOf(backup()))
+    expect(mockRestore.mock.calls[0][0].userCats[0].budget).toBeUndefined()
+  })
+
+  it('rejects non-positive or non-finite budgets', async () => {
+    await expect(loadBackupFile(fileOf(backup({ userCats: [{ ...validCat, budget: 0 }] })))).rejects.toThrow()
+    await expect(loadBackupFile(fileOf(backup({ userCats: [{ ...validCat, budget: -5 }] })))).rejects.toThrow()
+    await expect(loadBackupFile(fileOf(backup({ userCats: [{ ...validCat, budget: 'x' }] })))).rejects.toThrow()
+    expect(mockRestore).not.toHaveBeenCalled()
+  })
+
   it('rejects dangerous id values', async () => {
     await expect(loadBackupFile(fileOf(backup({ userCats: [{ ...validCat, id: '__proto__' }] })))).rejects.toThrow()
     expect(mockRestore).not.toHaveBeenCalled()

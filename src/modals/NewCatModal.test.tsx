@@ -30,6 +30,30 @@ describe('NewCatModal', () => {
     expect(arg.id).toMatch(/^cat_\d+$/)
   })
 
+  it('saves a positive budget and omits it when left blank', async () => {
+    const { putCat } = await import('../db/queries')
+    render(<NewCatModal />)
+
+    fireEvent.input(screen.getByPlaceholderText('e.g. Transport'), { target: { value: 'Transport' } })
+    fireEvent.input(screen.getByPlaceholderText('0.00'), { target: { value: '250' } })
+    fireEvent.click(screen.getByText(t('save')))
+
+    await waitFor(() => expect(putCat).toHaveBeenCalledOnce())
+    expect(vi.mocked(putCat).mock.calls[0][0].budget).toBe(250)
+  })
+
+  it('omits budget when the field is blank or non-positive', async () => {
+    const { putCat } = await import('../db/queries')
+    render(<NewCatModal />)
+
+    fireEvent.input(screen.getByPlaceholderText('e.g. Transport'), { target: { value: 'Transport' } })
+    fireEvent.input(screen.getByPlaceholderText('0.00'), { target: { value: '0' } })
+    fireEvent.click(screen.getByText(t('save')))
+
+    await waitFor(() => expect(putCat).toHaveBeenCalledOnce())
+    expect(vi.mocked(putCat).mock.calls[0][0].budget).toBeUndefined()
+  })
+
   it('does not save when the name is blank', async () => {
     const { putCat } = await import('../db/queries')
     render(<NewCatModal />)

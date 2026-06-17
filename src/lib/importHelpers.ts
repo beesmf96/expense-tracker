@@ -57,7 +57,8 @@ export async function loadBackupFile(file: File): Promise<void> {
         typeof cat.en !== 'string' ||
         typeof cat.zh !== 'string' ||
         typeof cat.emoji !== 'string' ||
-        (cat.label !== undefined && typeof cat.label !== 'string')
+        (cat.label !== undefined && typeof cat.label !== 'string') ||
+        (cat.budget !== undefined && (typeof cat.budget !== 'number' || !isFinite(cat.budget) || cat.budget <= 0))
       ) throw new Error('Invalid backup file')
       const cleanCat: Category = {
         id: cat.id,
@@ -66,6 +67,7 @@ export async function loadBackupFile(file: File): Promise<void> {
         emoji: cat.emoji,
       }
       if (cat.label !== undefined) cleanCat.label = cat.label as string
+      if (cat.budget !== undefined) cleanCat.budget = cat.budget as number
       cleanCats.push(cleanCat)
     }
   }
