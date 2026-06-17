@@ -1,6 +1,6 @@
 ---
 plan: dedupe-expense-recurring-modals
-status: review
+status: done
 branch: feature/dedupe-expense-recurring-modals
 pr: #20
 implemented: 2026-06-03

@@ -97,7 +97,10 @@ describe('CatBreakdownModal', () => {
 
     await userEvent.click(txRow!)
 
-    expect(openM).toHaveBeenCalledWith('detail', { detailTx: tx })
+    expect(openM).toHaveBeenCalledWith('detail', {
+      detailTx: tx,
+      returnTo: { id: 'cat-breakdown', ctx: { breakdownCatId: 'bills_sub' } },
+    })
   })
 
   it('renders empty tx list when no transactions match the breakdownCatId for the view month', async () => {

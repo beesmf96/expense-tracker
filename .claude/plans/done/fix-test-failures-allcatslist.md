@@ -1,9 +1,9 @@
 ---
 plan: fix-test-failures-allcatslist
-status: in-progress
+status: done
 branch: feature/fix-test-failures-allcatslist
 pr: ~
-implemented: ~
+implemented: 2026-06-17
 ---
 
 # Fix: 6 Pre-existing Test Failures (tests must seed their own category data)

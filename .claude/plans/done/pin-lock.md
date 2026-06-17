@@ -1,6 +1,6 @@
 ---
 plan: pin-lock
-status: review
+status: done
 branch: feature/pin-lock
 pr: #23
 implemented: 2026-06-03
