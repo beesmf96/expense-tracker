@@ -69,7 +69,7 @@ export const putCat = (cat: Category) => db.cats.put(cat).then(loadAll)
 export const delCat = (id: string) => db.cats.delete(id).then(loadAll)
 
 export async function bulkUpdateTxCat(fromId: string, toId: string) {
-  const affected = await db.txs.where('category').equals(fromId).toArray()
+  const affected = (await db.txs.toArray()).filter(tx => tx.category === fromId)
   await db.txs.bulkPut(affected.map(tx => ({ ...tx, category: toId })))
   await loadAll()
 }
