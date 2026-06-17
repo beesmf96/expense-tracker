@@ -37,7 +37,7 @@
   --border:#D8CFC4;
   --border2:#C8BDB0
 }
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh}
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
