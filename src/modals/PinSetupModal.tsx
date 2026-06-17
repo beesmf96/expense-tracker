@@ -59,73 +59,59 @@ export function PinSetupModal() {
     return current.value
   }
 
+  function reset(toStep: number) {
+    pin1.value = ''; current.value = ''; step.value = toStep
+  }
+
+  function captureNewPin(next: string, toStep: number) {
+    pin1.value = next
+    if (next.length === 4) { step.value = toStep; current.value = '' }
+  }
+
+  async function confirmNewPin(next: string, toast: string | null, failStep: number) {
+    current.value = next
+    if (next.length < 4) return
+    if (next === pin1.value) {
+      await setupPin(next)
+      reset(1)
+      if (toast) showToast(toast)
+      closeM()
+    } else {
+      doShake()
+      reset(failStep)
+    }
+  }
+
+  async function verifyThen(next: string, onSuccess: () => void) {
+    current.value = next
+    if (next.length < 4) return
+    if (await verifyPin(next)) onSuccess()
+    else { doShake(); current.value = '' }
+  }
+
   async function handleDigit(d: string) {
     const next = activeDigits() + d
     if (next.length > 4) return
 
     if (mode === 'set') {
-      if (step.value === 1) {
-        pin1.value = next
-        if (next.length === 4) { step.value = 2; current.value = '' }
-      } else {
-        current.value = next
-        if (next.length === 4) {
-          if (next === pin1.value) {
-            await setupPin(next)
-            pin1.value = ''; current.value = ''; step.value = 1
-            showToast(t('pinSet'))
-            closeM()
-          } else {
-            doShake()
-            pin1.value = ''; current.value = ''; step.value = 1
-          }
-        }
-      }
+      if (step.value === 1) captureNewPin(next, 2)
+      else await confirmNewPin(next, t('pinSet'), 1)
       return
     }
 
     if (mode === 'change') {
-      if (step.value === 1) {
-        current.value = next
-        if (next.length === 4) {
-          const ok = await verifyPin(next)
-          if (ok) { step.value = 2; current.value = ''; pin1.value = '' }
-          else { doShake(); current.value = '' }
-        }
-      } else if (step.value === 2) {
-        pin1.value = next
-        if (next.length === 4) { step.value = 3; current.value = '' }
-      } else {
-        current.value = next
-        if (next.length === 4) {
-          if (next === pin1.value) {
-            await setupPin(next)
-            pin1.value = ''; current.value = ''; step.value = 1
-            closeM()
-          } else {
-            doShake()
-            pin1.value = ''; current.value = ''; step.value = 2
-          }
-        }
-      }
+      if (step.value === 1) await verifyThen(next, () => reset(2))
+      else if (step.value === 2) captureNewPin(next, 3)
+      else await confirmNewPin(next, null, 2)
       return
     }
 
-    if (mode === 'disable') {
-      current.value = next
-      if (next.length === 4) {
-        const ok = await verifyPin(next)
-        if (ok) {
-          clearPin()
-          current.value = ''; step.value = 1
-          showToast(t('pinDisabled'))
-          closeM()
-        } else {
-          doShake()
-          current.value = ''
-        }
-      }
-    }
+    await verifyThen(next, () => {
+      clearPin()
+      reset(1)
+      showToast(t('pinDisabled'))
+      closeM()
+    })
   }
 
   function handleBackspace() {

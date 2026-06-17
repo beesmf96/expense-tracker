@@ -28,7 +28,7 @@ src/
   main.tsx             # Entry: loadAll() then render(<App />, document.body)
   types/index.ts       # All shared types — Freq, Lang, PageId, ModalId, Transaction, Category, etc.
   data/
-    cats.ts            # COLORS, EMOJIS, FREQS — readonly exported arrays; CATS is a private unexported seed list (not wired into allCatsList)
+    cats.ts            # COLORS, EMOJI_GROUPS, FREQS — readonly exported arrays; CATS is a private unexported seed list (not wired into allCatsList)
     i18n.ts            # S object (en/zh strings), t(), mfmt(), catLabel(), freqLabel() — label helpers that read the lang signal
   db/
     db.ts              # Dexie class — three tables: txs, cats (keyed by id), settings (keyed by key). settings stores arbitrary {key,value:unknown} rows for non-tx persisted state that can't go in localStorage (e.g. the auto-backup FileSystemDirectoryHandle). Bump version(N) when adding a table.
