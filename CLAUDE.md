@@ -126,7 +126,16 @@ The app is **blank-slate**: a fresh user has zero categories. There are no built
 
 ## Tests
 
-Vitest is installed and configured (`vite.config.ts` `test` block, `npm test` script, `@testing-library/preact` + `happy-dom`). `src/state/recurring.test.ts` exists. Test pure functions in `state/recurring.ts` and `lib/exportHelpers.ts` first; place test files next to the source they cover.
+Vitest is configured (`vite.config.ts` `test` block, `@testing-library/preact` + `happy-dom`). Scripts: `npm test` (watch) and `npm run test:coverage` (v8 provider, config in the `test.coverage` block; output `coverage/` is gitignored). Place test files next to the source they cover (`*.test.ts` / `*.test.tsx`).
+
+The suite is broad (~85% statements): pure functions, all `db/queries.ts` writes, every modal, all pages, and the components. Patterns to follow:
+- Use the factories + reset helper in `src/test-utils/setup.ts` (`makeTx`, `makeCat`, `setupStoreTest`). Remember the app is blank-slate, so tests must seed `userCats.value` for any category label to resolve.
+- Signals are real and module-global — reset the ones a test touches in `beforeEach` to avoid bleed.
+- To assert navigation, mock only `openM`/`showToast` via `vi.mock('../state/store', importOriginal => ({ ...actual, openM: vi.fn() }))` and keep the rest of the signals real.
+- DB tests import `'fake-indexeddb/auto'` first, then clear the Dexie tables in `beforeEach`. Note `fake-indexeddb` enforces structured-clone, so a mock `FileSystemDirectoryHandle` with function methods cannot be stored in the `settings` table.
+- i18n strings with emoji prefixes or embedded `\n` (e.g. `noRecords`) won't match `getByText` exactly — use a regex/substring.
+
+Intentionally NOT unit-tested (real-browser only, no Playwright): File System Access auto-backup paths (`writeAutoBackup` granted-permission writes, handle rehydrate in `initAutoBackup`/`grantAutoBackupPermission`, `pickFolder`/`grantAccess` in Settings — all gated on `showDirectoryPicker`), the `LockScreen` countdown interval, and `main.tsx` bootstrap.
 
 ## Pipeline
 When asked to "run the pipeline for plan X" (or to implement a plan), invoke the **`/pipeline X`**
