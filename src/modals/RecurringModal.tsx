@@ -1,3 +1,4 @@
+import { useSignal } from '@preact/signals'
 import { Modal } from './Modal'
 import { FormField } from '../components/FormField'
 import { selRCat, selFreq } from '../state/store'
@@ -10,9 +11,14 @@ import { useTransactionForm } from './useTransactionForm'
 import { AmountField, NoteField } from './ModalFormFields'
 
 export function RecurringModal() {
+  const occurrencesStr = useSignal('')
+
   const { amount, date, note, errMsg, editTx, parseAmount, reset } = useTransactionForm(
     selRCat,
-    tx => { selFreq.value = tx.freq as Exclude<Freq, 'none'> }
+    tx => {
+      selFreq.value = tx.freq as Exclude<Freq, 'none'>
+      occurrencesStr.value = tx.occurrences != null ? String(tx.occurrences) : ''
+    }
   )
 
   async function save() {
@@ -20,6 +26,8 @@ export function RecurringModal() {
     const amt = parseAmount()
     if (!amt) { errMsg.value = t('errAmount'); return }
     if (!selRCat.value) { errMsg.value = t('errCat'); return }
+    const parsedOcc = parseInt(occurrencesStr.value, 10)
+    const occurrences = !isNaN(parsedOcc) && parsedOcc > 0 ? parsedOcc : undefined
     if (editTx) {
       await putTx({
         ...editTx,
@@ -28,6 +36,7 @@ export function RecurringModal() {
         note: note.value.trim(),
         category: selRCat.value,
         freq: selFreq.value,
+        occurrences,
       })
     } else {
       await putTx({
@@ -38,6 +47,7 @@ export function RecurringModal() {
         note: note.value.trim(),
         freq: selFreq.value,
         createdAt: new Date().toISOString(),
+        occurrences,
       })
     }
     reset()
@@ -61,6 +71,16 @@ export function RecurringModal() {
         <FreqGrid
           selectedFreq={selFreq.value}
           onSelect={f => { selFreq.value = f }}
+        />
+      </FormField>
+
+      <FormField label={t('occurrencesLabel')}>
+        <input
+          type="number"
+          min="1"
+          value={occurrencesStr.value}
+          placeholder={t('occurrencesPlaceholder')}
+          onInput={e => { occurrencesStr.value = (e.target as HTMLInputElement).value }}
         />
       </FormField>
 

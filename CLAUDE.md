@@ -39,7 +39,8 @@ src/
   lib/
     catHelpers.ts      # Re-exports getCat/catColor from store; allCats() wrapper
     dateHelpers.ts     # today() — signal-free date helpers (no lang/signal reads)
-    exportHelpers.ts   # CSV export, JSON backup, writeAutoBackup, loadBackupFile (validates then calls restoreBackup)
+    exportHelpers.ts   # CSV export, JSON backup, writeAutoBackup
+    importHelpers.ts   # loadBackupFile — validates parsed JSON field-by-field then calls restoreBackup. EVERY field on Transaction/Category must have a matching runtime guard here; the JSON.parse cast proves nothing at runtime.
     txHelpers.ts       # confirmDeleteTx() — opens confirm modal then delTx
   components/          # Reusable UI: BottomNav, FAB, CatGrid, EmojiGrid, FreqGrid, ProgressBar, FormField, ModalActions, EmptyState
   pages/               # Home, Transactions, Recurring, Settings, ManageCats

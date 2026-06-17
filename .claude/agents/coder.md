@@ -13,6 +13,7 @@ You are a coder agent for MyLedger — a Preact + @preact/signals + Dexie expens
 2. Read `src/state/store.ts` — check if a signal or helper already exists before creating one.
 3. Read the file you will modify or the closest sibling to understand local style.
 4. For a cross-cutting change (a shared CSS class, a refactor applied to "the X header block", a pattern that lives in more than one file), do NOT stop after the first file. Grep the whole tree for every site that matches the pattern before concluding — `grep -rn "<old markup or class>" src/`. Modals especially come in near-identical pairs (e.g. `DetailModal.tsx` and `CatBreakdownModal.tsx` share the same category-header block); a change applied to one almost always belongs in the others. If the branch was rebased after you started, re-grep: a sibling file may have arrived from a merge that did not exist when you first read the tree.
+5. Adding a field to `Transaction` or `Category` is itself a cross-cutting change. The persisted-field touch list is: `types/index.ts` (the field), the write path (modal/query that sets it), the read path (e.g. `genRecurring` if it affects display), AND `loadBackupFile` in `src/lib/importHelpers.ts` (the runtime guard for JSON import). Missing the last one means malformed imported JSON writes an unvalidated value to IndexedDB. TypeScript's `as` cast on `JSON.parse` does not check it. Pattern for an optional numeric field: `(tx.occurrences !== undefined && (typeof tx.occurrences !== 'number' || !Number.isInteger(tx.occurrences) || tx.occurrences < 1))` in the throw condition.
 
 ## Signals
 
@@ -68,7 +69,7 @@ Add new query functions to `src/db/queries.ts`, not inline in components.
 
 ## Importing untrusted data
 
-Any `JSON.parse(text) as SomeType` of file or user input is an unchecked assertion — the cast is compile-time only and proves nothing at runtime. Before passing parsed data to a write helper (e.g. `restoreBackup`), validate it: check the `version` literal, that array fields are arrays (use `Array.isArray(x) ? x : []` — never `x ?? []`, which lets a non-null non-array value slip through into the write path), and every field of each record against its expected type (`typeof`, `isFinite`, format regex, allow-list for union types like `Freq`). Throw on the first failure so no partial or malformed data reaches IndexedDB. See `loadBackupFile` in `src/lib/exportHelpers.ts` as the reference implementation.
+Any `JSON.parse(text) as SomeType` of file or user input is an unchecked assertion — the cast is compile-time only and proves nothing at runtime. Before passing parsed data to a write helper (e.g. `restoreBackup`), validate it: check the `version` literal, that array fields are arrays (use `Array.isArray(x) ? x : []` — never `x ?? []`, which lets a non-null non-array value slip through into the write path), and every field of each record against its expected type (`typeof`, `isFinite`, format regex, allow-list for union types like `Freq`). Throw on the first failure so no partial or malformed data reaches IndexedDB. See `loadBackupFile` in `src/lib/importHelpers.ts` as the reference implementation.
 
 ## Components
 
@@ -89,6 +90,12 @@ When a fixed-set selector needs grouping (tabs/categories over a flat option lis
 ### Pages
 - Pages are always mounted in `App.tsx`. Add new pages there and in `src/types/index.ts` (`PageId` union).
 - Navigate by setting `activePage.value = 'my-page'`; never unmount a page
+
+### Tabbed sections within a page
+A page that splits one list into filtered views (e.g. Recurring's Active/Done) owns a local `const tab = useSignal<'active'|'done'>('active')` and renders a `<div class="page-tabs">` with `<button class={\`tab-btn${tab.value === x ? ' active' : ''}\`}>` children inside the sticky header block, above the list. `.page-tabs` / `.tab-btn` / `.tab-btn.active` are defined in `layout.css`. Because pages never unmount, the tab signal persists across navigation by design. Filter the list by `tab.value` before `.map()`; do not render both lists hidden.
+
+### Optional numeric field in a modal
+An optional whole-number field (e.g. RecurringModal's `occurrences`) uses a local `const fooStr = useSignal('')` holding the raw string, a `<input type="number" min="1">` bound to it, and on save: `const n = parseInt(fooStr.value, 10); const foo = !isNaN(n) && n > 0 ? n : undefined`. Empty/invalid → `undefined` (field omitted, meaning "unbounded"), not `0`. On edit-open, sync via the `onEditSync` callback: `fooStr.value = tx.foo != null ? String(tx.foo) : ''` — use `!= null` (not truthiness) so a legitimately-stored value of any positive integer is restored and the else branch clears it.
 
 ### Month navigation (viewY / viewM)
 `viewY` / `viewM` are shared global signals — both Home and Transactions read the same value, so paging the month on one page changes it on the other (intentional). The picker is `<MonthNav />` from `src/components/MonthNav.tsx` — a self-contained component that owns the `changeMonth` logic and renders `.month-nav`. Use it directly; do not inline the nav block again. Filter the page list with `monthTxs(txs.value, viewY.value, viewM.value)` — never show all-time records.
