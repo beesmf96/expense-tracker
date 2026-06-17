@@ -45,6 +45,9 @@ export function Recurring() {
           </button>
         </div>
       </div>
+      {list.length === 0 && (
+        <EmptyState icon="🔄" message={t(tab.value === 'active' ? 'noActiveRecurring' : 'noDoneRecurring')} />
+      )}
       {list.map(tx => {
         const cat = getCat(tx.category)
         const color = catColor(tx.category)

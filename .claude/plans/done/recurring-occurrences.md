@@ -1,9 +1,10 @@
 ---
 plan: recurring-occurrences
-status: review
+status: merged
 branch: feature/recurring-occurrences
 pr: #26
 implemented: 2026-06-07
+merged: 2026-06-17
 ---
 
 # Feature: Timed Recurring (Installments / Occurrences)

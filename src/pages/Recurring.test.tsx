@@ -34,6 +34,16 @@ describe('Recurring page', () => {
     expect(screen.queryByText('−5.00')).toBeNull()
   })
 
+  it('shows a per-tab empty state when the active tab has no templates', () => {
+    txs.value = [makeTx({ id: 'r1', category: 'rent', freq: 'monthly', occurrences: 1 })]
+    render(<Recurring />)
+    expect(screen.getByText('No active recurring expenses.')).toBeTruthy()
+    expect(screen.queryByText('Rent')).toBeNull()
+    fireEvent.click(screen.getByText('Done'))
+    expect(screen.getByText('Rent')).toBeTruthy()
+    expect(screen.queryByText('No active recurring expenses.')).toBeNull()
+  })
+
   it('opens the detail modal by id when a template is clicked', async () => {
     const { openM } = await import('../state/store')
     txs.value = [makeTx({ id: 'r1', category: 'rent', freq: 'monthly' })]
