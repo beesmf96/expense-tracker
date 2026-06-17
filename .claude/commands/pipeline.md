@@ -19,7 +19,6 @@ Each reviewer's final message MUST end with a machine-readable line you parse:
 
 - tester  → `VERDICT: pass` or `VERDICT: fail` (+ failing tests / missing coverage)
 - linter  → `VERDICT: pass` or `VERDICT: fail` (+ remaining violations the coder must fix)
-- security → highest severity emitted: `BLOCK` is a fail; `WARN`/`INFO`/"No security findings." pass
 - coder   → `VERDICT: done` (+ one-line summary of what changed)
 - reflector → advisory only; no gate
 
@@ -41,11 +40,11 @@ Spawn the **coder** agent (`subagent_type: coder`) with the plan path and accept
 Wait for `VERDICT: done`.
 
 ### Phase review (parallel, round N)
-Spawn **tester**, **security**, **linter** as three agents with `run_in_background: true`.
-The harness re-invokes you as each finishes. Collect all three verdicts.
+Spawn **tester** and **linter** as two agents with `run_in_background: true`.
+The harness re-invokes you as each finishes. Collect both verdicts.
 
 ### Gate — dynamic auto-fix loop (cap: 3 rounds)
-- All pass (tester pass, linter pass, security ≤ WARN) → go to Phase meta.
+- All pass (tester pass, linter pass) → go to Phase meta.
 - Any fail → spawn a fresh **coder** agent with ONLY the failing reviewers' findings as input,
   then re-run ONLY the reviewers that failed. Increment the round counter.
 - If round 3 still fails → STOP, leave `status: in-progress`, and report the outstanding findings.

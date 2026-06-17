@@ -30,13 +30,6 @@ export const COLORS: readonly string[] = [
   '#B5E48C', '#90E0EF', '#FFC8DD', '#FFAFCC',
 ]
 
-export const EMOJIS: readonly string[] = [
-  '✨','🏦','🍽️','💡','🛒','🛡️','⛽','🎬','☕','🧠','🏖️','🚌',
-  '🅿️','🛍️','📦','🛣️','🎁','💊','🏧','🏠','🚗','✈️','🎮','📱',
-  '💄','👗','🐾','🎓','💪','🍕','🍔','🥤','🎵','📚','💻','🏋️',
-  '🧴','🛁','🧹','🌿','💰','🎪','🎨','🎯','🏆','🌈','⭐','🔑',
-]
-
 export type EmojiGroupKey = 'money' | 'food' | 'transport' | 'home' | 'shopping' | 'health' | 'entertainment' | 'other'
 
 export const EMOJI_GROUPS: readonly { key: EmojiGroupKey; emojis: readonly string[] }[] = [
