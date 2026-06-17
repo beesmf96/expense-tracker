@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import type { BackupFile } from '../types'
 import { makeTx, makeCat } from '../test-utils/setup'
+import { exportCSV, backupJSON } from './exportHelpers'
+import { lang } from '../state/store'
 
 vi.mock('../db/queries', () => ({
   restoreBackup: vi.fn().mockResolvedValue(undefined),
@@ -258,5 +260,78 @@ describe('loadBackupFile', () => {
     const userCats = [{ id: '', en: 'Food', zh: '食物', emoji: '🍔' }]
     await expect(loadBackupFile(makeFile(makeBackup({ userCats })))).rejects.toThrow('Invalid backup file')
     expect(restoreBackup).not.toHaveBeenCalled()
+  })
+})
+
+describe('exportCSV / backupJSON download', () => {
+  let capturedBlob: Blob | null
+
+  beforeEach(() => {
+    lang.value = 'en'
+    capturedBlob = null
+    vi.spyOn(URL, 'createObjectURL').mockImplementation((b: Blob | MediaSource) => {
+      capturedBlob = b as Blob
+      return 'blob:mock'
+    })
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  describe('exportCSV', () => {
+    it('writes a header row and one row per non-recurring transaction', async () => {
+      exportCSV(
+        [
+          makeTx({ id: 't1', date: '2025-01-10', amount: 12.5, note: 'lunch' }),
+          makeTx({ id: 't2', date: '2025-01-11', amount: 30, note: '' }),
+        ],
+        [makeCat()],
+      )
+      const lines = (await capturedBlob!.text()).replace('﻿', '').split('\n')
+      expect(lines[0]).toBe('"Date","Category","Amount","Frequency","Note"')
+      expect(lines).toHaveLength(3)
+      expect(lines[1]).toBe('"2025-01-10","Bill & Subscription","12.5","none","lunch"')
+    })
+
+    it('skips recurring template rows (freq !== none)', async () => {
+      exportCSV(
+        [makeTx({ id: 't1', amount: 10 }), makeTx({ id: 't2', amount: 20, freq: 'monthly' })],
+        [makeCat()],
+      )
+      const lines = (await capturedBlob!.text()).replace('﻿', '').split('\n')
+      expect(lines).toHaveLength(2)
+    })
+
+    it('falls back to the raw category id when no matching category exists', async () => {
+      exportCSV([makeTx({ category: 'ghost' })], [])
+      const lines = (await capturedBlob!.text()).replace('﻿', '').split('\n')
+      expect(lines[1]).toContain('"ghost"')
+    })
+
+    it('escapes embedded double quotes by doubling them', async () => {
+      exportCSV([makeTx({ note: 'say "hi"' })], [makeCat()])
+      expect(await capturedBlob!.text()).toContain('"say ""hi"""')
+    })
+
+    it('prefixes the blob with a UTF-8 BOM', async () => {
+      exportCSV([makeTx({})], [makeCat()])
+      expect((await capturedBlob!.text()).startsWith('﻿')).toBe(true)
+    })
+  })
+
+  describe('backupJSON', () => {
+    it('serializes version 2 with the txs and userCats passed in', async () => {
+      const txList = [makeTx({ id: 't1' })]
+      const catList = [makeCat()]
+      backupJSON(txList, catList)
+      const data = JSON.parse(await capturedBlob!.text()) as BackupFile
+      expect(data.version).toBe(2)
+      expect(data.txs).toEqual(txList)
+      expect(data.userCats).toEqual(catList)
+      expect(typeof data.exportedAt).toBe('string')
+    })
   })
 })

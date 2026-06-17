@@ -127,37 +127,27 @@ The app is **blank-slate**: a fresh user has zero categories. There are no built
 
 ## Tests
 
-Vitest is installed and configured (`vite.config.ts` `test` block, `npm test` script, `@testing-library/preact` + `happy-dom`). `src/state/recurring.test.ts` exists. Test pure functions in `state/recurring.ts` and `lib/exportHelpers.ts` first; place test files next to the source they cover.
+Vitest is configured (`vite.config.ts` `test` block, `@testing-library/preact` + `happy-dom`). Scripts: `npm test` (watch) and `npm run test:coverage` (v8 provider, config in the `test.coverage` block; output `coverage/` is gitignored). Place test files next to the source they cover (`*.test.ts` / `*.test.tsx`).
+
+The suite is broad (~85% statements): pure functions, all `db/queries.ts` writes, every modal, all pages, and the components. Patterns to follow:
+- Use the factories + reset helper in `src/test-utils/setup.ts` (`makeTx`, `makeCat`, `setupStoreTest`). Remember the app is blank-slate, so tests must seed `userCats.value` for any category label to resolve.
+- Signals are real and module-global — reset the ones a test touches in `beforeEach` to avoid bleed.
+- To assert navigation, mock only `openM`/`showToast` via `vi.mock('../state/store', importOriginal => ({ ...actual, openM: vi.fn() }))` and keep the rest of the signals real.
+- DB tests import `'fake-indexeddb/auto'` first, then clear the Dexie tables in `beforeEach`. Note `fake-indexeddb` enforces structured-clone, so a mock `FileSystemDirectoryHandle` with function methods cannot be stored in the `settings` table.
+- i18n strings with emoji prefixes or embedded `\n` (e.g. `noRecords`) won't match `getByText` exactly — use a regex/substring.
+
+Intentionally NOT unit-tested (real-browser only, no Playwright): File System Access auto-backup paths (`writeAutoBackup` granted-permission writes, handle rehydrate in `initAutoBackup`/`grantAutoBackupPermission`, `pickFolder`/`grantAccess` in Settings — all gated on `showDirectoryPicker`), the `LockScreen` countdown interval, and `main.tsx` bootstrap.
 
 ## Pipeline
-When asked to run the pipeline for a plan (e.g. "run the pipeline for plan xxx"), the main thread acts as **orchestrator**: it does not hand-run the roles inline but spawns each as an Agent and reacts to what each produces. Every role (`coder`, `tester`, `security`, `linter`, `reflector`) is a spawned Agent call, never inline — see `.claude/agents/<role>.md` for each role's brief.
+When asked to "run the pipeline for plan X" (or to implement a plan), invoke the **`/pipeline X`**
+command — defined in `.claude/commands/pipeline.md`. It orchestrates a dynamic, verdict-gated flow:
 
-The flow is a gated loop, not a fixed script:
+- **Worktree-isolated** run on branch `feature/{plan-name}`.
+- **Build → parallel review → auto-fix loop → meta → land.** Each phase is a spawned `Agent` call
+  (never inline), so reviewer verdicts come back as structured results.
+- tester/security/linter run in parallel as background agents; any `fail`/`BLOCK` feeds the findings
+  back into a fresh coder agent (cap: 3 rounds). The land phase (commit → push → PR → frontmatter)
+  is unreachable until all reviewers are green. reflector is advisory and runs once, outside the loop.
 
-### SETUP — deterministic
-- Update plan frontmatter `status: in-progress`.
-- Create branch `feature/{plan-name}`.
-
-### BUILD
-- Spawn the `coder` agent to implement the plan. Keep its agent id — VERIFY findings are sent back to *this same* coder, not a fresh spawn.
-
-### VERIFY — parallel fan-out
-- Spawn `tester`, `security`, and `linter` **in a single turn** (three Agent calls in one assistant message) so they run concurrently. They each read the diff independently and do not depend on one another.
-- Each returns structured findings. `security` uses BLOCK / WARN / INFO; treat a red `npm test` run from `tester`, or any BLOCK from `security`/`linter`, as a **gate failure**.
-
-### GATE — classify and loop
-- **Any BLOCK or red tests** → consolidate every blocking finding into one message and `SendMessage` it to the original `coder` agent (preserves its context so it fixes rather than re-derives). Then re-run VERIFY. Repeat.
-- **Cap: 3 verify rounds.** If BLOCK findings remain after the 3rd round → **halt**: do NOT commit or open a PR, leave the branch in place, leave frontmatter at `in-progress`, and report the unresolved BLOCK findings to the user. Stop here.
-- **Only WARN/INFO (no BLOCK, tests green)** → proceed.
-
-### REFLECT — non-gating
-- Spawn the `reflector` agent. It only suggests edits to `.claude/agents/*` / `CLAUDE.md`; it never gates the PR. Surface its suggestions to the user; apply them only if asked.
-
-### FINALIZE
-- Commit and push.
-- Open PR.
-- Update plan frontmatter:
-  - `status: review`
-  - `branch: feature/{plan-name}`
-  - `pr: #{pr-number}`
-  - `implemented: {today's date}`
+The reviewers emit a machine-readable verdict line (`VERDICT: pass|fail`, or BLOCK/WARN/INFO for
+security) that the orchestrator parses to gate progression.

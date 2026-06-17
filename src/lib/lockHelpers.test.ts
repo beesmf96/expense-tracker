@@ -1,5 +1,5 @@
-import { describe, it, expect, afterEach } from 'vitest'
-import { hashPin, verifyPin, setupPin, clearPin } from './lockHelpers'
+import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
+import { hashPin, verifyPin, setupPin, clearPin, initLockWatcher } from './lockHelpers'
 import { pinHash, pinEnabled, isLocked } from '../state/store'
 
 describe('hashPin', () => {
@@ -91,5 +91,63 @@ describe('clearPin', () => {
     isLocked.value = true
     clearPin()
     expect(isLocked.value).toBe(false)
+  })
+})
+
+describe('initLockWatcher', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    isLocked.value = false
+    pinEnabled.value = false
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    isLocked.value = false
+    pinEnabled.value = false
+  })
+
+  it('locks after 60s of inactivity when pin is enabled', () => {
+    pinEnabled.value = true
+    initLockWatcher()
+    vi.advanceTimersByTime(60_000)
+    expect(isLocked.value).toBe(true)
+  })
+
+  it('does not lock on the idle timer when pin is disabled', () => {
+    pinEnabled.value = false
+    initLockWatcher()
+    vi.advanceTimersByTime(60_000)
+    expect(isLocked.value).toBe(false)
+  })
+
+  it('resets the idle timer on user activity', () => {
+    pinEnabled.value = true
+    initLockWatcher()
+    vi.advanceTimersByTime(59_000)
+    document.dispatchEvent(new Event('click'))
+    vi.advanceTimersByTime(59_000)
+    expect(isLocked.value).toBe(false)
+    vi.advanceTimersByTime(1_000)
+    expect(isLocked.value).toBe(true)
+  })
+
+  it('locks on return to visibility after being hidden 60s or more', () => {
+    pinEnabled.value = true
+    initLockWatcher()
+
+    const setVisibility = (state: DocumentVisibilityState) =>
+      Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => state })
+
+    setVisibility('hidden')
+    document.dispatchEvent(new Event('visibilitychange'))
+
+    vi.setSystemTime(Date.now() + 61_000)
+
+    setVisibility('visible')
+    document.dispatchEvent(new Event('visibilitychange'))
+
+    expect(isLocked.value).toBe(true)
+    setVisibility('visible')
   })
 })

@@ -207,6 +207,15 @@ When the unit under test is a **modal** (renders `<Modal id="x">`), set `openMod
 
 When asserting empty-state or status text, read the actual key from `S.en` in `src/data/i18n.ts` or trace the component's `t('key')` call — do not guess the wording. Example: the empty Search query state renders `t('searchHint')` = `'Search your expenses'`, not `'No results'` (that is `t('searchEmpty')`, shown only when a query yields zero matches). A guessed string silently fails the run.
 
+## Verdict line (required)
+
+End your report with a single machine-readable line the pipeline orchestrator parses:
+
+- `VERDICT: pass` — `npm test` is green and the coverage the task asked for exists.
+- `VERDICT: fail` — list the failing tests or missing coverage above the line, one per bullet.
+
+This line is mandatory on every run; omitting it makes the orchestrator treat the run as a fail.
+
 ## Do not
 
 - Snapshot tests — this codebase's UI is actively developed

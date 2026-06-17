@@ -1,9 +1,9 @@
 ---
 plan: emoji-picker-tabs
-status: review
+status: done
 branch: feature/emoji-picker-tabs
 pr: #25
-implemented: 2026-06-07
+implemented: 2026-06-03
 ---
 
 # Feature: Categorized Emoji Picker with Tabs
