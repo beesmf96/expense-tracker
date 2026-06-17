@@ -145,9 +145,14 @@ command — defined in `.claude/commands/pipeline.md`. It orchestrates a dynamic
 - **Worktree-isolated** run on branch `feature/{plan-name}`.
 - **Build → parallel review → auto-fix loop → meta → land.** Each phase is a spawned `Agent` call
   (never inline), so reviewer verdicts come back as structured results.
-- tester/security/linter run in parallel as background agents; any `fail`/`BLOCK` feeds the findings
+- tester/linter run in parallel as background agents; any `fail` feeds the findings
   back into a fresh coder agent (cap: 3 rounds). The land phase (commit → push → PR → frontmatter)
   is unreachable until all reviewers are green. reflector is advisory and runs once, outside the loop.
 
-The reviewers emit a machine-readable verdict line (`VERDICT: pass|fail`, or BLOCK/WARN/INFO for
-security) that the orchestrator parses to gate progression.
+The reviewers emit a machine-readable verdict line (`VERDICT: pass|fail`) that the orchestrator
+parses to gate progression.
+
+## Refactor check
+`/refactor-check` (`.claude/commands/refactor-check.md`) runs `npx fallow` (dead-code + dupes +
+health) to surface refactoring targets, unused exports/files, and duplication. It is **standalone
+and advisory** — run it occasionally for cleanup, not on every pipeline run; it never gates a commit.
