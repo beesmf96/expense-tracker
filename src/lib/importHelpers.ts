@@ -1,5 +1,19 @@
-import type { BackupFile, Freq } from '../types'
+import type { BackupFile, Freq, Transaction, Category } from '../types'
 import { restoreBackup } from '../db/queries'
+
+const DANGEROUS_KEYS = ['__proto__', 'constructor', 'prototype']
+
+function isPlainSafeObject(v: unknown): v is Record<string, unknown> {
+  if (v === null || typeof v !== 'object' || Array.isArray(v)) return false
+  for (const key of Object.keys(v)) {
+    if (DANGEROUS_KEYS.includes(key)) return false
+  }
+  return true
+}
+
+function safeId(v: unknown): v is string {
+  return typeof v === 'string' && !!v && !DANGEROUS_KEYS.includes(v)
+}
 
 export async function loadBackupFile(file: File): Promise<void> {
   const text = await file.text()
@@ -7,26 +21,53 @@ export async function loadBackupFile(file: File): Promise<void> {
   if (data.version !== 2) throw new Error('Unsupported backup version')
   if (!data.txs || !Array.isArray(data.txs)) throw new Error('Invalid backup file')
   const VALID_FREQS: Freq[] = ['none', 'monthly', 'quarterly', 'biannual', 'yearly']
+  const cleanTxs: Transaction[] = []
   for (const tx of data.txs) {
     if (
-      typeof tx.id !== 'string' || !tx.id ||
+      !isPlainSafeObject(tx) ||
+      !safeId(tx.id) ||
       typeof tx.amount !== 'number' || !isFinite(tx.amount) || tx.amount <= 0 ||
       typeof tx.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(tx.date) ||
-      !VALID_FREQS.includes(tx.freq) ||
+      !VALID_FREQS.includes(tx.freq as Freq) ||
       typeof tx.category !== 'string' || !tx.category ||
       typeof tx.note !== 'string' ||
       typeof tx.createdAt !== 'string' || !tx.createdAt ||
+      (tx.isGenerated !== undefined && typeof tx.isGenerated !== 'boolean') ||
       (tx.occurrences !== undefined && (typeof tx.occurrences !== 'number' || !Number.isInteger(tx.occurrences) || tx.occurrences < 1))
     ) throw new Error('Invalid backup file')
+    const cleanTx: Transaction = {
+      id: tx.id,
+      date: tx.date,
+      amount: tx.amount,
+      category: tx.category,
+      note: tx.note,
+      freq: tx.freq as Freq,
+      createdAt: tx.createdAt,
+    }
+    if (tx.occurrences !== undefined) cleanTx.occurrences = tx.occurrences as number
+    cleanTxs.push(cleanTx)
   }
-  const validatedCats = Array.isArray(data.userCats) ? data.userCats : []
-  for (const cat of validatedCats) {
-    if (
-      typeof cat.id !== 'string' || !cat.id ||
-      typeof cat.en !== 'string' ||
-      typeof cat.zh !== 'string' ||
-      typeof cat.emoji !== 'string'
-    ) throw new Error('Invalid backup file')
+  const rawCats: unknown = data.userCats
+  const cleanCats: Category[] = []
+  if (Array.isArray(rawCats)) {
+    for (const cat of rawCats) {
+      if (
+        !isPlainSafeObject(cat) ||
+        !safeId(cat.id) ||
+        typeof cat.en !== 'string' ||
+        typeof cat.zh !== 'string' ||
+        typeof cat.emoji !== 'string' ||
+        (cat.label !== undefined && typeof cat.label !== 'string')
+      ) throw new Error('Invalid backup file')
+      const cleanCat: Category = {
+        id: cat.id,
+        en: cat.en,
+        zh: cat.zh,
+        emoji: cat.emoji,
+      }
+      if (cat.label !== undefined) cleanCat.label = cat.label as string
+      cleanCats.push(cleanCat)
+    }
   }
-  await restoreBackup({ txs: data.txs, userCats: validatedCats })
+  await restoreBackup({ txs: cleanTxs, userCats: cleanCats })
 }
