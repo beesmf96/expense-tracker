@@ -4,6 +4,8 @@ import preact from '@preact/preset-vite'
 export default defineConfig({
   base: '/expense-tracker/',
   plugins: [preact()],
+  server: { host: 'localhost', strictPort: true },
+  preview: { host: 'localhost', strictPort: true },
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
   },

@@ -43,6 +43,10 @@ Wait for `VERDICT: done`.
 Spawn **tester** and **linter** as two agents with `run_in_background: true`.
 The harness re-invokes you as each finishes. Collect both verdicts.
 
+Also run `npm audit` directly (orchestrator-level, no agent needed). Treat **high** or
+**critical** advisories as a `fail` that feeds the next auto-fix round (bump/lock the
+offending dependency); moderate/low are advisory-only and reported but do not gate.
+
 ### Gate — dynamic auto-fix loop (cap: 3 rounds)
 - All pass (tester pass, linter pass) → go to Phase meta.
 - Any fail → spawn a fresh **coder** agent with ONLY the failing reviewers' findings as input,

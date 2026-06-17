@@ -156,3 +156,36 @@ parses to gate progression.
 `/refactor-check` (`.claude/commands/refactor-check.md`) runs `npx fallow` (dead-code + dupes +
 health) to surface refactoring targets, unused exports/files, and duplication. It is **standalone
 and advisory** — run it occasionally for cleanup, not on every pipeline run; it never gates a commit.
+
+## Security model
+
+### Threat model & trust boundary
+- **No backend = the client is the entire trust boundary.** Everything in IndexedDB and localStorage is fully readable and writable by anyone with DevTools access. Treat all persisted state as attacker-controllable.
+- The PIN lock is a **soft, single-device deterrent**, NOT data encryption. IndexedDB content is stored in plaintext and readable via DevTools regardless of lock state. Do not describe or treat the PIN as protecting data at rest.
+- No secrets, tokens, or API keys may ever be committed to source or stored client-side (there is no backend to hold them anyway — keep it that way).
+
+### XSS is the primary risk
+Because all financial data renders from IndexedDB/user input, an XSS hole exposes the entire DB.
+- **Never** use `innerHTML`, `dangerouslySetInnerHTML`, `insertAdjacentHTML`, `document.write`, `eval`, or `new Function` with any value that originates from a transaction note, category label, imported JSON, or URL param.
+- Preact escapes JSX text by default — keep all user data (notes, category names, amounts) flowing through JSX children, never through `dangerouslySetInnerHTML`.
+- Category emoji/labels and transaction notes are user-controlled free text — treat them as untrusted at every render site.
+
+### Import is the main untrusted-input gate
+`importHelpers.ts > loadBackupFile` is the one place external data enters the app. It is security-critical:
+- EVERY field on `Transaction`/`Category` must have a runtime guard (already noted in the lib section — this is a *security* requirement, not just correctness). The `JSON.parse` cast proves nothing.
+- Validate types, lengths, and value ranges (e.g. amount is a finite number, dates parse, ids are strings of bounded length). Reject — don't coerce — malformed records.
+- Guard against prototype-pollution keys (`__proto__`, `constructor`, `prototype`) in any parsed object before merging.
+- `restoreBackup` bulk-replaces both tables — a malformed import must fail atomically before any write, never half-apply.
+
+### PIN lock limitations (document honestly)
+- SHA-256 of the PIN is stored in `localStorage['pinHash']`. A short numeric PIN is trivially brute-forced offline by anyone with localStorage access — the hash provides obfuscation, not real protection. (A slow KDF like PBKDF2 with many iterations would raise the cost; plain SHA-256 does not.)
+- Fail-count/cooldown state is in-memory only and resets on reload, so the lockout is bypassable by reloading the page. This is acceptable only because the lock is a UX deterrent, not a security control — keep that framing explicit and never market it as securing the data.
+
+### Dependency & supply chain
+- Run `npm audit` as part of review; pin/lock dependency versions.
+- Vite dev server (`localhost:5173`) must never be exposed on a public/`0.0.0.0` interface.
+
+### What is intentionally NOT protected
+- Data-at-rest encryption (would require a user-derived key; out of scope unless added deliberately).
+- Multi-user / server-side authorization (no server exists).
+- Protection against a compromised local machine or malicious browser extension (out of scope — the client owns the data).
